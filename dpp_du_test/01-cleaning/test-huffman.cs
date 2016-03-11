@@ -12,11 +12,11 @@ namespace dpp_du_test
 	[TestFixture()]
 	public class Test
 	{
-		private static string TEST_FILE_DIR = "/Users/SkyCrawl/Shared/_xamarin/dpp_du/dpp_du_test/01-cleaning/";
-		private static string EMPTY_FILE = TEST_FILE_DIR + "empty_file";
-		private static string ONE_BYTE_FILE = TEST_FILE_DIR + "one_byte_file";
-		private static string INCOMPLETE_BYTE_SET_FILE = TEST_FILE_DIR + "incomplete_byte_set_file";
-		private static string COMPLETE_BYTE_SET_FILE = TEST_FILE_DIR + "complete_byte_set_file";
+		private static string TEST_DIR = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName + "/01-cleaning/";
+		private static string EMPTY_FILE = TEST_DIR + "empty_file";
+		private static string ONE_BYTE_FILE = TEST_DIR + "one_byte_file";
+		private static string INCOMPLETE_BYTE_SET_FILE = TEST_DIR + "incomplete_byte_set_file";
+		private static string COMPLETE_BYTE_SET_FILE = TEST_DIR + "complete_byte_set_file";
 
 		private static bool PRINT_PROGRAM_OUTPUT = false;
 
