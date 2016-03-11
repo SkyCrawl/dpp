@@ -301,8 +301,8 @@ namespace HuffmanskeKapky
             catch (Exception)
             {
                 Console.Write("File Error");
-                Environment.Exit(0);
-                //    return false;
+                // Environment.Exit(0);
+                return false;
             }
             return true;
         }
@@ -373,20 +373,21 @@ namespace HuffmanskeKapky
 
     }
 
-    class Program
+    public static class Program
     {
         static SortedDictionary<int, List<vrchol>> vrcholy;
         static strom Huffman;
      //   static Stopwatch sw = new Stopwatch();
 
-        static void Main(string[] args)
+        public static void MainOriginal(string[] args)
         {
        //     sw.Start();
 
             if (args.Length != 1)
             {
                 Console.Write("Argument Error");
-                Environment.Exit(0);
+                // Environment.Exit(0);
+				return;
             }
             vrcholy = Nacitacka.PrectiSoubor(args[0]);
 
