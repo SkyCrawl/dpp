@@ -3,15 +3,76 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dpp_du", "dpp_du\dpp_du.csproj", "{E68754C2-60F3-47DF-80B3-7D5DF46E9A5C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dpp_du_test", "dpp_du_test\dpp_du_test.csproj", "{E3F45090-796B-40E7-8582-A8F6C4E86C89}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E3F45090-796B-40E7-8582-A8F6C4E86C89}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E3F45090-796B-40E7-8582-A8F6C4E86C89}.Debug|x86.Build.0 = Debug|Any CPU
+		{E3F45090-796B-40E7-8582-A8F6C4E86C89}.Release|x86.ActiveCfg = Release|Any CPU
+		{E3F45090-796B-40E7-8582-A8F6C4E86C89}.Release|x86.Build.0 = Release|Any CPU
 		{E68754C2-60F3-47DF-80B3-7D5DF46E9A5C}.Debug|x86.ActiveCfg = Debug|x86
 		{E68754C2-60F3-47DF-80B3-7D5DF46E9A5C}.Debug|x86.Build.0 = Debug|x86
 		{E68754C2-60F3-47DF-80B3-7D5DF46E9A5C}.Release|x86.ActiveCfg = Release|x86
 		{E68754C2-60F3-47DF-80B3-7D5DF46E9A5C}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.TextStylePolicy = $1
+		$1.TabsToSpaces = False
+		$1.EolMarker = Windows
+		$1.inheritsSet = VisualStudio
+		$1.inheritsScope = text/plain
+		$1.scope = text/x-csharp
+		$0.CSharpFormattingPolicy = $2
+		$2.AutoPropertyFormatting = ForceOneLine
+		$2.MethodBraceStyle = EndOfLine
+		$2.AnonymousMethodBraceStyle = NextLine
+		$2.PropertyBraceStyle = NextLine
+		$2.PropertyGetBraceStyle = NextLine
+		$2.PropertySetBraceStyle = NextLine
+		$2.EventBraceStyle = NextLine
+		$2.EventAddBraceStyle = NextLine
+		$2.EventRemoveBraceStyle = NextLine
+		$2.StatementBraceStyle = NextLine
+		$2.ElseNewLinePlacement = NewLine
+		$2.CatchNewLinePlacement = NewLine
+		$2.FinallyNewLinePlacement = NewLine
+		$2.WhileNewLinePlacement = NewLine
+		$2.BeforeMethodDeclarationParentheses = False
+		$2.BeforeMethodCallParentheses = False
+		$2.BeforeConstructorDeclarationParentheses = False
+		$2.NewLineBeforeConstructorInitializerColon = SameLine
+		$2.NewLineAfterConstructorInitializerColon = SameLine
+		$2.BeforeIndexerDeclarationBracket = False
+		$2.BeforeDelegateDeclarationParentheses = False
+		$2.AfterDelegateDeclarationParameterComma = True
+		$2.NewParentheses = False
+		$2.IfParentheses = False
+		$2.WhileParentheses = False
+		$2.ForParentheses = False
+		$2.ForeachParentheses = False
+		$2.CatchParentheses = False
+		$2.SwitchParentheses = False
+		$2.LockParentheses = False
+		$2.UsingParentheses = False
+		$2.SpacesBeforeBrackets = False
+		$2.SpacesAfterTypecast = True
+		$2.MethodCallArgumentWrapping = WrapIfTooLong
+		$2.MethodDeclarationParameterWrapping = WrapIfTooLong
+		$2.AlignToFirstMethodDeclarationParameter = False
+		$2.IndexerDeclarationParameterWrapping = WrapIfTooLong
+		$2.AlignToFirstIndexerDeclarationParameter = False
+		$2.IndexerArgumentWrapping = WrapIfTooLong
+		$2.inheritsSet = Mono
+		$2.inheritsScope = text/x-csharp
+		$2.scope = text/x-csharp
+		$0.StandardHeader = $3
+		$3.Text = 
+		$3.IncludeInNewFiles = True
 	EndGlobalSection
 EndGlobal
