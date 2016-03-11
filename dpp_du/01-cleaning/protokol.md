@@ -55,7 +55,7 @@ obsahuje jediný zakomentovaný řádek, volající neexistující metodu.
 
 * Magická čísla byla extrahována do statických proměnných.
 * `Node[]` bylo změněno na typ třídy `Dictionary<byte, int>` a následně došlo
-k eliminaci zbytečných proměnných.
+k eliminaci zbytečných proměnných. Trochu méně efektivní, nicméně příjemnější.
 * Čtení vstupního souboru již probíhá jen v jednom cyklu.
 * Proměnné byly přejmenovány.
 * Odstraněn zakomentovaný kód, který již nedával smysl.
@@ -94,7 +94,7 @@ Property.
 ## Neprovedené změny
 
 * Program by mohl brát ještě jeden argument, který bude určovat aplikaci stopek,
-ale musel by být pro přehlednost a lepší použití první v pořadí, a tomu
+ale měl by být pro přehlednost a lepší použití první v pořadí, a tomu
 zabraňuje zadání.
 * Parametrizace třídy `HuffNode`, která by pouze obsahovala fieldy `data`, 
 `leftSon` a `rightSon`. V rámci např. rozšíření programu na knihovnu by se změna
@@ -107,6 +107,10 @@ následek jinou výslednou podobu stromu, a to nám zadání úkolu zakazuje.
 * Vylepšení rozhraní - `HuffTree` bychom mohli (či dokonce měli) použít ve třídě
 `HuffForests`, ale to by mělo dlouhosáhlé důsledky a výsledný kód by byl ještě
 více nerozeznatelný od originálu.
+* Konstruktory tříd `HuffTree`, `FreqSortedHuffForests` a `CharToFrequency`
+obsahují složitější logiku, pomocí které se samy inicializují. Pravděpodobně to
+není zcela podle DPP, nicméně v tomto případě je to únosné a kód může být o
+něco deklarativnější, bez dalších zbytečných metod.
 * Při vypisování běhu programu se vypisují minuty, sekundy, a k tomu celkový
 počet milisekund. Neopraveno, protože by se změnil výstup.
 
