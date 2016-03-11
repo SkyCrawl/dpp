@@ -10,6 +10,6 @@ File.open("complete_byte_set_file", 'w') { |file|
     # the result file must contain every byte at least once
     while(!bytes.empty?)
         # either get rid another of the bytes or write a random byte, based on chance
-        file.write((rand(2) ? bytes.shift : rand(256)).chr)
+        file.write((rand(2) == 0 ? bytes.shift : rand(256)).chr)
     end
 }
