@@ -130,22 +130,21 @@ namespace HuffmanCoding
 			// create the constructor-scoped state variable, shared among related methods
 			ConstructionState state = new ConstructionState(allHuffForests, null);
 
-			// zip forests of frequency-equal characters, until there is a single forest left
-			// Note: the algorithm guarantees one remaining forest, unless the input is empty
-			while(state.HasTwoMoreTreesToProcess) // there are still at least two forests to zip
+			// zip pairs of trees, until there is a single one left (unless the input is empty)
+			while(state.HasTwoMoreTreesToProcess)
 			{
-				// get the current minimum frequency and corresponding huffman forests
+				// get the current minimum frequency and corresponding huffman forest
 				int minFreq = state.allHuffForests.LeastFreq;
 				HuffForest minFreqForests = state.allHuffForests.ForestWithLeastFreq;
 
-				// branch depending on whether we still have a leftover forest from last iteration to process
+				// branch depending on whether we still have a leftover tree from the last iteration
 				IEnumerator<HuffNode> minFreqForestsEnumerator = minFreqForests.GetEnumerator();
 				if(state.leftoverForestFromLastIter == null)
 				{
-					// process the current forests pair-wise, possibly leaving a leftover
+					// pair-wise zip of the forest's trees, maybe leaving a leftover
 					PairWiseForestZip(minFreqForestsEnumerator, state);
 				}
-				else // we have a leftover forest from last iteration
+				else // we have a leftover tree from last iteration
 				{
 					// if the forest happens to be empty (else branch), do nothing and remove the forest later on
 					if(minFreqForestsEnumerator.MoveNext())
@@ -157,19 +156,19 @@ namespace HuffmanCoding
 						// zip the two trees into one and add it to be processed later
 						ZipTrees(state, tree1, tree2);
 
-						// reset the leftover pointer
+						// leftover tree has just been zipped => reset the pointer
 						state.leftoverForestFromLastIter = null;
 
-						// and now process the current forests pair-wise, possibly leaving another leftover
+						// and now pair-wise zip of the forest's trees, maybe leaving a leftover
 						PairWiseForestZip(minFreqForestsEnumerator, state);
 					}
 				}
 
-				// remove the currently processed entry
+				// remove the currently processed forest
 				state.allHuffForests.Remove(minFreq);
 			}
 
-			// the last surviving forest is the last added forest and becomes the root
+			// the last surviving tree is the last added tree with highest frequency number
 			// Note: mind empty input...
 			this.root = state.allHuffForests.LeastTree; // null if empty
 		}
@@ -197,10 +196,10 @@ namespace HuffmanCoding
 
 		private void ZipTrees(ConstructionState state, HuffNode tree1, HuffNode tree2)
 		{
-			// create a parent node for the two nodes
+			// zip the trees into one
 			bool oneLeftOfTwo = tree1.ShouldBeLeftOf(tree2);
 			HuffNode compoundTree = new HuffNode(
-				tree1.character, // doesn't really matter for inner nodes because their characters are not printed out
+				tree1.character, // doesn't matter for inner nodes because they don't represent a character
 				tree1.frequency + tree2.frequency,
 				oneLeftOfTwo ? tree1 : tree2, // one is left
 				oneLeftOfTwo ? tree2 : tree1); // and the other is right
