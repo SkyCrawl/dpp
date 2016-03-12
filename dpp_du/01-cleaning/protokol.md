@@ -49,7 +49,7 @@ obsahuje jediný zakomentovaný řádek, volající neexistující metodu.
 ## Třída 'FreqSortedHuffForests'
 
 * Upravena vzhledem k zavedení `CharToFrequency`.
-* Vyřešeny potenciální budoucí problémy s `null` seznamy.
+* Vyřešeny potenciální problémy s `null` seznamy.
 
 ## Třída 'CharToFrequency'
 
@@ -74,7 +74,7 @@ protože nebyla použita a pouze obsahovala hodnotu 0 nebo 1.
 zakomentovaný řádek, volající neexistující metodu.
 * Metoda `VypisStrom2(vrchol vrch, string pre)` byla výrazně zjednodušena.
 * Zavedeny konstanty `MIN_ASCII_PRINTABLE` a `MAX_ASCII_PRINTABLE`.
-* Odstraněny případné budoucí problémy s `null` uzly, včetně kořene.
+* Odstraněny případné budoucí problémy s prázdnými soubory a `null` uzly (včetně kořene).
 * Udržování proměnné `ZbyvaZpracovat` jsme obešli speciální metodou ve třídě
 `FreqSortedHuffForests`, efektivní pro toto konkrétní použití.
 
