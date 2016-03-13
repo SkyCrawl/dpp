@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -30,17 +30,20 @@
     <Externalconsole>true</Externalconsole>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>HuffmanCoding.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="01-cleaning\huffman-clean.cs" />
-    <Compile Include="01-cleaning\huffman-original.cs" />
+    <Compile Include="huffman-clean.cs" />
+    <Compile Include="huffman-original.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <None Include="01-cleaning\protokol.md" />
+    <None Include="protokol.md" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
@@ -52,7 +55,5 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
-  <ItemGroup>
-    <Folder Include="01-cleaning\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

@@ -1,9 +1,9 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dpp_du", "dpp_du\dpp_du.csproj", "{E68754C2-60F3-47DF-80B3-7D5DF46E9A5C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dpp_du", "01 Cleaning\01 Cleaning.csproj", "{E68754C2-60F3-47DF-80B3-7D5DF46E9A5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dpp_du_test", "dpp_du_test\dpp_du_test.csproj", "{E3F45090-796B-40E7-8582-A8F6C4E86C89}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dpp_du_test", "01 Cleaning Test\01 Cleaning Test.csproj", "{E3F45090-796B-40E7-8582-A8F6C4E86C89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
