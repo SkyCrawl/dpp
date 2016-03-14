@@ -20,6 +20,8 @@
     <Externalconsole>true</Externalconsole>
     <PlatformTarget>x86</PlatformTarget>
     <Commandlineparameters>"/Users/SkyCrawl/Shared/_xamarin/dpp_du/dpp_du_test/01-cleaning/incomplete_byte_set_file"</Commandlineparameters>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>bin\Debug\dpp_du.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>full</DebugType>
@@ -29,6 +31,8 @@
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
     <PlatformTarget>x86</PlatformTarget>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>bin\Release\dpp_du.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>HuffmanCoding.Program</StartupObject>

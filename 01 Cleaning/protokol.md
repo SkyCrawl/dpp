@@ -41,8 +41,9 @@ jinde.
 a nic se s ní reálně nedělalo).
 * Vytvořena konstanta potřebného počtu argumentů pro program.
 * Přejmenovány původní proměnné.
-* Základní logika načítání souborů byla vylepšena a obsah výjimek je nyní
-vypisován na konzoli.
+* Základní logika načítání souborů byla vylepšena, oproti původní verzi
+programu se odchytávají výjimky v průběhu celého čtení vstupního souboru,
+nejenom při jeho otevření.
 * Volání metody `strom.VypisStrom()` bylo odstraněno, protože daná metoda
 obsahuje jediný zakomentovaný řádek, volající neexistující metodu.
 
@@ -116,7 +117,5 @@ počet milisekund. Neopraveno, protože by se změnil výstup.
 
 ## TODO
 
-* Doplnit komentáře k metodám.
 * Formátování (hlavně 80 sloupců).
-* Možná změnit zpátky chybové výstupy programu (byly upraveny).
 
