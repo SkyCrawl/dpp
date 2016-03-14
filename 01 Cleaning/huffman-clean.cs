@@ -53,13 +53,20 @@ namespace HuffmanCoding
         #region Constructor
 
         /// <summary>
-        /// Constructor of the <see cref="HuffNode"/>. All values have to be set here, no value can be changed later.
+        /// Constructor of the <see cref="HuffNode"/>. All values have to be set
+        /// here, no value can be changed later.
         /// </summary>
-        /// <param name="character">The ASCII character, that the node is representing.</param>
-        /// <param name="frequency">The frequency of the character in the document.</param>
+        /// <param name="character">The ASCII character, that the node is
+        /// representing.</param>
+        /// <param name="frequency">The frequency of the character in the
+        /// document.</param>
         /// <param name="leftSon">The left child of the node.</param>
         /// <param name="rightSon">The right child of the node.</param>
-        public HuffNode(byte character, int frequency, HuffNode leftSon, HuffNode rightSon)
+        public HuffNode(
+            byte character,
+            int frequency,
+            HuffNode leftSon,
+            HuffNode rightSon)
         {
             this.Frequency = frequency;
             this.Character = character;
@@ -73,7 +80,8 @@ namespace HuffmanCoding
         #region Methods
 
         /// <summary>
-        /// True o sobe vrchol rekne jestli bude v Huffmanskem strome nalevo od druheho vrcholu.
+        /// True o sobe vrchol rekne jestli bude v Huffmanskem strome nalevo od
+        /// druheho vrcholu.
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -125,7 +133,12 @@ namespace HuffmanCoding
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns>
-        /// A value that indicates the relative order of the objects being compared. The return value has the following meanings: Value Meaning Less than zero This object is less than the <paramref name="other" /> parameter.Zero This object is equal to <paramref name="other" />. Greater than zero This object is greater than <paramref name="other" />.
+        /// A value that indicates the relative order of the objects being
+        /// compared. The return value has the following meanings: Value Meaning
+        /// Less than zero This object is less than the
+        /// <paramref name="other" /> parameter.Zero This object is equal to
+        /// <paramref name="other" />. Greater than zero This object is greater
+        /// than <paramref name="other" />.
         /// </returns>
         public int CompareTo(HuffNode other)
         {
@@ -143,11 +156,15 @@ namespace HuffmanCoding
     }
 
     /// <summary>
-    /// The huffman tree. There is no easy way to change the tree, it has to be fully loaded from already existing nodes.
+    /// The huffman tree. There is no easy way to change the tree, it has to be
+    /// fully loaded from already existing nodes.
     /// </summary>
     class HuffTree
     {
         #region Fields
+
+        const string EMPTY_TREE_MESSAGE = "Algorithm doesn't allow zipping of"
+            + " 'null' nodes. Is the tree construction algorithm broken?";
 
         /// <summary>
         /// The lowest ASCII value, that is printed as character.
@@ -166,7 +183,8 @@ namespace HuffmanCoding
         #region Classes
 
         /// <summary>
-        /// The internal class, that represents the state of the tree generation.
+        /// The internal class, that represents the state of the tree
+        /// generation.
         /// </summary>
         private class ConstructionState
         {
@@ -177,11 +195,14 @@ namespace HuffmanCoding
             {
                 get
                 {
-                    return forests.HasMoreTreesThan(lastIterLeftoverTree != null ? 0 : 1);
+                    return forests.HasMoreTreesThan(
+                        lastIterLeftoverTree != null ? 0 : 1);
                 }
             }
 
-            public ConstructionState(FreqSortedHuffForest forests, HuffNode lastIterLeftoverTree)
+            public ConstructionState(
+                FreqSortedHuffForest forests,
+                HuffNode lastIterLeftoverTree)
             {
                 this.forests = forests;
                 this.lastIterLeftoverTree = lastIterLeftoverTree;
@@ -193,53 +214,28 @@ namespace HuffmanCoding
         #region Constructor
 
         /// <summary>
-        /// Constructor of the <see cref="HuffTree"/>. All nodes have to be specified here.
+        /// Constructor of the <see cref="HuffTree"/>.
+        /// All nodes have to be specified here.
         /// </summary>
         /// <param name="forests"></param>
         public HuffTree(FreqSortedHuffForest forests)
         {
-            // create the constructor-scoped state variable, shared among related methods
+            // create the constructor-scoped state variable, shared among
+            // related methods
             ConstructionState state = new ConstructionState(forests, null);
 
-            // zip pairs of trees, until there is a single one left (unless the input is empty)
+            // zip pairs of trees, until there is a single one left (unless the
+            // input is empty)
             while (state.HasTwoMoreTreesToProcess)
             {
-                // get the current minimum frequency and corresponding huffman forest
-                int minFreq = state.forests.LowestFreq;
-                HuffForest minFreqForest = state.forests.ForestWithLowestFreq;
-
-                // branch depending on whether we still have a leftover tree from the last iteration
-                IEnumerator<HuffNode> minFreqForestEnumerator = minFreqForest.GetEnumerator();
-                if (state.lastIterLeftoverTree == null)
-                {
-                    // pair-wise zip of the forest's trees, maybe leaving a leftover
-                    PairWiseForestZip(minFreqForestEnumerator, state);
-                }
-                else // we have a leftover tree from last iteration
-                {
-                    // if the forest happens to be empty (else branch), do nothing and remove the forest later on
-                    if (minFreqForestEnumerator.MoveNext())
-                    {
-                        // then get the first currently processed forest
-                        HuffNode tree1 = state.lastIterLeftoverTree; // non-null (guaranteed by condition)
-                        HuffNode tree2 = minFreqForestEnumerator.Current; // non-null (guaranteed by condition)
-
-                        // zip the two trees into one and add it to be processed later
-                        ZipTrees(state, tree1, tree2);
-
-                        // leftover tree has just been zipped => reset the pointer
-                        state.lastIterLeftoverTree = null;
-
-                        // and now pair-wise zip of the forest's trees, maybe leaving a leftover
-                        PairWiseForestZip(minFreqForestEnumerator, state);
-                    }
-                }
+                int minFreq = ProcessTwoTrees(state);
 
                 // remove the currently processed forest
                 state.forests.Remove(minFreq);
             }
 
-            // the last surviving tree is the last added tree with highest frequency number
+            // the last surviving tree is the last added tree with highest
+            // frequency number
             // Note: mind empty input...
             this.root = state.forests.LowestTree; // null if empty
         }
@@ -248,22 +244,71 @@ namespace HuffmanCoding
 
         #region Methods
 
+        private int ProcessTwoTrees(ConstructionState state)
+        {
+            // get the current minimum frequency and corresponding huffman
+            // forest
+            int minFreq = state.forests.LowestFreq;
+            HuffForest minFreqForest = state.forests.ForestWithLowestFreq;
+
+            // branch depending on whether we still have a leftover tree from
+            // the last iteration
+            IEnumerator<HuffNode> minFreqForestEnumerator =
+                minFreqForest.GetEnumerator();
+
+            if (state.lastIterLeftoverTree == null)
+            {
+                // pair-wise zip of the forest's trees, maybe leaving a leftover
+                PairWiseForestZip(minFreqForestEnumerator, state);
+            }
+            else // we have a leftover tree from last iteration
+            {
+                // if the forest happens to be empty (else branch), do nothing
+                // and remove the forest later on
+                if (minFreqForestEnumerator.MoveNext())
+                {
+                    // then get the first currently processed forest
+                    // Both are non-null (guaranteed by condition)
+                    HuffNode tree1 = state.lastIterLeftoverTree;
+                    HuffNode tree2 = minFreqForestEnumerator.Current;
+
+                    // zip the two trees into one and add it to be processed
+                    // later
+                    ZipTrees(state, tree1, tree2);
+
+                    // leftover tree has just been zipped => reset the pointer
+                    state.lastIterLeftoverTree = null;
+
+                    // and now pair-wise zip of the forest's trees,
+                    // maybe leaving a leftover
+                    PairWiseForestZip(minFreqForestEnumerator, state);
+                }
+            }
+            return minFreq;
+        }
+
         /// <summary>
-        /// Merges next two trees of Huffman nodes into one, that is added back into the construction state.
+        /// Merges next two trees of Huffman nodes into one, that is added back
+        /// into the construction state.
         /// </summary>
         /// <param name="enumerator"></param>
         /// <param name="state"></param>
-        private void PairWiseForestZip(IEnumerator<HuffNode> enumerator, ConstructionState state)
+        private void PairWiseForestZip(
+            IEnumerator<HuffNode> enumerator,
+            ConstructionState state)
         {
             while (enumerator.MoveNext())
             {
-                HuffNode tree1 = enumerator.Current; // non-null (guaranteed by condition)
+                // non-null (guaranteed by condition)
+                HuffNode tree1 = enumerator.Current;
 
                 if (enumerator.MoveNext()) // second node is available
                 {
-                    HuffNode tree2 = enumerator.Current; // non-null (guaranteed by condition)
+                    // non-null (guaranteed by condition)
+                    HuffNode tree2 = enumerator.Current;
 
-                    // zip the two trees into one and add it to be processed later
+                    // zip the two trees into one and
+                    // add it to be processed later
                     ZipTrees(state, tree1, tree2);
                 }
                 else // second node is not available
@@ -274,16 +319,21 @@ namespace HuffmanCoding
             }
         }
 
-        private void ZipTrees(ConstructionState state, HuffNode tree1, HuffNode tree2)
+        private void ZipTrees(
+            ConstructionState state,
+            HuffNode tree1,
+            HuffNode tree2)
         {
             // just-in-case integrity check
-            tree1.ThrowIfNull("Algorithm doesn't allow zipping of 'null' nodes. Is the tree construction algorithm broken?");
-            tree2.ThrowIfNull("Algorithm doesn't allow zipping of 'null' nodes. Is the tree construction algorithm broken?");
+            tree1.ThrowIfNull(EMPTY_TREE_MESSAGE);
+            tree2.ThrowIfNull(EMPTY_TREE_MESSAGE);
 
             // zip the trees into one
             bool oneLeftOfTwo = tree1.ShouldBeLeftOf(tree2);
             HuffNode compoundTree = new HuffNode(
-                tree1.Character, // doesn't matter for inner nodes because they don't represent a character
+                // doesn't matter for inner nodes
+                // because they don't represent a character
+                tree1.Character,
                 tree1.Frequency + tree2.Frequency,
                 oneLeftOfTwo ? tree1 : tree2, // one is left
                 oneLeftOfTwo ? tree2 : tree1); // and the other is right
@@ -314,20 +364,29 @@ namespace HuffmanCoding
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="subtreeRoot">The subtree, that should be printed.</param>
-        /// <param name="indentation">The prefix that is used before all nodes of the subtree</param>
+        /// <param name="subtreeRoot">The subtree,
+        /// that should be printed.</param>
+        /// <param name="indentation">The prefix that is used before all nodes
+        /// of the subtree</param>
         private void PrintSubtree(HuffNode subtreeRoot, string indentation)
         {
             if (subtreeRoot.IsLeaf)
             {
                 // print self
-                if ((subtreeRoot.Character < MIN_ASCII_PRINTABLE) || (subtreeRoot.Character > MAX_ASCII_PRINTABLE))
+                if ((subtreeRoot.Character < MIN_ASCII_PRINTABLE) ||
+                    (subtreeRoot.Character > MAX_ASCII_PRINTABLE))
                 {
-                    Console.Write(" [{0}:{1}]\n", subtreeRoot.Character, subtreeRoot.Frequency);
+                    Console.Write(
+                        " [{0}:{1}]\n",
+                        subtreeRoot.Character,
+                        subtreeRoot.Frequency);
                 }
                 else
                 {
-                    Console.Write(" ['{0}':{1}]\n", (char)subtreeRoot.Character, subtreeRoot.Frequency);
+                    Console.Write(
+                        " ['{0}':{1}]\n",
+                        (char)subtreeRoot.Character,
+                        subtreeRoot.Frequency);
                 }
             }
             else
@@ -339,10 +398,12 @@ namespace HuffmanCoding
                 Console.Write("{0,4} -+- ", subtreeRoot.Frequency);
 
                 // and finally, print the subtree
-                // Note: child null-check is done in the 'ZipTrees' method and doesn't need to be included here
+                // Note: child null-check is done in the 'ZipTrees' method and
+                // doesn't need to be included here
                 PrintSubtree(subtreeRoot.RightChild, indentation + "|  ");
                 Console.Write("{0}|\n{0}`- ", indentation);
-                PrintSubtree(subtreeRoot.LeftChild, indentation + new string(' ', 3));
+                PrintSubtree(
+                    subtreeRoot.LeftChild, indentation + new string(' ', 3));
             }
         }
 
@@ -441,7 +502,13 @@ namespace HuffmanCoding
         /// </summary>
         public HuffForest ForestWithLowestFreq
         {
-            get { return forests.IsNullOrEmpty() ? null : forests.First().Value; }
+            get 
+            {
+                return
+                    forests.IsNullOrEmpty() ?
+                    null :
+                    forests.First().Value;
+            }
         }
 
         /// <summary>
@@ -449,7 +516,13 @@ namespace HuffmanCoding
         /// </summary>
         public HuffNode LowestTree
         {
-            get { return HasMoreTreesThan(0) ? ForestWithLowestFreq.First() : null; }
+            get
+            {
+                return
+                    HasMoreTreesThan(0) ?
+                    ForestWithLowestFreq.First() :
+                    null;
+            }
         }
 
         #endregion
@@ -457,7 +530,8 @@ namespace HuffmanCoding
         #region Constructor
 
         /// <summary>
-        /// Creates a new forest instance from the character frequencies dictionary.
+        /// Creates a new forest instance from the character frequencies
+        /// dictionary.
         /// </summary>
         /// <param name="charToFreq"></param>
         public FreqSortedHuffForest(Dictionary<byte, int> charToFreq)
@@ -465,14 +539,16 @@ namespace HuffmanCoding
             // initialize
             this.forests = new SortedDictionary<int, HuffForest>();
 
-            // convert bytes with frequencies into forests of trivial huffman trees, indexed by frequency
+            // convert bytes with frequencies into forests of trivial huffman
+            // trees, indexed by frequency
             foreach (KeyValuePair<byte, int> entry in charToFreq)
             {
                 // use our own method to add new forests
                 this.Add(new HuffNode(entry.Key, entry.Value, null, null));
             }
 
-            // once we have the forests, sort them with the order defined by the 'Node.CompareTo' method
+            // once we have the forests, sort them with the order defined by the
+            // 'Node.CompareTo' method
             foreach (HuffForest forest in forests.Values)
             {
                 forest.Sort();
@@ -513,7 +589,8 @@ namespace HuffmanCoding
         }
 
         /// <summary>
-        /// Returns the if the there are more trees in the forest than the amount parameter.
+        /// Returns the if the there are more trees in the forest than the
+        /// amount parameter.
         /// </summary>
         /// <param name="amount"></param>
         /// <returns></returns>
@@ -561,7 +638,9 @@ namespace HuffmanCoding
 
         #region Methods to run/benchmark the program
 
-        private static void ApplyStopwatch(Action<string[]> action, string[] args)
+        private static void ApplyStopwatch(
+            Action<string[]> action,
+            string[] args)
         {
             // initialize stopwatch
             Stopwatch stopwatch = new Stopwatch();
@@ -575,7 +654,8 @@ namespace HuffmanCoding
             // stop counting
             stopwatch.Stop();
 
-            // print execution time and wait for console input to terminate the process
+            // print execution time and wait for console input to terminate the
+            // process
             Console.WriteLine(string.Format(
                 "Execution time: {0}mn {1}s {2}ms",
                 stopwatch.Elapsed.Minutes,
@@ -597,10 +677,15 @@ namespace HuffmanCoding
             FreqSortedHuffForest freqSortedHuffForests = null;
             try
             {
-                using (var inputFileStream = new FileStream(args[0], FileMode.Open, FileAccess.Read))
+                using (var inputFileStream =
+                    new FileStream(args[0], FileMode.Open, FileAccess.Read))
                 {
                     // read & parse the input file
-                    freqSortedHuffForests = new FreqSortedHuffForest(new CharToFrequency(inputFileStream));
+                    CharToFrequency frequencies =
+                        new CharToFrequency(inputFileStream);
+
+                    freqSortedHuffForests =
+                        new FreqSortedHuffForest(frequencies);
                 }
             }
             catch (Exception)
@@ -612,7 +697,8 @@ namespace HuffmanCoding
             // at this point, 'freqSortedHuffForests' must be non-null
             if (freqSortedHuffForests.HasMoreTreesThan(0))
             {
-                // the condition is not necessary as the program correctly handles empty inputs now
+                // the condition is not necessary as the program correctly
+                // handles empty inputs now
                 HuffTree huffTree = new HuffTree(freqSortedHuffForests);
                 huffTree.Print();
                 Console.Write("\n");
@@ -624,7 +710,8 @@ namespace HuffmanCoding
         #region Extensions/conveniences
 
         /// <summary>
-        /// Checks the source argument and throws a <see cref="NullReferenceException"/> if it is null.
+        /// Checks the source argument and throws a
+        /// <see cref="NullReferenceException"/> if it is null.
         /// </summary>
         /// <param name="source"></param>
         /// <param name="message"></param>

@@ -3,14 +3,15 @@
 * Formátováno. Dodatečné poznámky:
     * 80 sloupců.
     * Explicitně doplněny závorky pro bloky sestávající z jediného příkazu.
-    * Konvence velkých a malých písmen podle [MSDN](https://msdn.microsoft.com/en-us/library/ms229043.aspx). Privátní metody
-začínají malým písmenem.
+    * Konvence velkých a malých písmen podle 
+[MSDN](https://msdn.microsoft.com/en-us/library/ms229043.aspx).
+Privátní metody začínají malým písmenem.
 * Namespace přejmenován na `HuffmanCoding`.
 * Ke všem fieldům/metodám explicitně doplněn scope.
 * Obsah metod je nyní mnohdy explicitně komentován.
 * `SortedDictionary<int, List<Node>>` představoval typ přečteného vstupu a byl
-extrahován do speciálního typu (`FreqSortedHuffForests`), i protože metoda čtení
-a přípravy tohoto vstupu byla dlouhá a zasloužila si lepší členění.
+extrahován do speciálního typu (`FreqSortedHuffForests`), i protože metoda
+čtení a přípravy tohoto vstupu byla dlouhá a zasloužila si lepší členění.
 * Ze třídy `FreqSortedHuffForests` byly dále pro lepší srozumitelnost,
 přehlednost a znovupoužitelnost extrahovány dva nové typy: `CharToFrequency` a
 `HuffForests`.
@@ -73,7 +74,8 @@ protože nebyla použita a pouze obsahovala hodnotu 0 nebo 1.
 zakomentovaný řádek, volající neexistující metodu.
 * Metoda `VypisStrom2(vrchol vrch, string pre)` byla výrazně zjednodušena.
 * Zavedeny konstanty `MIN_ASCII_PRINTABLE` a `MAX_ASCII_PRINTABLE`.
-* Odstraněny případné budoucí problémy s prázdnými soubory a `null` uzly (včetně kořene).
+* Odstraněny případné budoucí problémy s prázdnými soubory a `null` uzly
+(včetně kořene).
 * Udržování proměnné `ZbyvaZpracovat` jsme obešli speciální metodou ve třídě
 `FreqSortedHuffForests`, efektivní pro toto konkrétní použití.
 
@@ -93,8 +95,8 @@ Property.
 ## Neprovedené změny
 
 * Program by mohl brát ještě jeden argument, který bude určovat aplikaci stopek,
-ale měl by být pro přehlednost a lepší použití první v pořadí, a tomu
-zabraňuje zadání.
+ale měl by být pro přehlednost a lepší použití první v pořadí, a tomu zabraňuje
+zadání.
 * Parametrizace třídy `HuffNode`, která by pouze obsahovala fieldy `data`, 
 `leftSon` a `rightSon`. V rámci např. rozšíření programu na knihovnu by se změna
 mohla hodit, nicméně také zvyšuje zavlečenou složitost a zatím nemá smysl.
@@ -114,9 +116,4 @@ něco deklarativnější, bez dalších zbytečných metod.
 počet milisekund. Neopraveno, protože by se změnil výstup.
 * Všechna `Console.Write` volání zapisující na konci `\n` byl mohla být
 přepsána na `Console.WriteLine`, ale to by změnilo chování programu ve Windows,
-kde se standardně ukončují řádky pomocí `\r\n`
-
-## TODO
-
-* Formátování (hlavně 80 sloupců).
-
+kde se standardně ukončují řádky pomocí `\r\n`.
