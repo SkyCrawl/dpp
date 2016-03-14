@@ -323,11 +323,11 @@ namespace HuffmanCoding
                 // print self
                 if ((subtreeRoot.Character < MIN_ASCII_PRINTABLE) || (subtreeRoot.Character > MAX_ASCII_PRINTABLE))
                 {
-                    Console.WriteLine(" [{0}:{1}]", subtreeRoot.Character, subtreeRoot.Frequency);
+                    Console.Write(" [{0}:{1}]\n", subtreeRoot.Character, subtreeRoot.Frequency);
                 }
                 else
                 {
-                    Console.WriteLine(" ['{0}':{1}]", (char)subtreeRoot.Character, subtreeRoot.Frequency);
+                    Console.Write(" ['{0}':{1}]\n", (char)subtreeRoot.Character, subtreeRoot.Frequency);
                 }
             }
             else
@@ -615,7 +615,7 @@ namespace HuffmanCoding
                 // the condition is not necessary as the program correctly handles empty inputs now
                 HuffTree huffTree = new HuffTree(freqSortedHuffForests);
                 huffTree.Print();
-                Console.WriteLine();
+                Console.Write("\n");
             }
         }
 

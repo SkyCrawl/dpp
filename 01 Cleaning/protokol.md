@@ -8,8 +8,6 @@ začínají malým písmenem.
 * Namespace přejmenován na `HuffmanCoding`.
 * Ke všem fieldům/metodám explicitně doplněn scope.
 * Obsah metod je nyní mnohdy explicitně komentován.
-* Všechna `Console.Write` volání zapisující na konci `\n` byla přepsána na
-`Console.WriteLine`.
 * `SortedDictionary<int, List<Node>>` představoval typ přečteného vstupu a byl
 extrahován do speciálního typu (`FreqSortedHuffForests`), i protože metoda čtení
 a přípravy tohoto vstupu byla dlouhá a zasloužila si lepší členění.
@@ -114,6 +112,9 @@ není zcela podle DPP, nicméně v tomto případě je to únosné a kód může
 něco deklarativnější, bez dalších zbytečných metod.
 * Při vypisování běhu programu se vypisují minuty, sekundy, a k tomu celkový
 počet milisekund. Neopraveno, protože by se změnil výstup.
+* Všechna `Console.Write` volání zapisující na konci `\n` byl mohla být
+přepsána na `Console.WriteLine`, ale to by změnilo chování programu ve Windows,
+kde se standardně ukončují řádky pomocí `\r\n`
 
 ## TODO
 

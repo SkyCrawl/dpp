@@ -15,7 +15,7 @@ namespace dpp_du_test
     [TestFixture()]
     public class Test
     {
-        private static string TEST_DIR = new DirectoryInfo(GetCurrentDirectory()).Parent.Parent.FullName;
+        private static string TEST_DIR = new DirectoryInfo(GetCurrentDirectory()).Parent.Parent.Parent.FullName;
         private static string EMPTY_FILE = Path.Combine(TEST_DIR, "empty_file");
         private static string ONE_BYTE_FILE = Path.Combine(TEST_DIR, "one_byte_file");
         private static string INCOMPLETE_BYTE_SET_FILE = Path.Combine(TEST_DIR, "incomplete_byte_set_file");
