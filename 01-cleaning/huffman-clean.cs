@@ -40,7 +40,7 @@ namespace HuffmanCoding
         public HuffNode RightChild { get; private set; }
 
         /// <summary>
-		/// Returns true if no child is defined.
+        /// Returns true if no child is defined.
         /// </summary>
         /// <returns></returns>
         public bool IsLeaf
@@ -163,18 +163,19 @@ namespace HuffmanCoding
     {
         #region Fields
 
-        private static string EMPTY_TREE_MESSAGE = "Algorithm doesn't allow zipping of"
-            + " 'null' nodes. Is the tree construction algorithm broken?";
+        private const string EMPTY_TREE_MESSAGE = "Algorithm doesn't allow"
+            + " zipping of 'null' nodes. Is the tree construction algorithm"
+            + " broken?";
 
         /// <summary>
         /// The lowest ASCII value, that is printed as character.
         /// </summary>
-        private static byte MIN_ASCII_PRINTABLE = 32;
+        private const byte MIN_ASCII_PRINTABLE = 32;
 
         /// <summary>
         /// The highest ASCII value, that is printed as character.
         /// </summary>
-        private static byte MAX_ASCII_PRINTABLE = 126;
+        private const byte MAX_ASCII_PRINTABLE = 126;
 
         private HuffNode root;
 
@@ -289,12 +290,12 @@ namespace HuffmanCoding
 
         /// <summary>
         /// Merges each pair of Huffman nodes into one and adds it to the
-		/// construction state.
+        /// construction state.
         /// </summary>
-		/// <param name="treeEnumerator"></param>
+        /// <param name="treeEnumerator"></param>
         /// <param name="state"></param>
         private void PairWiseTreeZip(
-			IEnumerator<HuffNode> treeEnumerator,
+            IEnumerator<HuffNode> treeEnumerator,
             ConstructionState state)
         {
             while (treeEnumerator.MoveNext())
@@ -362,11 +363,11 @@ namespace HuffmanCoding
         }
 
         /// <summary>
-		/// Prints the given subtree to standard output.
+        /// Prints the given subtree to standard output.
         /// </summary>
         /// <param name="subtreeRoot">The subtree.</param>
         /// <param name="indentation">The string to prepend to the current
-		/// root.</param>
+        /// root.</param>
         private void PrintSubtree(HuffNode subtreeRoot, string indentation)
         {
             if (subtreeRoot.IsLeaf)
@@ -419,7 +420,7 @@ namespace HuffmanCoding
         /// <summary>
         /// The size of the internal buffer used for reading the stream.
         /// </summary>
-        private static int BUFF_SIZE = 0x4000; // 16384
+        private const int BUFF_SIZE = 0x4000; // 16384
 
         #endregion
 
@@ -471,16 +472,16 @@ namespace HuffmanCoding
         #endregion
     }
 
-	/// <summary>
-	/// Helper class for <see cref="FreqSortedHuffForests"/>.
-	/// </summary>
+    /// <summary>
+    /// Helper class for <see cref="FreqSortedHuffForests"/>.
+    /// </summary>
     class HuffForest : List<HuffNode>
     {
     }
 
     /// <summary>
     /// The currently required input for Huffman tree construction. Indexes
-	/// trees represented by their root and sorts them by frequency.
+    /// trees represented by their root and sorts them by frequency.
     /// </summary>
     class FreqSortedHuffForests
     {
@@ -516,7 +517,7 @@ namespace HuffmanCoding
 
         /// <summary>
         /// Returns the first tree with the lowest frequency in the forest
-		/// or 'null' of empty.
+        /// or 'null' of empty.
         /// </summary>
         public HuffNode LowestTree
         {
@@ -603,10 +604,10 @@ namespace HuffmanCoding
             {
                 amount -= forest.Count;
 
-				if(amount < 0)
-				{
-					return true;
-				}
+                if(amount < 0)
+                {
+                    return true;
+                }
             }
 
             return false;
@@ -736,7 +737,7 @@ namespace HuffmanCoding
         /// <returns></returns>
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> enumerable)
         {
-			return enumerable == null ? true : !enumerable.Any();
+            return enumerable == null ? true : !enumerable.Any();
         }
 
         #endregion
