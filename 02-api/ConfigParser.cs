@@ -64,7 +64,7 @@ namespace IniConfig
 
 				if(IsIdentifierWellFormed(optionIdentifier, IdentifierType.OPTION))
 				{
-					ParseOptionValue(lineIndex, optionIdentifier, optionValue, section, backlog);
+					ParseElement(lineIndex, optionIdentifier, optionValue, section, backlog);
 				}
 				else
 				{
@@ -78,14 +78,19 @@ namespace IniConfig
 			}
 		}
 
-		private void ParseOptionValue(int lineIndex, string identifier, string value, Section section, IConfigBacklog backlog)
+		private void ParseElement(int lineIndex, string identifier, string value, Section section, IConfigBacklog backlog)
 		{
-			/*
-			 * - hodnota je reprezentována jedním nebo více elementy stejného typu oddělených čárkou (,) nebo dvojtečkou (:), v rámci jedné hodnoty ale vždy buď pouze (,) nebo pouze (:)
-			 */
+			// hodnota je reprezentována jedním nebo více elementy stejného typu oddělených čárkou (,) nebo dvojtečkou (:), v rámci jedné hodnoty ale vždy buď pouze (,) nebo pouze (:)
+			// TODO: semicolon shall be preferred over comma but don't forget about escaping with slashes...
+			// TODO: type checks
 
+			Element element = null; // TODO
+			section.optionMap.AddOption(identifier, element);
+		}
+
+		private void TypeCheck()
+		{
 			// TODO:
-			section.optionMap.AddOption(identifier, optionValue);
 		}
 
 		#region Identifier types and restrictions
