@@ -23,7 +23,7 @@ namespace _02_api_alternative.Definitions
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Schema"/> class with an option to supply sections.
+        /// Initializes a new instance of the <see cref="Schema"/> class with an option to supply a collection of sections.
         /// </summary>
         /// <param name="sectionDefinitions">The definitions of sections.</param>
         public Schema(IEnumerable<SectionDefinition> sectionDefinitions = null)

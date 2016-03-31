@@ -9,17 +9,17 @@ using _02_api_alternative.Definitions;
 namespace _02_api_alternative
 {
     /// <summary>
-    /// The class used to read configuration from a stream.
+    /// The class used to write a configuration into stream.
     /// </summary>
-    public class ConfigurationReader
+    public class ConfigurationWriter
     {
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ConfigurationReader"/> class with an optional configuration schema.
+        /// Initializes a new instance of the <see cref="ConfigurationWriter"/> class with an optional configuration schema.
         /// </summary>
         /// <param name="schema">The configuration schema.</param>
-        public ConfigurationReader(Schema schema = null)
+        public ConfigurationWriter(Schema schema = null)
         {
         }
 
@@ -28,14 +28,12 @@ namespace _02_api_alternative
         #region Public Methods
 
         /// <summary>
-        /// Reads the configuration.
+        /// Writes the configuration into a stream.
         /// </summary>
         /// <param name="stream"></param>
-        /// <param name="strict"></param>
-        /// <returns></returns>
-        public Configuration Read(Stream stream, bool strict)
+        /// <param name="configuration"></param>
+        public void Write(Stream stream, Configuration configuration)
         {
-            throw new NotImplementedException();
         }
 
         #endregion

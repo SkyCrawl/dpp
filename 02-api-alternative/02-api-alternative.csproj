@@ -45,10 +45,23 @@
   <ItemGroup>
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationReader.cs" />
+    <Compile Include="ConfigurationWriter.cs" />
+    <Compile Include="Definitions\BooleanElementDefinition.cs" />
+    <Compile Include="Definitions\EnumElementDefinition.cs" />
+    <Compile Include="Definitions\FloatElementDefinition.cs" />
     <Compile Include="Definitions\SectionDefinition.cs" />
+    <Compile Include="Definitions\SignedElementDefinition.cs" />
+    <Compile Include="Definitions\StringElementDefinition.cs" />
+    <Compile Include="Definitions\UnsignedElementDefinition.cs" />
+    <Compile Include="Elements\BooleanElement.cs" />
     <Compile Include="Elements\Element.cs" />
     <Compile Include="Definitions\ElementDefinition.cs" />
     <Compile Include="Definitions\Schema.cs" />
+    <Compile Include="Elements\EnumElement.cs" />
+    <Compile Include="Elements\FloatElement.cs" />
+    <Compile Include="Elements\SignedElement.cs" />
+    <Compile Include="Elements\StringElement.cs" />
+    <Compile Include="Elements\UnsignedElement.cs" />
     <Compile Include="Exceptions\ConfigurationException.cs" />
     <Compile Include="Exceptions\DuplicateSectionException.cs" />
     <Compile Include="Exceptions\InvalidCharacterException.cs" />

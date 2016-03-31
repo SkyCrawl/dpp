@@ -19,6 +19,11 @@ namespace _02_api_alternative.Definitions
         public string Identifier { get; set; }
 
         /// <summary>
+        /// True is the element is mandatory.
+        /// </summary>
+        public bool IsMandatory { get; set; }
+
+        /// <summary>
         /// The list of section elements.
         /// </summary>
         public List<ElementDefinition> Elements { get; private set; }
@@ -29,7 +34,7 @@ namespace _02_api_alternative.Definitions
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SectionDefinition"/> class
-        /// with an option to specify the section identifier and supply element definitions.
+        /// with an option to specify the section identifier and supply a collection of element definitions.
         /// </summary>
         /// <param name="identifier">The section identifier.</param>
         /// <param name="elements">The definition of elements.</param>
