@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _02_api_alternative.Exceptions
+namespace IniConfiguration.Exceptions
 {
     /// <summary>
     /// The configuration file contains an illegal character.

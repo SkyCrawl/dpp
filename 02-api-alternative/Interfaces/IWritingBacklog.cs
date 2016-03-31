@@ -4,10 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _02_api_alternative.Interfaces
+namespace IniConfiguration.Interfaces
 {
+    /// <summary>
+    /// The interface for backlog that provides information about writing configuration.
+    /// </summary>
     public interface IWritingBacklog
     {
+        /// <summary>
+        /// The configuration if not valid.
+        /// </summary>
         void ConfigurationNotValid();
     }
 }

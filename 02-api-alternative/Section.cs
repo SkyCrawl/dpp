@@ -3,30 +3,55 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using _02_api_alternative.Elements;
-using _02_api_alternative.Interfaces;
+using IniConfiguration.Definitions;
+using IniConfiguration.Elements;
+using IniConfiguration.Interfaces;
+using IniConfiguration.Schema;
 
-namespace _02_api_alternative
+namespace IniConfiguration
 {
     /// <summary>
     /// The configuration section.
     /// </summary>
-    public class Section : IValidable
+    public class Section : ConfigurationNode
     {
         #region Properties
 
         /// <summary>
-        /// Section elements.
+        /// The section options.
         /// </summary>
         public Dictionary<string, Option> Options { get; private set; }
 
         #endregion
 
-        public bool IsValid(ValidationMode mode)
+        #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Section"/> class.
+        /// </summary>
+        public Section()
+        {
+            Options = new Dictionary<string, Option>();
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Verifies the integrity of the configuration section.
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <param name="sectionDefinition"></param>
+        /// <param name="backlog"></param>
+        /// <returns></returns>
+        public bool IsValid(ValidationMode mode, SectionDefinition sectionDefinition, IValidationBacklog backlog = null)
         {
             throw new NotImplementedException();
         }
 
-        // Will containt an internal list of elements loaded from the stream.
+        #endregion
+
+        // Will containt an internal list of options loaded from the file.
     }
 }

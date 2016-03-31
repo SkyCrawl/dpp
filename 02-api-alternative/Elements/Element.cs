@@ -3,24 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using _02_api_alternative.Definitions;
-using _02_api_alternative.Interfaces;
+using IniConfiguration.Definitions;
+using IniConfiguration.Interfaces;
+using IniConfiguration.Schema;
 
-namespace _02_api_alternative.Elements
+namespace IniConfiguration.Elements
 {
     /// <summary>
-    /// The configuration element.
+    /// The option element.
     /// </summary>
-    public interface IElement : IValidable
-    {
-        object ValueObject { get; set; }
-        T GetValue<T>();
-        Type ValueType;
-    }
-
+    /// <typeparam name="T"></typeparam>
     public abstract class Element<T> : IElement
     {
         #region Properties
+
+        /// <summary>
+        /// The element value.
+        /// </summary>
+        public T Value { get; set; }
+
+        #endregion
+
+        #region IElement Members
 
         /// <summary>
         /// The element value.
@@ -31,33 +35,33 @@ namespace _02_api_alternative.Elements
             set { Value = (T)value; }
         }
 
-        #endregion
-
-        #region Public Methods
+        /// <summary>
+        /// The type of the value.
+        /// </summary>
+        public Type ValueType
+        {
+            get { return typeof(T); }
+        }
 
         /// <summary>
         /// Return the element value cast to a certain type.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="OutputType"></typeparam>
         /// <returns></returns>
-        public T GetValue<T>()
+        public OutputType GetValue<OutputType>()
         {
-            return (T)ValueObject;
+            return (OutputType)ValueObject;
         }
 
+        /// <summary>
+        /// Verifies the integrity of the configuration element.
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <param name="definition"></param>
+        /// <param name="backlog"></param>
+        /// <returns></returns>
+        public abstract bool IsValid(ValidationMode mode, OptionDefinition definition, IValidationBacklog backlog = null);
+
         #endregion
-
-        #region IValidable Members
-
-        public abstract bool IsValid(ValidationMode mode);
-
-        #endregion
-        
-        public T Value { get; set; }
-
-        public override Type ValueType
-        {
-            get { return typeof(T); }
-        }
     }
 }

@@ -3,22 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IniConfiguration.Interfaces;
 
-namespace _02_api_alternative.Definitions
+namespace IniConfiguration.Schema
 {
     /// <summary>
-    /// The definition for an enum element.
+    /// The definition for an enum option.
     /// </summary>
     /// <typeparam name="TEnum">The enumeration type, must be enum.</typeparam>
-    public class EnumElementDefinition<TEnum> : ElementDefinition
+    public class EnumOptionDefinition<TEnum> : OptionDefinition<TEnum>
         where TEnum : struct, IConvertible, IComparable, IFormattable
     {
         #region Constructor
 
         /// <summary>
-        /// Initializes the <see cref="EnumElementDefinition{TEnum}"/> class.
+        /// Initializes the <see cref="EnumOptionDefinition{TEnum}"/> class.
         /// </summary>
-        static EnumElementDefinition()
+        static EnumOptionDefinition()
         {
             if (!typeof(TEnum).IsEnum)
             {
@@ -31,10 +32,11 @@ namespace _02_api_alternative.Definitions
         #region Overrides
 
         /// <summary>
-        /// Verifies the integrity of the configuration element definition.
+        /// Verifies the integrity of the configuration definition.
         /// </summary>
+        /// <param name="backlog"></param>
         /// <returns></returns>
-        public override bool IsValid()
+        public override bool IsValid(IValidationBacklog backlog = null)
         {
             throw new NotImplementedException();
         }

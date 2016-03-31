@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _02_api_alternative.Definitions
+namespace IniConfiguration.Schema
 {
     /// <summary>
     /// The representation of a configuraton schema.
     /// </summary>
-    public class Schema
+    public class ConfigurationDefinition
     {
         #region Properties
 
@@ -23,11 +23,11 @@ namespace _02_api_alternative.Definitions
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Schema"/> class with an option to supply a collection of sections.
+        /// Initializes a new instance of the <see cref="ConfigurationDefinition"/> class.
         /// </summary>
-        /// <param name="sectionDefinitions">The definitions of sections.</param>
-        public Schema(IEnumerable<SectionDefinition> sectionDefinitions = null)
+        public ConfigurationDefinition()
         {
+            Sections = new List<SectionDefinition>();
         }
 
         #endregion
@@ -44,7 +44,7 @@ namespace _02_api_alternative.Definitions
         }
 
         /// <summary>
-        /// Creates a new configuration with default values.
+        /// Creates a new configuration with default option elements.
         /// </summary>
         /// <returns></returns>
         public Configuration CreateConfiguration()

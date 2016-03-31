@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace _02_api_alternative.Exceptions
+namespace IniConfiguration.Exceptions
 {
     /// <summary>
     /// The general exception type for invalid configuration.

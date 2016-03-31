@@ -3,26 +3,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IniConfiguration.Interfaces;
 
-namespace IniConfiguration.Interfaces
+namespace IniConfiguration.Backlogs
 {
     /// <summary>
-    /// The interface for backlog that provides information about parsing configuration.
+    /// The implementation of a parsing backlog that logs into console.
     /// </summary>
-    public interface IParsingBacklog
+    public class ConsoleParsingBacklog : IParsingBacklog
     {
+        #region IParsingBacklog Members
+
         /// <summary>
         /// A parsing error occured at the specified line.
         /// </summary>
         /// <param name="lineIndex"></param>
         /// <param name="message"></param>
-        void ParsingError(int lineIndex, string message);
+        public void ParsingError(int lineIndex, string message)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// A duplicate section was found in configuration.
         /// </summary>
         /// <param name="lineIndex"></param>
         /// <param name="sectionName"></param>
-        void DuplicateSection(int lineIndex, string sectionName);
+        public void DuplicateSection(int lineIndex, string sectionName)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

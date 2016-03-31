@@ -4,19 +4,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using _02_api_alternative.Definitions;
-using _02_api_alternative.Interfaces;
+using IniConfiguration.Definitions;
+using IniConfiguration.Interfaces;
+using IniConfiguration.Schema;
 
-namespace _02_api_alternative
+namespace IniConfiguration
 {
     /// <summary>
     /// The configuration.
     /// </summary>
-    public class Configuration : IValidable
+    public class Configuration
     {
         #region Properties
 
-        public Schema Schema { get; private set; }
+        /// <summary>
+        /// The configuration schema.
+        /// </summary>
+        public ConfigurationDefinition Schema { get; private set; }
 
         /// <summary>
         /// The configuration sections.
@@ -25,11 +29,33 @@ namespace _02_api_alternative
 
         #endregion
 
-        public bool IsValid(ValidationMode mode)
+        #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Configuration"/> class.
+        /// </summary>
+        public Configuration()
+        {
+            Sections = new Dictionary<string, Section>();
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Verifies the integrity of the configuration definition.
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <param name="backlog"></param>
+        /// <returns></returns>
+        public bool IsValid(ValidationMode mode, IValidationBacklog backlog = null)
         {
             throw new NotImplementedException();
         }
 
-        // Will contain an internal list of sections loaded from the stream.
+        #endregion
+
+        // Will contain an internal list of sections loaded from the file.
     }
 }
