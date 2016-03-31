@@ -48,21 +48,21 @@ namespace _02_api_alternative
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="configuration"></param>
-        public void WriteToText(TextWriter writer, Configuration configuration)
+        public void WriteToText(TextWriter writer, Configuration configuration, WritingOptions options)
         {
         }
 
-        public void WriteToFile(string fileName, Configuration configuration)
+        public void WriteToFile(string fileName, Configuration configuration, WritingOptions options)
         {
-            WriteToFile(fileName, Encoding.Default, configuration);
+            WriteToFile(fileName, Encoding.Default, configuration, options);
         }
 
-        public void WriteToFile(string fileName, Encoding encoding, Configuration configuration)
+        public void WriteToFile(string fileName, Encoding encoding, Configuration configuration, WritingOptions options)
         {
             using (var stream = File.Open(fileName, FileMode.Create, FileAccess.Write))
             {
                 var writer = new StreamWriter(stream, encoding);
-                WriteToText(writer, configuration);
+                WriteToText(writer, configuration, options);
             }
         }
 

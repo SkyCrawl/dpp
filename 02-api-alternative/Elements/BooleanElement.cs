@@ -10,17 +10,8 @@ namespace _02_api_alternative.Elements
     /// <summary>
     /// The element of the <see cref="bool" /> type.
     /// </summary>
-    public class BooleanElement : Element
+    public class BooleanElement : Element<bool>
     {
-        #region Properties
-
-        /// <summary>
-        /// The element value.
-        /// </summary>
-        public bool Value { get; set; }
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
@@ -30,7 +21,7 @@ namespace _02_api_alternative.Elements
         /// <param name="identifier">The element identifier.</param>
         /// <param name="definition">The element definition.</param>
         public BooleanElement(string identifier, BooleanElementDefinition definition = null)
-            :base (identifier, definition)
+            :base (identifier)
         {
         }
 
@@ -45,14 +36,6 @@ namespace _02_api_alternative.Elements
         {
             get { return Value; }
             set { Value = (bool)value; }
-        }
-
-        /// <summary>
-        /// The value type.
-        /// </summary>
-        public override Type ValueType
-        {
-            get { return typeof(bool); }
         }
 
         /// <summary>

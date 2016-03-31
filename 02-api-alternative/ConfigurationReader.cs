@@ -34,15 +34,15 @@ namespace _02_api_alternative
         /// </summary>
         /// <returns>The config read and parsed from the given path.</returns>
         /// <param name="path">The given path.</param>
-        public Configuration LoadFromFile(string path, ParsingOptions options = null)
+        public Configuration LoadFromFile(string path, ValidationMode mode, Schema schema = null)
         {
-            return LoadFromFile(path, Encoding.Default, options);
+            return LoadFromFile(path, mode, Encoding.Default, schema);
         }
 
         //Doplnit ostatní varianty!!!
-        public bool TryLoadFromFile(string path, ParsingOptions options, out Configuration configuration)
+        public bool TryLoadFromFile(string path, ValidationMode mode, out Configuration configuration, Schema schema = null)
         {
-
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -51,11 +51,11 @@ namespace _02_api_alternative
         /// <returns>The config read and parsed from the given path and encoding.</returns>
         /// <param name="path">The given path.</param>
         /// <param name="encoding">The given encoding.</param>
-        public Configuration LoadFromFile(string path, ParsingOptions options = null)
+        public Configuration LoadFromFile(string path, ValidationMode mode, Encoding encoding = null, Schema schema = null)
         {
             using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
-                return LoadFromText(new StreamReader(fileStream, encoding), options);
+                return LoadFromText(new StreamReader(fileStream, encoding), mode, schema);
             }
         }
 
@@ -65,10 +65,10 @@ namespace _02_api_alternative
         /// </summary>
         /// <returns>The config read and parsed from the given reader.</returns>
         /// <param name="reader">The given reader.</param>
-        public Configuration LoadFromText(TextReader reader, ParsingOptions options)
+        public Configuration LoadFromText(TextReader reader, ValidationMode mode, Schema schema = null)
         {
             ConfigurationParser parser = new ConfigurationParser();
-            return parser.Parse(reader, backlog, options);
+            return parser.Parse(reader, backlog, mode);
         }
 
     }

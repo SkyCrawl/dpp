@@ -10,7 +10,7 @@ namespace _02_api_alternative
 	{
 		private static char INNER_OPTION_SEPARATOR = '=';
 
-        public Configuration Parse(TextReader reader, IParsingBacklog backlog, ParsingOptions options)
+        public Configuration Parse(TextReader reader, IParsingBacklog backlog, ValidationMode options)
 		{
             Configuration result = new Configuration();
 

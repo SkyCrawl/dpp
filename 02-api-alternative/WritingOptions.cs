@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace _02_api_alternative
 {
-    class WritingOptions
+    public class WritingOptions
     {
+        public ValidationMode ValidationMode { get; set; }
+
+        public bool WriteInvalidConfiguraion { get; set; }
     }
 }

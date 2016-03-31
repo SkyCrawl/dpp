@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace _02_api_alternative.Interfaces
 {
+    // Přidat validační backlog
     public interface IValidable
     {
         bool IsValid(ValidationMode mode);

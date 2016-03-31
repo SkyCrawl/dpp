@@ -18,7 +18,7 @@ namespace _02_api_alternative
         /// <summary>
         /// Section elements.
         /// </summary>
-        public Dictionary<string, Element> Elements { get; private set; }
+        public Dictionary<string, Option> Options { get; private set; }
 
         #endregion
 
