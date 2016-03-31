@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using _02_api_alternative.Definitions;
+using _02_api_alternative.Interfaces;
 
 namespace _02_api_alternative
 {
@@ -13,14 +14,29 @@ namespace _02_api_alternative
     /// </summary>
     public class ConfigurationWriter
     {
+        #region Fields
+
+        IWritingBacklog writingBacklog;
+
+        #endregion
+
         #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConfigurationWriter"/> class.
+        /// </summary>
+        public ConfigurationWriter()
+            : this(new ConsoleWritingBacklog())
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationWriter"/> class with an optional configuration schema.
         /// </summary>
         /// <param name="schema">The configuration schema.</param>
-        public ConfigurationWriter(Schema schema = null)
+        public ConfigurationWriter(IWritingBacklog writingBacklog)
         {
+            this.writingBacklog = writingBacklog;
         }
 
         #endregion
@@ -32,8 +48,22 @@ namespace _02_api_alternative
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="configuration"></param>
-        public void Write(Stream stream, Configuration configuration)
+        public void WriteToText(TextWriter writer, Configuration configuration)
         {
+        }
+
+        public void WriteToFile(string fileName, Configuration configuration)
+        {
+            WriteToFile(fileName, Encoding.Default, configuration);
+        }
+
+        public void WriteToFile(string fileName, Encoding encoding, Configuration configuration)
+        {
+            using (var stream = File.Open(fileName, FileMode.Create, FileAccess.Write))
+            {
+                var writer = new StreamWriter(stream, encoding);
+                WriteToText(writer, configuration);
+            }
         }
 
         #endregion

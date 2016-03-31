@@ -5,15 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using _02_api_alternative.Definitions;
+using _02_api_alternative.Interfaces;
 
 namespace _02_api_alternative
 {
     /// <summary>
     /// The configuration.
     /// </summary>
-    public class Configuration
+    public class Configuration : IValidable
     {
         #region Properties
+
+        public Schema Schema { get; private set; }
 
         /// <summary>
         /// The configuration sections.
@@ -22,18 +25,10 @@ namespace _02_api_alternative
 
         #endregion
 
-        #region Constructor
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Configuration"/> class.
-        /// If the schema is specified, than the configuration will contain mandatory sections and elements with default values.
-        /// </summary>
-        /// <param name="schema">The schema.</param>
-        public Configuration(Schema schema)
+        public bool IsValid(ValidationMode mode)
         {
+            throw new NotImplementedException();
         }
-
-        #endregion
 
         // Will contain an internal list of sections loaded from the stream.
     }

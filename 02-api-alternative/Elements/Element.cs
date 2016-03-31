@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using _02_api_alternative.Definitions;
+using _02_api_alternative.Interfaces;
 
 namespace _02_api_alternative.Elements
 {
     /// <summary>
     /// The configuration element.
     /// </summary>
-    public abstract class Element
+    public abstract class Element : IValidable
     {
         #region Properties
 
@@ -58,12 +59,6 @@ namespace _02_api_alternative.Elements
         #region Public Methods
 
         /// <summary>
-        /// Verifies the integrity of the configuration element.
-        /// </summary>
-        /// <returns></returns>
-        public abstract bool IsValid();
-
-        /// <summary>
         /// Return the element value cast to a certain type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -72,6 +67,12 @@ namespace _02_api_alternative.Elements
         {
             return (T)ValueObject;
         }
+
+        #endregion
+
+        #region IValidable Members
+
+        public abstract bool IsValid(ValidationMode mode);
 
         #endregion
     }

@@ -43,6 +43,15 @@ namespace _02_api_alternative.Definitions
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Creates a new configuration with default values.
+        /// </summary>
+        /// <returns></returns>
+        public Configuration CreateConfiguration()
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }

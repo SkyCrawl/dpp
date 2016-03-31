@@ -43,9 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigurationParser.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationReader.cs" />
     <Compile Include="ConfigurationWriter.cs" />
+    <Compile Include="ConsoleParsingBacklog.cs" />
+    <Compile Include="ConsoleWritingBacklog.cs" />
     <Compile Include="Definitions\BooleanElementDefinition.cs" />
     <Compile Include="Definitions\EnumElementDefinition.cs" />
     <Compile Include="Definitions\FloatElementDefinition.cs" />
@@ -67,6 +70,10 @@
     <Compile Include="Exceptions\InvalidCharacterException.cs" />
     <Compile Include="Exceptions\InvalidFormatException.cs" />
     <Compile Include="Exceptions\InvalidSchemaException.cs" />
+    <Compile Include="Interfaces\IParsingBacklog.cs" />
+    <Compile Include="Interfaces\IValidable.cs" />
+    <Compile Include="Interfaces\IWritingBacklog.cs" />
+    <Compile Include="ParsingOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Section.cs" />
   </ItemGroup>

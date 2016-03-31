@@ -65,6 +65,11 @@ namespace _02_api_alternative.Elements
             throw new NotImplementedException();
         }
 
+        enum TestEnum
+        {
+            A,B,C
+        }
+
         #endregion
     }
 }
