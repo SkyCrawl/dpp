@@ -22,7 +22,7 @@ namespace _02_api_alternative.Elements
         /// <summary>
         /// The element value.
         /// </summary>
-        public abstract object Value { get; set; }
+        public abstract object ValueObject { get; set; }
 
         /// <summary>
         /// The value type.
@@ -62,6 +62,16 @@ namespace _02_api_alternative.Elements
         /// </summary>
         /// <returns></returns>
         public abstract bool IsValid();
+
+        /// <summary>
+        /// Return the element value cast to a certain type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T GetValue<T>()
+        {
+            return (T)ValueObject;
+        }
 
         #endregion
     }
