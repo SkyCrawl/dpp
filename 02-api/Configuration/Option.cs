@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Ini.Schema;
 using Ini.Configuration.Elements;
+using Ini.Backlogs;
 
 namespace Ini.Configuration
 {
@@ -17,6 +18,8 @@ namespace Ini.Configuration
         /// List of option elements.
         /// </summary>
         public List<IElement> Elements { get; set; }
+
+        public Type ElementType { get; set; }
 
         #endregion
 

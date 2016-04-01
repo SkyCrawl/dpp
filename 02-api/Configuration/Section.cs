@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Ini.Backlogs;
 using Ini.Schema;
 
 namespace Ini.Configuration
@@ -15,6 +16,13 @@ namespace Ini.Configuration
         /// The section options.
         /// </summary>
         public Dictionary<string, Option> Options { get; private set; }
+
+        internal List<string> ParsedOptions { get; set; }
+
+        class ConfigLine
+        {
+            string 
+        }
 
         #endregion
 
@@ -39,7 +47,7 @@ namespace Ini.Configuration
         /// <param name="sectionDefinition"></param>
         /// <param name="backlog"></param>
         /// <returns></returns>
-        public bool IsValid(ValidationMode mode, SectionSpec sectionDefinition, IValidationBacklog backlog = null)
+        public bool IsValid(ValidationMode mode, SectionSpec sectionDefinition = null, IValidationBacklog backlog = null)
         {
             throw new NotImplementedException();
         }

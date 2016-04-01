@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Ini.Backlogs;
+using YamlDotNet.Serialization;
 
 namespace Ini.Schema
 {
@@ -14,17 +16,20 @@ namespace Ini.Schema
         /// <summary>
         /// The definition identifier.
         /// </summary>
+        [YamlMember(Alias = "identifier")]
         public string Identifier { get; set; }
 
         /// <summary>
         /// True if the definition is mandatory.
         /// </summary>
+        [YamlMember(Alias = "mandatory")]
         public bool IsMandatory { get; set; }
 
         /// <summary>
         /// The comment description of the definition.
         /// </summary>
-        public string Commentary { get; set; }
+        [YamlMember(Alias = "description")]
+        public string Description { get; set; }
 
         #endregion
 

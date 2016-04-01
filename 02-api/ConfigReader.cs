@@ -4,6 +4,7 @@ using System.IO;
 using Ini.Configuration;
 using System.Text;
 using Ini.Schema;
+using Ini.Backlogs;
 
 namespace Ini
 {
@@ -66,15 +67,12 @@ namespace Ini
         /// <param name="encoding">The given encoding.</param>
 		public bool TryLoadFromFile(string filePath, out Config configuration, ValidationMode mode = ValidationMode.Strict, ConfigSpec schema = null, Encoding encoding = null)
         {
-            try
+            if (encoding == null)
+                encoding = Encoding.Default;
+
+            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
-                configuration = LoadFromFile(filePath, mode, schema, encoding);
-                return true;
-            }
-            catch (Exception)
-            {
-                configuration = null;
-                return false;
+                return TryLoadFromText(new StreamReader(fileStream, encoding), out configuration, mode, schema);
             }
         }
 
@@ -103,16 +101,8 @@ namespace Ini
         /// <param name="schema">The schema.</param>
 		public bool TryLoadFromText(TextReader reader, out Config configuration, ValidationMode mode = ValidationMode.Strict, ConfigSpec schema = null)
         {
-            try
-            {
-                configuration = LoadFromText(reader, mode, schema);
-                return true;
-            }
-            catch(Exception)
-            {
-                configuration = null;
-                return false;
-            }
+            ConfigParser parser = new ConfigParser(schema);
+            return parser.TryParse(reader, out configuration, backlog, mode);
         }
 
         #endregion

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Ini.Backlogs;
 using Ini.Schema;
 
 namespace Ini.Configuration
@@ -15,7 +16,7 @@ namespace Ini.Configuration
 		/// <summary>
 		/// Path to the configuration, if any.
 		/// </summary>
-		public string Path { get; private set; }
+		public string Origin { get; private set; }
 
         /// <summary>
         /// The configuration schema.
@@ -43,9 +44,9 @@ namespace Ini.Configuration
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Configuration"/> class.
 		/// </summary>
-		public Config(string path, ConfigSpec schema = null)
+		public Config(string origin, ConfigSpec schema = null)
 		{
-			this.Path = path;
+            this.Origin = origin;
 			this.Sections = new Dictionary<string, Section>();
 			this.Schema = schema;
 		}

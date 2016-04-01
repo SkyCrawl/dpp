@@ -14,24 +14,32 @@ namespace Ini.Schema
 		/// <summary>
 		/// Path to the configuration, if any.
 		/// </summary>
-		public string Path { get; private set; }
+		public string Origin { get; set; }
 
 		/// <summary>
         /// The list of configuration sections.
         /// </summary>
-        public List<SectionSpec> Sections { get; private set; }
+        public List<SectionSpec> Sections { get; set; }
 
         #endregion
 
         #region Constructor
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ConfigSpec"/> class.
+        /// </summary>
+        public ConfigSpec()
+        {
+            this.Sections = new List<SectionSpec>();
+        }
+
+        /// <summary>
 		/// Initializes a new instance of the <see cref="ConfigSpec"/> class.
         /// </summary>
-		public ConfigSpec(string path = null)
+		public ConfigSpec(string origin = null)
+            : this()
         {
-			this.Path = path;
-            this.Sections = new List<SectionSpec>();
+			this.Origin = origin;
         }
 
         #endregion

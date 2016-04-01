@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Ini
+namespace Ini.Backlogs
 {
     /// <summary>
     /// The implementation of a parsing backlog that logs into console.

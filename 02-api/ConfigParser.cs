@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using Ini.Backlogs;
 using Ini.Configuration;
 using Ini.Schema;
 
@@ -78,6 +79,19 @@ namespace Ini
              * Meanwhile, catch exceptions and report with 'backlog'.
              */
             return result;
+        }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="config"></param>
+        /// <param name="backlog"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public bool TryParse(TextReader reader, out Config config, IParsingBacklog backlog, ValidationMode options)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

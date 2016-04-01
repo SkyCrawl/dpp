@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Ini
+namespace Ini.Backlogs
 {
     /// <summary>
     /// An implementation of validation backlog that writes into console.

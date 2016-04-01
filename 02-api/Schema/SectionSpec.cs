@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Ini.Backlogs;
 using Ini.Configuration;
 
 namespace Ini.Schema
@@ -14,7 +15,7 @@ namespace Ini.Schema
         /// <summary>
         /// The list of section options.
         /// </summary>
-        public List<OptionSpec> Options { get; private set; }
+        public List<OptionSpec> Options { get; set; }
 
         #endregion
 

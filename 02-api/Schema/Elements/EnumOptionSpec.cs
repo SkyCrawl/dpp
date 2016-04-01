@@ -1,26 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using Ini.Backlogs;
 
 namespace Ini.Schema.Elements
 {
     /// <summary>
     /// The definition for an enum option.
     /// </summary>
-    /// <typeparam name="TEnum">The enumeration type, must be enum.</typeparam>
-    public class EnumOptionSpec<TEnum> : OptionSpec<TEnum>
-        where TEnum : struct, IConvertible, IComparable, IFormattable
+    public class EnumOptionSpec : OptionSpec<string>
     {
+        #region Properties
+
+        /// <summary>
+        /// Allowed values for enum.
+        /// </summary>
+        public List<string> AllowedValues { get; set; }
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
-		/// Initializes the <see cref="EnumOptionSpec{TEnum}"/> class.
+        /// Initializes a new instance of the <see cref="EnumOptionSpec"/> class.
         /// </summary>
-        static EnumOptionSpec()
+        public EnumOptionSpec()
         {
-            if (!typeof(TEnum).IsEnum)
-            {
-                throw new ArgumentException("The TEnum must be an enum.");
-            }
+            AllowedValues = new List<string>();
         }
 
         #endregion

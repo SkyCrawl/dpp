@@ -1,0 +1,24 @@
+﻿#Poznámka
+Origin: Test origin
+Sections:
+- identifier: Section 1
+  description: Section commentary
+  mandatory: true
+  Options:
+  - !String
+    identifier: String option
+    description: Option commentary
+    mandatory: true
+    HasSingleValue: true
+    DefaultValues: []
+  - !Enum
+    identifier: Enum option
+    description: 
+    mandatory: false
+    HasSingleValue: false
+    AllowedValues:
+    - Value1
+    - Value2
+    DefaultValues:
+    - Value1
+    - Value1

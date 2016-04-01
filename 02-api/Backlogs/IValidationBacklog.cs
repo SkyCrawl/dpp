@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Ini
+namespace Ini.Backlogs
 {
     /// <summary>
     /// The interface for backlog that provides information about validation.

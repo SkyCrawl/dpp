@@ -39,7 +39,7 @@ namespace Ini.Schema
         /// <summary>
         /// Default value if the element is optional.
         /// </summary>
-        public List<T> DefaultValues { get; private set; }
+        public List<T> DefaultValues { get; set; }
 
         #endregion
 
