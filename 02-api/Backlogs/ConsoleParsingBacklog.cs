@@ -10,6 +10,18 @@ namespace Ini
     {
         #region IParsingBacklog Members
 
+		/// <summary>
+		/// Information about parsing a new configuration. Users will probably
+		/// want to distinguish the previous output from the current.
+		/// </summary>
+		/// <param name="configPath">Config path.</param>
+		/// <param name="schemaPath">Schema path.</param>
+		/// <param name="mode">Mode.</param>
+		public void NewConfig(string configPath, string schemaPath = null, ValidationMode mode = ValidationMode.Strict)
+		{
+			throw new NotImplementedException();
+		}
+
         /// <summary>
         /// A parsing error occured at the specified line.
         /// </summary>

@@ -8,15 +8,24 @@ namespace Ini
     /// </summary>
     public interface IParsingBacklog
     {
+		/// <summary>
+		/// Information about parsing a new configuration. Users will probably
+		/// want to distinguish the previous output from the current.
+		/// </summary>
+		/// <param name="configPath">Config path.</param>
+		/// <param name="schemaPath">Schema path.</param>
+		/// <param name="mode">Mode.</param>
+		void NewConfig(string configPath, string schemaPath = null, ValidationMode mode = ValidationMode.Strict);
+
         /// <summary>
-        /// A parsing error occured at the specified line.
+        /// Information about a general parsing error occured at the specified line.
         /// </summary>
         /// <param name="lineIndex"></param>
         /// <param name="message"></param>
         void ParsingError(int lineIndex, string message);
 
         /// <summary>
-        /// A duplicate section was found in configuration.
+        /// An error A duplicate section was found in configuration.
         /// </summary>
         /// <param name="lineIndex"></param>
         /// <param name="sectionName"></param>
