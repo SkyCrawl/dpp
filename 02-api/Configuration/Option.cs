@@ -9,7 +9,7 @@ namespace Ini.Configuration
     /// <summary>
     /// The configuration option.
     /// </summary>
-    public class Option : ConfigNode
+    public class Option : ConfigBase
     {
         #region Properties
 

@@ -9,7 +9,7 @@ namespace Ini.Configuration
     /// <summary>
     /// The common properties of the configuration nodes.
     /// </summary>
-    public abstract class ConfigNode
+    public abstract class ConfigBase
     {
         #region Properties
 

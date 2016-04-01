@@ -7,7 +7,7 @@ namespace Ini.Configuration
     /// <summary>
     /// The configuration section.
     /// </summary>
-    public class Section : ConfigNode
+    public class Section : ConfigBase
     {
         #region Properties
 

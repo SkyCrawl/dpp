@@ -62,7 +62,6 @@
     <Compile Include="IValidatable.cs" />
     <Compile Include="WriterOptions.cs" />
     <Compile Include="Configuration\Config.cs" />
-    <Compile Include="Configuration\ConfigNode.cs" />
     <Compile Include="Configuration\Option.cs" />
     <Compile Include="Configuration\Section.cs" />
     <Compile Include="Configuration\Elements\BooleanElement.cs" />
@@ -84,6 +83,7 @@
     <Compile Include="Schema\Elements\SignedOptionSpec.cs" />
     <Compile Include="Schema\Elements\StringOptionSpec.cs" />
     <Compile Include="Schema\Elements\UnsignedOptionSpec.cs" />
+    <Compile Include="Configuration\ConfigBase.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
