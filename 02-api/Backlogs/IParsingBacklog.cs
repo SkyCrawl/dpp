@@ -30,5 +30,12 @@ namespace Ini.Backlogs
         /// <param name="lineIndex"></param>
         /// <param name="sectionName"></param>
         void DuplicateSection(int lineIndex, string sectionName);
+
+        /// <summary>
+        /// An error A duplicate option was found in configuration.
+        /// </summary>
+        /// <param name="lineIndex"></param>
+        /// <param name="optionName"></param>
+        void DuplicateOption(int lineIndex, string optionName);
     }
 }

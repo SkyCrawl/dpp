@@ -17,13 +17,6 @@ namespace Ini.Configuration
         /// </summary>
         public Dictionary<string, Option> Options { get; private set; }
 
-        internal List<string> ParsedOptions { get; set; }
-
-        class ConfigLine
-        {
-            string 
-        }
-
         #endregion
 
         #region Constructor

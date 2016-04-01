@@ -42,6 +42,16 @@ namespace Ini.Backlogs
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// An error A duplicate option was found in configuration.
+        /// </summary>
+        /// <param name="lineIndex"></param>
+        /// <param name="optionName"></param>
+        public void DuplicateOption(int lineIndex, string optionName)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }

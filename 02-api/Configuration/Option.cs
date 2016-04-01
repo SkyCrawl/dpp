@@ -19,6 +19,9 @@ namespace Ini.Configuration
         /// </summary>
         public List<IElement> Elements { get; set; }
 
+        /// <summary>
+        /// Type of the elements
+        /// </summary>
         public Type ElementType { get; set; }
 
         #endregion

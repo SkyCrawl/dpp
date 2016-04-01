@@ -28,6 +28,21 @@ namespace Ini.Configuration
         /// </summary>
         public Dictionary<string, Section> Sections { get; private set; }
 
+        //private List<Line> originalLines;
+
+        //class Line
+        //{
+        //    LineType Type;
+        //    string identifier;
+        //}
+
+        //enum LineType
+        //{
+        //    EmptyLine,
+        //    Commentary,
+        //    Section
+        //}
+
         #endregion
 
         #region Constructor

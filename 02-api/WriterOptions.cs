@@ -17,5 +17,10 @@ namespace Ini
         /// If true, than the configuration is saved to file even if it is invalid.
         /// </summary>
         public bool WriteInvalidConfiguration { get; set; }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        public SortOrder SortOrder { get; set; }
     }
 }

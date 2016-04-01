@@ -49,11 +49,11 @@
   <ItemGroup>
     <Compile Include="Backlogs\ConsoleSpecReaderBacklog.cs" />
     <Compile Include="Backlogs\ISpecReaderBacklog.cs" />
-    <Compile Include="Configuration\Elements\LinkElement.cs" />
     <Compile Include="Exceptions\InvalidConfigFormatException.cs" />
     <Compile Include="Exceptions\InvalidConfigSpecException.cs" />
     <Compile Include="Exceptions\InvalidSpecFormatException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SortOrder.cs" />
     <Compile Include="SpecReader.cs" />
     <Compile Include="ValidationMode.cs" />
     <Compile Include="Backlogs\ConsoleParsingBacklog.cs" />
