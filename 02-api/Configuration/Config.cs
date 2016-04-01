@@ -12,6 +12,11 @@ namespace Ini.Configuration
     {
         #region Properties
 
+		/// <summary>
+		/// Path to the configuration, if any.
+		/// </summary>
+		public string Path { get; private set; }
+
         /// <summary>
         /// The configuration schema.
         /// </summary>
@@ -29,10 +34,21 @@ namespace Ini.Configuration
         /// <summary>
         /// Initializes a new instance of the <see cref="Configuration"/> class.
         /// </summary>
-        public Config()
+		public Config(ConfigSpec schema = null)
         {
-            Sections = new Dictionary<string, Section>();
+            this.Sections = new Dictionary<string, Section>();
+			this.Schema = schema;
         }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Configuration"/> class.
+		/// </summary>
+		public Config(string path, ConfigSpec schema = null)
+		{
+			this.Path = path;
+			this.Sections = new Dictionary<string, Section>();
+			this.Schema = schema;
+		}
 
         #endregion
 

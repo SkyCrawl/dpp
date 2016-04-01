@@ -11,7 +11,12 @@ namespace Ini.Schema
     {
         #region Properties
 
-        /// <summary>
+		/// <summary>
+		/// Path to the configuration, if any.
+		/// </summary>
+		public string Path { get; private set; }
+
+		/// <summary>
         /// The list of configuration sections.
         /// </summary>
         public List<SectionSpec> Sections { get; private set; }
@@ -23,9 +28,10 @@ namespace Ini.Schema
         /// <summary>
 		/// Initializes a new instance of the <see cref="ConfigSpec"/> class.
         /// </summary>
-        public ConfigSpec()
+		public ConfigSpec(string path = null)
         {
-            Sections = new List<SectionSpec>();
+			this.Path = path;
+            this.Sections = new List<SectionSpec>();
         }
 
         #endregion
