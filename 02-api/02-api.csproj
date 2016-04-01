@@ -73,7 +73,6 @@
     <Compile Include="Configuration\Elements\UnsignedElement.cs" />
     <Compile Include="Configuration\Elements\IElement.cs" />
     <Compile Include="Schema\SpecBase.cs" />
-    <Compile Include="Schema\IOptionSpec.cs" />
     <Compile Include="Schema\OptionSpec.cs" />
     <Compile Include="Schema\SectionSpec.cs" />
     <Compile Include="Schema\ConfigSpec.cs" />
