@@ -1,41 +1,103 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2195C1C8-B013-410A-A69E-ECA0591A1118}</ProjectGuid>
+    <ProjectGuid>{428D39B1-CB87-4AC0-A316-674D20ED5F46}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>api</RootNamespace>
-    <AssemblyName>02-api</AssemblyName>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IniConfiguration</RootNamespace>
+    <AssemblyName>02-api-alternative</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>bin\Debug\02-api-alternative.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
+    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>bin\Release\02-api-alternative.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\ConfigurationException.cs" />
+    <Compile Include="Exceptions\DuplicateSectionException.cs" />
+    <Compile Include="Exceptions\InvalidCharacterException.cs" />
+    <Compile Include="Exceptions\InvalidFormatException.cs" />
+    <Compile Include="Exceptions\InvalidSchemaException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Config.cs" />
-    <Compile Include="ConfigFactory.cs" />
+    <Compile Include="ValidationMode.cs" />
+    <Compile Include="Backlogs\ConsoleParsingBacklog.cs" />
+    <Compile Include="Backlogs\ConsoleValidationBacklog.cs" />
+    <Compile Include="Backlogs\ConsoleWritingBacklog.cs" />
+    <Compile Include="Backlogs\IParsingBacklog.cs" />
+    <Compile Include="Backlogs\IValidationBacklog.cs" />
+    <Compile Include="Backlogs\IWritingBacklog.cs" />
     <Compile Include="ConfigParser.cs" />
-    <Compile Include="Exceptions.cs" />
+    <Compile Include="ConfigReader.cs" />
+    <Compile Include="ConfigWriter.cs" />
+    <Compile Include="IValidatable.cs" />
+    <Compile Include="WriterOptions.cs" />
+    <Compile Include="Configuration\Config.cs" />
+    <Compile Include="Configuration\ConfigNode.cs" />
+    <Compile Include="Configuration\Option.cs" />
+    <Compile Include="Configuration\Section.cs" />
+    <Compile Include="Configuration\Elements\BooleanElement.cs" />
+    <Compile Include="Configuration\Elements\Element.cs" />
+    <Compile Include="Configuration\Elements\EnumElement.cs" />
+    <Compile Include="Configuration\Elements\FloatElement.cs" />
+    <Compile Include="Configuration\Elements\SignedElement.cs" />
+    <Compile Include="Configuration\Elements\StringElement.cs" />
+    <Compile Include="Configuration\Elements\UnsignedElement.cs" />
+    <Compile Include="Configuration\Elements\IElement.cs" />
+    <Compile Include="Schema\SpecBase.cs" />
+    <Compile Include="Schema\IOptionSpec.cs" />
+    <Compile Include="Schema\OptionSpec.cs" />
+    <Compile Include="Schema\SectionSpec.cs" />
+    <Compile Include="Schema\ConfigSpec.cs" />
+    <Compile Include="Schema\Elements\BooleanOptionSpec.cs" />
+    <Compile Include="Schema\Elements\EnumOptionSpec.cs" />
+    <Compile Include="Schema\Elements\FloatOptionSpec.cs" />
+    <Compile Include="Schema\Elements\SignedOptionSpec.cs" />
+    <Compile Include="Schema\Elements\StringOptionSpec.cs" />
+    <Compile Include="Schema\Elements\UnsignedOptionSpec.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <Folder Include="Schema\Elements\" />
+    <Folder Include="Backlogs\" />
+    <Folder Include="Configuration\" />
+    <Folder Include="Configuration\Elements\" />
+  </ItemGroup>
 </Project>
