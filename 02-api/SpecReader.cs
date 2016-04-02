@@ -32,6 +32,7 @@ namespace Ini
         public SpecReader(ISpecReaderBacklog backlog = null)
         {
             this.backlog = backlog ?? new ConsoleSpecReaderBacklog();
+			this.backlog.GetHashCode(); // TODO: remove! (this only gets rid of an annoying warning)
         }
 
         #endregion
@@ -46,9 +47,10 @@ namespace Ini
         /// <param name="encoding">The given encoding.</param>
         public ConfigSpec LoadFromFile(string filePath, Encoding encoding = null)
         {
-            if (encoding == null)
-                encoding = Encoding.Default;
-
+			if(encoding == null)
+			{
+				encoding = Encoding.Default;
+			}
             using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
                 return LoadFromText(new StreamReader(fileStream, encoding));

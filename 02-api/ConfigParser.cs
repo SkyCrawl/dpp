@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using Ini.Backlogs;
 using Ini.Configuration;
 using Ini.Schema;
+using Ini.Util;
 
 namespace Ini
 {
@@ -91,6 +92,8 @@ namespace Ini
         /// <returns></returns>
         public bool TryParse(TextReader reader, out Config config, IParsingBacklog backlog, ValidationMode options)
         {
+			// TODO: if commentary:
+			// System.Guid.NewGuid()
             throw new NotImplementedException();
         }
 
@@ -128,8 +131,8 @@ namespace Ini
             // TODO: semicolon shall be preferred over comma but don't forget about escaping with slashes...
             // TODO: type checks
 
-            Option option = null; // TODO
-            section.Options.Add(identifier, option);
+            // Option option = null; // TODO
+            // section.Options.Add(identifier, option);
         }
 
         private void TypeCheck()

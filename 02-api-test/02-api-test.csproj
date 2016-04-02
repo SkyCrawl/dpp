@@ -32,11 +32,6 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="YamlDotNet, Version=3.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\YamlDotNet.3.8.0\lib\net35\YamlDotNet.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Test.cs" />
@@ -47,17 +42,12 @@
     <None Include="Examples\config.yml" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\02-api\02-api.csproj">
-      <Project>{428d39b1-cb87-4ac0-a316-674d20ed5f46}</Project>
+      <Project>{428D39B1-CB87-4AC0-A316-674D20ED5F46}</Project>
       <Name>02-api</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="YamlExample.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <Folder Include="Examples\" />
   </ItemGroup>
 </Project>

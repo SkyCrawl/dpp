@@ -4,7 +4,8 @@ using System.Reflection;
 using System.IO;
 using Ini.Schema;
 using Ini.Schema.Elements;
-using YamlDotNet.Serialization;
+// using YamlDotNet.Serialization;
+using System.Collections.Generic;
 
 namespace ApiTest
 {
@@ -25,6 +26,16 @@ namespace ApiTest
 		}
 		*/
 
+		[Test()]
+		public void BasicTest()
+		{
+			Dictionary<int, int> dic = new Dictionary<int, int>();
+			dic.Add(1, 2);
+			dic.Add(1, 3);
+			Console.WriteLine(dic[1]);
+		}
+
+		/*
         [Test()]
         public void TestSpecSerialization()
         {
@@ -58,6 +69,7 @@ namespace ApiTest
             var reader = new StringReader(specString);
             var deserializedSpec = deserializer.Deserialize<ConfigSpec>(reader);
         }
+        */
         
         /*
         private void SameOutputForFile(string[] args)
@@ -103,6 +115,7 @@ namespace ApiTest
 		}
 	}
 
+	/*
     class TypeResolver : INodeTypeResolver
     {
         #region INodeTypeResolver Members
@@ -124,4 +137,5 @@ namespace ApiTest
 
         #endregion
     }
+    */
 }

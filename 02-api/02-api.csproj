@@ -41,9 +41,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="YamlDotNet, Version=3.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="YamlDotNet, Version=3.8.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\YamlDotNet.3.8.0\lib\net35\YamlDotNet.dll</HintPath>
-      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -53,9 +52,7 @@
     <Compile Include="Exceptions\InvalidConfigSpecException.cs" />
     <Compile Include="Exceptions\InvalidSpecFormatException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SortOrder.cs" />
     <Compile Include="SpecReader.cs" />
-    <Compile Include="ValidationMode.cs" />
     <Compile Include="Backlogs\ConsoleParsingBacklog.cs" />
     <Compile Include="Backlogs\ConsoleValidationBacklog.cs" />
     <Compile Include="Backlogs\ConsoleWritingBacklog.cs" />
@@ -65,8 +62,6 @@
     <Compile Include="ConfigParser.cs" />
     <Compile Include="ConfigReader.cs" />
     <Compile Include="ConfigWriter.cs" />
-    <Compile Include="IValidatable.cs" />
-    <Compile Include="WriterOptions.cs" />
     <Compile Include="Configuration\Config.cs" />
     <Compile Include="Configuration\Option.cs" />
     <Compile Include="Configuration\Section.cs" />
@@ -88,7 +83,13 @@
     <Compile Include="Schema\Elements\SignedOptionSpec.cs" />
     <Compile Include="Schema\Elements\StringOptionSpec.cs" />
     <Compile Include="Schema\Elements\UnsignedOptionSpec.cs" />
-    <Compile Include="Configuration\ConfigBase.cs" />
+    <Compile Include="Configuration\ConfigBlockBase.cs" />
+    <Compile Include="Configuration\Commentary.cs" />
+    <Compile Include="Util\ConfigBlockDictionary.cs" />
+    <Compile Include="Util\ConfigBlockSortOrder.cs" />
+    <Compile Include="Util\IValidatable.cs" />
+    <Compile Include="Util\ValidationMode.cs" />
+    <Compile Include="Util\WriterOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -102,4 +103,7 @@
   </Target>
   -->
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Util\" />
+  </ItemGroup>
 </Project>

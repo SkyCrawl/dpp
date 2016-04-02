@@ -2,55 +2,58 @@
 using System.Collections.Generic;
 using Ini.Backlogs;
 using Ini.Schema;
+using Ini.Util;
 
 namespace Ini.Configuration.Elements
 {
     /// <summary>
-    /// The option element.
+    /// Base parametrized class for elements.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class Element<T> : IElement
     {
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// The element value.
-        /// </summary>
-        public T Value { get; set; }
+		/// <summary>
+		/// The element's value.
+		/// </summary>
+		public T Value { get; set; }
 
-        #endregion
+		/// <summary>
+		/// The type of the element's value. It is bound to the class's
+		/// parametrized type and thus can not be changed. Corresponds
+		/// with the containing option's <see cref="Option.ElementType"/>.
+		/// </summary>
+		public Type ValueType
+		{
+			get { return typeof(T); }
+		}
+
+		/// <summary>
+		/// The element's <see cref="Value"/> as an object.
+		/// </summary>
+		public object ValueObject
+		{
+			get { return Value; }
+		}
+
+		#endregion
 
         #region IElement Members
 
         /// <summary>
-        /// The element value.
-        /// </summary>
-        public object ValueObject
-        {
-            get { return Value; }
-            set { Value = (T)value; }
-        }
-
-        /// <summary>
-        /// The type of the value.
-        /// </summary>
-        public Type ValueType
-        {
-            get { return typeof(T); }
-        }
-
-        /// <summary>
-        /// Return the element value cast to a certain type.
+        /// The element's value, cast to the output type. Casting
+		/// exceptions are not caught.
         /// </summary>
         /// <typeparam name="OutputType"></typeparam>
         /// <returns></returns>
         public OutputType GetValue<OutputType>()
         {
-            return (OutputType)ValueObject;
+            return (OutputType) ValueObject;
         }
 
         /// <summary>
-        /// Verifies the integrity of the configuration element.
+        /// Determines whether the element conforms to the given option specification.
         /// </summary>
         /// <param name="mode"></param>
         /// <param name="definition"></param>

@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using Ini.Backlogs;
 using Ini.Schema;
+using Ini.Util;
 
 namespace Ini.Configuration.Elements
 {
     /// <summary>
-    /// The element of the <see cref="bool" /> type.
+	/// Element of type <see cref="bool"/>.
     /// </summary>
     public class BooleanElement : Element<bool>
     {
-        #region Overrides
+        #region Validation
 
         /// <summary>
-        /// Verifies the integrity of the configuration element.
+		/// Determines whether the element conforms to the given option specification.
         /// </summary>
         /// <param name="mode"></param>
         /// <param name="definition"></param>

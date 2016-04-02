@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using Ini.Backlogs;
 using Ini.Schema;
+using Ini.Util;
 
 namespace Ini.Configuration.Elements
 {
     /// <summary>
-    /// The element of the <see cref="ulong" /> type.
+    /// Element of type <see cref="ulong"/>.
     /// </summary>
     public class UnsignedElement : Element<ulong>
     {
-        #region Overrides
+		#region Validation
 
         /// <summary>
-        /// Verifies the integrity of the configuration element.
+		/// Determines whether the element conforms to the given option specification.
         /// </summary>
         /// <param name="mode"></param>
         /// <param name="definition"></param>

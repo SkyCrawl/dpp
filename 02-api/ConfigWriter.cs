@@ -4,6 +4,7 @@ using System.IO;
 using Ini.Configuration;
 using System.Text;
 using Ini.Backlogs;
+using Ini.Util;
 
 namespace Ini
 {

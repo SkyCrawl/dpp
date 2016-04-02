@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ini
+namespace Ini.Util
 {
     /// <summary>
     /// The sort order of sections and options in saved file.
@@ -24,11 +24,11 @@ namespace Ini
         /// <summary>
         /// 
         /// </summary>
-        Ascending,
+        IdentifierAscendingOrder,
 
-        /// <summary>
-        /// 
-        /// </summary>
-        Descending
+		/// <summary>
+		/// 
+		/// </summary>
+		IdentifierDescendingOrder
     }
 }

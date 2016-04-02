@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Ini.Backlogs;
 
-namespace Ini
+namespace Ini.Util
 {
     /// <summary>
     /// The interface for validation of configuration definition.

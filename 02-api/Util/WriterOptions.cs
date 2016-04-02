@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Ini
+namespace Ini.Util
 {
     /// <summary>
     /// The options for writing configuration to file.
