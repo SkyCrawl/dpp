@@ -5,7 +5,7 @@ using YamlDotNet.Serialization;
 using Ini.Backlogs;
 using Ini.Util;
 
-namespace Ini.Schema
+namespace Ini.Specification
 {
     /// <summary>
     /// The base class for configuration definitions.

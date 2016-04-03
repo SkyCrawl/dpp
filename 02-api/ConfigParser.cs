@@ -3,7 +3,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Ini.Backlogs;
 using Ini.Configuration;
-using Ini.Schema;
+using Ini.Specification;
 using Ini.Util;
 using Ini.Validation;
 

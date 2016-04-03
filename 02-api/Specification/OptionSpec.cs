@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Ini.Configuration;
 
-namespace Ini.Schema
+namespace Ini.Specification
 {
     /// <summary>
     /// The definition of a schema option.

@@ -5,7 +5,7 @@ using Ini.Configuration;
 using Ini.Backlogs;
 using Ini.Exceptions;
 
-namespace Ini.Schema
+namespace Ini.Specification
 {
     /// <summary>
     /// Configuration specification. Represents configuration schema.

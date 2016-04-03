@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ini.Backlogs;
-using Ini.Schema;
+using Ini.Specification;
 
 namespace Ini
 {

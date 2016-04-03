@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Ini.Backlogs;
-using Ini.Schema;
+using Ini.Specification;
 using Ini.Util;
 using Ini.Validation;
 using Ini.Exceptions;
-using System.Collections.ObjectModel;
 using Ini.Configuration.Elements;
 
 namespace Ini.Configuration
@@ -243,21 +243,21 @@ namespace Ini.Configuration
 		#region Validation
 
 		/// <summary>
-		/// Determines whether the configuration conforms to <see cref="Schema"/>.
+		/// Determines whether the configuration conforms to <see cref="Spec"/>.
 		/// </summary>
 		/// <returns><c>true</c> if this instance is valid the specified mode configBacklog schemaBacklog; otherwise, <c>false</c>.</returns>
 		/// <exception cref="UndefinedSpecException">If the specification is undefined.</exception>
 		/// <exception cref="InvalidSpecException">If the schema is invalid.</exception>
 		/// <param name="mode">Mode.</param>
 		/// <param name="configBacklog">Config backlog.</param>
-		/// <param name="backlog">Specification backlog.</param>
-		public bool IsValid(ConfigValidationMode mode, IConfigWriterBacklog configBacklog, ISpecValidatorBacklog backlog = null)
+		/// <param name="specBacklog">Specification backlog.</param>
+		public bool IsValid(ConfigValidationMode mode, IConfigWriterBacklog configBacklog, ISpecValidatorBacklog specBacklog = null)
 		{
 			if(Spec == null)
 			{
 				throw new UndefinedSpecException();
 			}
-			else if(!Spec.IsValid(backlog))
+			else if(!Spec.IsValid(specBacklog))
 			{
 				configBacklog.SpecNotValid();
 				throw new InvalidSpecException();

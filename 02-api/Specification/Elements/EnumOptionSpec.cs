@@ -2,36 +2,30 @@
 using System.Collections.Generic;
 using Ini.Backlogs;
 
-namespace Ini.Schema.Elements
+namespace Ini.Specification.Elements
 {
     /// <summary>
-    /// The definition of a signed option.
+    /// The definition for an enum option.
     /// </summary>
-    public class SignedOptionSpec : OptionSpec<long>
+    public class EnumOptionSpec : OptionSpec<string>
     {
         #region Properties
 
         /// <summary>
-        /// The minimal value.
+        /// Allowed values for enum.
         /// </summary>
-        public long MinValue { get; set; }
-
-        /// <summary>
-        /// The maximal value.
-        /// </summary>
-        public long MaxValue { get; set; }
+        public List<string> AllowedValues { get; set; }
 
         #endregion
 
         #region Constructor
 
         /// <summary>
-		/// Initializes a new instance of the <see cref="SignedOptionSpec"/> class.
+        /// Initializes a new instance of the <see cref="EnumOptionSpec"/> class.
         /// </summary>
-        public SignedOptionSpec()
+        public EnumOptionSpec()
         {
-            MinValue = long.MinValue;
-            MaxValue = long.MaxValue;
+            AllowedValues = new List<string>();
         }
 
         #endregion

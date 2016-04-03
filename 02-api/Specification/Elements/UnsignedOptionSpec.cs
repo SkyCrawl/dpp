@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Ini.Backlogs;
 
-namespace Ini.Schema.Elements
+namespace Ini.Specification.Elements
 {
     /// <summary>
     /// The definition of an unsigned option.

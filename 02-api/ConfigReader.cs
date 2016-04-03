@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Ini.Configuration;
-using Ini.Schema;
+using Ini.Specification;
 using Ini.Backlogs;
 using Ini.Util;
 using Ini.Validation;

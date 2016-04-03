@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Ini.Backlogs;
-using Ini.Schema;
+using Ini.Specification;
 using Ini.Util;
 using Ini.Validation;
 using System.Collections.ObjectModel;

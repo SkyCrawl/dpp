@@ -62,15 +62,6 @@
     <Compile Include="Configuration\Elements\StringElement.cs" />
     <Compile Include="Configuration\Elements\UnsignedElement.cs" />
     <Compile Include="Configuration\Elements\IElement.cs" />
-    <Compile Include="Schema\OptionSpec.cs" />
-    <Compile Include="Schema\SectionSpec.cs" />
-    <Compile Include="Schema\ConfigSpec.cs" />
-    <Compile Include="Schema\Elements\BooleanOptionSpec.cs" />
-    <Compile Include="Schema\Elements\EnumOptionSpec.cs" />
-    <Compile Include="Schema\Elements\FloatOptionSpec.cs" />
-    <Compile Include="Schema\Elements\SignedOptionSpec.cs" />
-    <Compile Include="Schema\Elements\StringOptionSpec.cs" />
-    <Compile Include="Schema\Elements\UnsignedOptionSpec.cs" />
     <Compile Include="Configuration\ConfigBlockBase.cs" />
     <Compile Include="Configuration\Commentary.cs" />
     <Compile Include="Util\ConfigBlockSortOrder.cs" />
@@ -93,9 +84,18 @@
     <Compile Include="Exceptions\InvalidSchemaFormatException.cs" />
     <Compile Include="Exceptions\InvalidSpecException.cs" />
     <Compile Include="Backlogs\ISpecValidatorBacklog.cs" />
-    <Compile Include="Schema\SpecBlockBase.cs" />
     <Compile Include="Exceptions\InvalidConfigException.cs" />
     <Compile Include="Exceptions\UndefinedSpecException.cs" />
+    <Compile Include="Specification\SpecBlockBase.cs" />
+    <Compile Include="Specification\OptionSpec.cs" />
+    <Compile Include="Specification\SectionSpec.cs" />
+    <Compile Include="Specification\ConfigSpec.cs" />
+    <Compile Include="Specification\Elements\BooleanOptionSpec.cs" />
+    <Compile Include="Specification\Elements\EnumOptionSpec.cs" />
+    <Compile Include="Specification\Elements\FloatOptionSpec.cs" />
+    <Compile Include="Specification\Elements\SignedOptionSpec.cs" />
+    <Compile Include="Specification\Elements\StringOptionSpec.cs" />
+    <Compile Include="Specification\Elements\UnsignedOptionSpec.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

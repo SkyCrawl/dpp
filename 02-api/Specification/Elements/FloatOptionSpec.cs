@@ -2,30 +2,36 @@
 using System.Collections.Generic;
 using Ini.Backlogs;
 
-namespace Ini.Schema.Elements
+namespace Ini.Specification.Elements
 {
     /// <summary>
-    /// The definition for an enum option.
+    /// The definition of a float option.
     /// </summary>
-    public class EnumOptionSpec : OptionSpec<string>
+    public class FloatOptionSpec : OptionSpec<double>
     {
         #region Properties
 
         /// <summary>
-        /// Allowed values for enum.
+        /// The minimal value.
         /// </summary>
-        public List<string> AllowedValues { get; set; }
+        public double MinValue { get; set; }
+
+        /// <summary>
+        /// The maximal value.
+        /// </summary>
+        public double MaxValue { get; set; }
 
         #endregion
 
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EnumOptionSpec"/> class.
+		/// Initializes a new instance of the <see cref="FloatOptionSpec"/> class.
         /// </summary>
-        public EnumOptionSpec()
+        public FloatOptionSpec()
         {
-            AllowedValues = new List<string>();
+            MinValue = double.MinValue;
+            MaxValue = double.MaxValue;
         }
 
         #endregion

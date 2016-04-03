@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using Ini.Schema;
+using Ini.Specification;
 using Ini.Configuration.Elements;
 using Ini.Backlogs;
 using Ini.Util;

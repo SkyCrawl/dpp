@@ -2,36 +2,36 @@
 using System.Collections.Generic;
 using Ini.Backlogs;
 
-namespace Ini.Schema.Elements
+namespace Ini.Specification.Elements
 {
     /// <summary>
-    /// The definition of a float option.
+    /// The definition of a signed option.
     /// </summary>
-    public class FloatOptionSpec : OptionSpec<double>
+    public class SignedOptionSpec : OptionSpec<long>
     {
         #region Properties
 
         /// <summary>
         /// The minimal value.
         /// </summary>
-        public double MinValue { get; set; }
+        public long MinValue { get; set; }
 
         /// <summary>
         /// The maximal value.
         /// </summary>
-        public double MaxValue { get; set; }
+        public long MaxValue { get; set; }
 
         #endregion
 
         #region Constructor
 
         /// <summary>
-		/// Initializes a new instance of the <see cref="FloatOptionSpec"/> class.
+		/// Initializes a new instance of the <see cref="SignedOptionSpec"/> class.
         /// </summary>
-        public FloatOptionSpec()
+        public SignedOptionSpec()
         {
-            MinValue = double.MinValue;
-            MaxValue = double.MaxValue;
+            MinValue = long.MinValue;
+            MaxValue = long.MaxValue;
         }
 
         #endregion
