@@ -37,7 +37,7 @@ namespace Ini.Schema.Elements
         /// </summary>
         /// <param name="backlog"></param>
         /// <returns></returns>
-        public override bool IsValid(IValidationBacklog backlog = null)
+        public override bool IsValid(ISpecValidatorBacklog backlog = null)
         {
             throw new NotImplementedException();
         }

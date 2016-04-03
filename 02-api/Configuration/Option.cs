@@ -9,6 +9,7 @@ using Ini.Configuration.Elements;
 using Ini.Backlogs;
 using Ini.Util;
 using Ini.Exceptions;
+using Ini.Validation;
 
 namespace Ini.Configuration
 {
@@ -91,10 +92,10 @@ namespace Ini.Configuration
 		/// Determines whether the option conforms to the specified option specification.
 		/// </summary>
 		/// <param name="mode"></param>
-		/// <param name="definition"></param>
+		/// <param name="optionSpec"></param>
 		/// <param name="backlog"></param>
 		/// <returns></returns>
-		public bool IsValid(ValidationMode mode, OptionSpec definition, IValidationBacklog backlog = null)
+		public bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, ISpecValidatorBacklog backlog)
 		{
 			throw new NotImplementedException();
 		}
@@ -137,9 +138,13 @@ namespace Ini.Configuration
 							ValueType.FullName));
 					}
 					break;
-				default:
+				case NotifyCollectionChangedAction.Move:
+				case NotifyCollectionChangedAction.Remove:
 					// one or more items were moved or removed - that doesn't break any invariant
 					break;
+
+				default:
+					throw new ArgumentException("Unknown enum value: " + e.Action.ToString());
 			}
 		}
 

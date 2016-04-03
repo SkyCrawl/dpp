@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Ini.Util
+namespace Ini.Validation
 {
     /// <summary>
-    /// The mode of validation.
+    /// Validation mode for configurations.
     /// </summary>
-    public enum ValidationMode
+    public enum ConfigValidationMode
     {
         /// <summary>
-        /// Strict mode
+        /// Strict mode, as requested by client.
         /// </summary>
         Strict,
         /// <summary>
-        /// Relaxed mode
+		/// Strict mode, as requested by client.
         /// </summary>
         Relaxed
     }

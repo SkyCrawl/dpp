@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Ini.Configuration;
 using System.Text;
+using Ini.Configuration;
 using Ini.Backlogs;
 using Ini.Util;
+using Ini.Exceptions;
 
 namespace Ini
 {
@@ -13,21 +14,24 @@ namespace Ini
     /// </summary>
     public class ConfigWriter
     {
-        #region Fields
+        #region Properties
 
-		private IWritingBacklog backlog;
+		private IConfigWriterBacklog ConfigWriterBacklog;
+		private ISpecValidatorBacklog SpecValidatorBacklog;
 
         #endregion
 
         #region Constructor
 
         /// <summary>
-		/// Initializes a new instance of the <see cref="ConfigWriter"/> class with an optional backlog.
+        /// Initializes a new instance of the <see cref="Ini.ConfigWriter"/> class.
         /// </summary>
-		/// <param name="backlog">The backlog.</param>
-        public ConfigWriter(IWritingBacklog backlog = null)
+		/// <param name="specValidatorBacklog">Spec validator backlog.</param>
+		/// <param name="configWriterBacklog">Config writer backlog.</param>
+		public ConfigWriter(ISpecValidatorBacklog specValidatorBacklog = null, IConfigWriterBacklog configWriterBacklog = null)
         {
-            this.backlog = backlog ?? new ConsoleWritingBacklog();
+			this.ConfigWriterBacklog = configWriterBacklog ?? new ConsoleConfigWriterBacklog();
+			this.SpecValidatorBacklog = specValidatorBacklog ?? new ConsoleSchemaValidatorBacklog();
         }
 
         #endregion
@@ -41,13 +45,12 @@ namespace Ini
         /// <param name="configuration"></param>
         /// <param name="options"></param>
         /// <param name="encoding"></param>
-		public void WriteToFile(string fileName, Config configuration, WriterOptions options = null, Encoding encoding = null)
+		public void WriteToFile(string fileName, Config configuration, ConfigWriterOptions options = null, Encoding encoding = null)
         {
 			if(encoding == null)
 			{
 				encoding = Encoding.Default;
 			}
-
             using (var stream = File.Open(fileName, FileMode.Create, FileAccess.Write))
             {
                 var writer = new StreamWriter(stream, encoding);
@@ -61,10 +64,23 @@ namespace Ini
 		/// <param name="writer"></param>
 		/// <param name="configuration"></param>
 		/// <param name="options"></param>
-		public void WriteToText(TextWriter writer, Config configuration, WriterOptions options = null)
+		/// <exception cref="UndefinedSpecException">If the configuration's specification is undefined.</exception>
+		/// <exception cref="InvalidSpecException">If the configuration's specification is invalid.</exception>
+		/// <exception cref="InvalidConfigException">If the configuration is invalid.</exception>
+		public void WriteToText(TextWriter writer, Config configuration, ConfigWriterOptions options = null)
 		{
-			backlog.ConfigurationNotValid();
-			throw new NotImplementedException();
+			// first check validity of both specification and configuration, if defined and required
+			options = options ?? ConfigWriterOptions.GetDefault();
+			if(options.ValidateConfig && !configuration.IsValid(options.ValidationMode, ConfigWriterBacklog, SpecValidatorBacklog))
+			{
+				ConfigWriterBacklog.ConfigNotValid();
+				throw new InvalidConfigException();
+			}
+			else
+			{
+				// and then only proceed with the writing
+				throw new NotImplementedException();
+			}
 		}
 
         #endregion

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Ini.Configuration;
 using System.Text;
+using Ini.Configuration;
 using Ini.Schema;
 using Ini.Backlogs;
 using Ini.Util;
+using Ini.Validation;
 
 namespace Ini
 {
@@ -19,7 +20,7 @@ namespace Ini
         /// <summary>
         /// A user-specified or default backlog for handling errors and parsing messages.
         /// </summary>
-        private IParsingBacklog backlog;
+        private IConfigReaderBacklog backlog;
 
         #endregion
 
@@ -29,9 +30,9 @@ namespace Ini
 		/// Initializes a new instance of the <see cref="ConfigReader"/> class.
         /// </summary>
         /// <param name="backlog">The backlog.</param>
-        public ConfigReader(IParsingBacklog backlog = null)
+        public ConfigReader(IConfigReaderBacklog backlog = null)
         {
-            this.backlog = backlog ?? new ConsoleParsingBacklog();
+            this.backlog = backlog ?? new ConsoleConfigReaderBacklog();
         }
 
         #endregion
@@ -42,18 +43,19 @@ namespace Ini
         /// Creates an instance of <see cref="Configuration"/> from the given path and encoding.
         /// </summary>
         /// <returns>The config read and parsed from the given path and encoding.</returns>
-        /// <param name="filePath">The given path.</param>
+		/// <param name="configPath">The given path.</param>
         /// <param name="mode">The validation mode.</param>
         /// <param name="schema">The schema.</param>
         /// <param name="encoding">The given encoding.</param>
-        public Config LoadFromFile(string filePath, ValidationMode mode = ValidationMode.Strict, ConfigSpec schema = null, Encoding encoding = null)
+		public Config LoadFromFile(string configPath, ConfigSpec schema = null, ConfigValidationMode mode = ConfigValidationMode.Strict, Encoding encoding = null)
         {
-            if (encoding == null)
-                encoding = Encoding.Default;
-
-            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+			if(encoding == null)
+			{
+				encoding = Encoding.Default;
+			}
+			using (var fileStream = new FileStream(configPath, FileMode.Open, FileAccess.Read))
             {
-                return LoadFromText(new StreamReader(fileStream, encoding), mode, schema);
+				return LoadFromText(new StreamReader(fileStream, encoding), schema, mode);
             }
         }
 
@@ -66,14 +68,15 @@ namespace Ini
         /// <param name="mode">The validation mode.</param>
         /// <param name="schema">The schema.</param>
         /// <param name="encoding">The given encoding.</param>
-		public bool TryLoadFromFile(string filePath, out Config configuration, ValidationMode mode = ValidationMode.Strict, ConfigSpec schema = null, Encoding encoding = null)
+		public bool TryLoadFromFile(string filePath, out Config configuration, ConfigSpec schema = null, ConfigValidationMode mode = ConfigValidationMode.Strict, Encoding encoding = null)
         {
-            if (encoding == null)
-                encoding = Encoding.Default;
-
+			if(encoding == null)
+			{
+				encoding = Encoding.Default;
+			}
             using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
-                return TryLoadFromText(new StreamReader(fileStream, encoding), out configuration, mode, schema);
+				return TryLoadFromText(new StreamReader(fileStream, encoding), out configuration, schema, mode);
             }
         }
 
@@ -85,7 +88,7 @@ namespace Ini
         /// <param name="reader">The given reader.</param>
         /// <param name="mode">The validation mode.</param>
         /// <param name="schema">The schema.</param>
-		public Config LoadFromText(TextReader reader, ValidationMode mode = ValidationMode.Strict, ConfigSpec schema = null)
+		public Config LoadFromText(TextReader reader, ConfigSpec schema = null, ConfigValidationMode mode = ConfigValidationMode.Strict)
         {
             ConfigParser parser = new ConfigParser(schema);
             return parser.Parse(reader, backlog, mode);
@@ -100,7 +103,7 @@ namespace Ini
         /// <param name="configuration">The config read and parsed from the given reader.</param>
         /// <param name="mode">The validation mode.</param>
         /// <param name="schema">The schema.</param>
-		public bool TryLoadFromText(TextReader reader, out Config configuration, ValidationMode mode = ValidationMode.Strict, ConfigSpec schema = null)
+		public bool TryLoadFromText(TextReader reader, out Config configuration, ConfigSpec schema = null, ConfigValidationMode mode = ConfigValidationMode.Strict)
         {
             ConfigParser parser = new ConfigParser(schema);
             return parser.TryParse(reader, out configuration, backlog, mode);

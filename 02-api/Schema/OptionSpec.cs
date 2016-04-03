@@ -7,7 +7,7 @@ namespace Ini.Schema
     /// <summary>
     /// The definition of a schema option.
     /// </summary>
-    public abstract class OptionSpec : SpecBase
+    public abstract class OptionSpec : SpecBlockBase
     {
         #region Properties
 

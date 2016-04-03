@@ -8,7 +8,7 @@ namespace Ini.Schema
     /// <summary>
     /// The definition of a configuration section.
     /// </summary>
-    public class SectionSpec : SpecBase
+    public class SectionSpec : SpecBlockBase
     {
         #region Properties
 
@@ -51,7 +51,7 @@ namespace Ini.Schema
         /// </summary>
         /// <param name="backlog"></param>
         /// <returns></returns>
-        public override bool IsValid(IValidationBacklog backlog = null)
+        public override bool IsValid(ISpecValidatorBacklog backlog = null)
         {
             throw new NotImplementedException();
         }

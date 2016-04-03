@@ -10,7 +10,7 @@ namespace Ini.Schema
     /// <summary>
     /// The base class for configuration definitions.
     /// </summary>
-    public abstract class SpecBase : IValidatable
+    public abstract class SpecBlockBase
     {
         #region Properties
 
@@ -41,7 +41,7 @@ namespace Ini.Schema
         /// </summary>
         /// <param name="backlog"></param>
         /// <returns></returns>
-        public abstract bool IsValid(IValidationBacklog backlog = null);
+        public abstract bool IsValid(ISpecValidatorBacklog backlog = null);
 
         #endregion
     }

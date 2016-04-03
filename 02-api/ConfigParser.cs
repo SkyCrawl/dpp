@@ -5,6 +5,7 @@ using Ini.Backlogs;
 using Ini.Configuration;
 using Ini.Schema;
 using Ini.Util;
+using Ini.Validation;
 
 namespace Ini
 {
@@ -58,7 +59,7 @@ namespace Ini
         /// <param name="backlog"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public Config Parse(TextReader reader, IParsingBacklog backlog, ValidationMode options)
+        public Config Parse(TextReader reader, IConfigReaderBacklog backlog, ConfigValidationMode options)
         {
 			Config result = new Config();
 
@@ -90,7 +91,7 @@ namespace Ini
         /// <param name="backlog"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public bool TryParse(TextReader reader, out Config config, IParsingBacklog backlog, ValidationMode options)
+        public bool TryParse(TextReader reader, out Config config, IConfigReaderBacklog backlog, ConfigValidationMode options)
         {
 			// TODO: if commentary:
 			// System.Guid.NewGuid()
@@ -101,7 +102,7 @@ namespace Ini
 
         #region Private Methods
 
-        private void ParseOption(string option, int lineIndex, Section section, IParsingBacklog backlog)
+        private void ParseOption(string option, int lineIndex, Section section, IConfigReaderBacklog backlog)
         {
             string[] splitted = option.Split(new char[] { INNER_OPTION_SEPARATOR }, 2); // splits by first occurrence and limits to two substrings
             if(splitted.Length == 2)
@@ -125,7 +126,7 @@ namespace Ini
             }
         }
 
-        private void ParseElement(int lineIndex, string identifier, string value, Section section, IParsingBacklog backlog)
+        private void ParseElement(int lineIndex, string identifier, string value, Section section, IConfigReaderBacklog backlog)
         {
             // hodnota je reprezentována jedním nebo více elementy stejného typu oddělených čárkou (,) nebo dvojtečkou (:), v rámci jedné hodnoty ale vždy buď pouze (,) nebo pouze (:)
             // TODO: semicolon shall be preferred over comma but don't forget about escaping with slashes...

@@ -1,24 +1,24 @@
-- Sekce1:
-	mandatory: yes
-	description: the purpose of Sekce1
-	options:
-		- Option 1:
-		  	 mandatory: yes
-			 description: the purpose of Option 1
-			 single_value: yes
-			 element_type: string
+- Sekce1:												# mandatory
+	mandatory: yes										# mandatory
+	description: the purpose of Sekce1					# mandatory
+	options:											# optional
+		- Option 1:										# mandatory
+		  	 mandatory: yes								# mandatory
+			 description: the purpose of Option 1		# mandatory
+			 single_value: yes							# mandatory (TODO: 'value: single|multiple" instead?)
+			 element_type: string						# mandatory ??? (TODO: optional and 'string' by default? also, maybe 'value_type' instead?)
 		- Option 2:
 		  	 mandatory: yes
 			 description: the purpose of Option 2
 			 single_value: no
 			 element_type: signed
-			 allowed_values: (-5, 5)
+			 allowed_values: (-5, 5)					# mandatory (TODO: "value_range" instead?)
 		- Option 3:
 		  	 mandatory: no
 			 description: the purpose of Option 3
 			 single_value: no
-			 element_type: bool
-			 default_value: t
+			 element_type: enum
+			 default_value: t							# mandatory (TODO: 'value_default' instead?)
 
 - Cisla:
 	mandatory: no

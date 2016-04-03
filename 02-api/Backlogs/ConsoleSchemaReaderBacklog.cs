@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 
 namespace Ini.Backlogs
 {
-    /// <summary>
-    /// TODO
-    /// </summary>
-    public class ConsoleSpecReaderBacklog : ISpecReaderBacklog
+	/// <summary>
+	/// An implementation of <see cref="ISchemaReaderBacklog"/> that writes into the console.
+	/// </summary>
+	public class ConsoleSchemaReaderBacklog : ConsoleSchemaValidatorBacklog, ISchemaReaderBacklog
     {
         #region ISpecReaderBacklog Members
 
         /// <summary>
-        /// TODO
+        /// The associated reader will now parse a new schema. Consumers will
+        /// probably want to distinguish the previous output from the new.
         /// </summary>
-        /// <param name="specOrigin">Config path.</param>
+        /// <param name="specOrigin">Spec origin.</param>
         public void NewSpec(string specOrigin)
         {
             throw new NotImplementedException();

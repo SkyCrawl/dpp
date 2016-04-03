@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Ini.Backlogs;
 using Ini.Schema;
 using Ini.Util;
+using Ini.Validation;
+using Ini.Exceptions;
 
 namespace Ini.Configuration
 {
@@ -25,7 +27,7 @@ namespace Ini.Configuration
         /// The schema this configuration should conform to. It can be changed during runtime to
 		/// perform checks against user-defined schemas.
         /// </summary>
-		public ConfigSpec Schema { get; set; }
+		public ConfigSpec Spec { get; set; }
 
 		/// <summary>
 		/// Gets the count of underlying sections.
@@ -59,7 +61,7 @@ namespace Ini.Configuration
 		public Config(string origin, ConfigSpec schema = null)
 		{
             this.Origin = origin;
-			this.Schema = schema;
+			this.Spec = schema;
 			this.SectionCount = 0;
 			this.Content = new ConfigBlockDictionary<string, ConfigBlockBase>();
 		}
@@ -161,12 +163,27 @@ namespace Ini.Configuration
 		/// <summary>
 		/// Determines whether the configuration conforms to <see cref="Schema"/>.
 		/// </summary>
-		/// <param name="mode"></param>
-		/// <param name="backlog"></param>
-		/// <returns></returns>
-		public bool IsValid(ValidationMode mode, IValidationBacklog backlog = null)
+		/// <returns><c>true</c> if this instance is valid the specified mode configBacklog schemaBacklog; otherwise, <c>false</c>.</returns>
+		/// <exception cref="UndefinedSpecException">If the specification is undefined.</exception>
+		/// <exception cref="InvalidSpecException">If the schema is invalid.</exception>
+		/// <param name="mode">Mode.</param>
+		/// <param name="configBacklog">Config backlog.</param>
+		/// <param name="backlog">Specification backlog.</param>
+		public bool IsValid(ConfigValidationMode mode, IConfigWriterBacklog configBacklog, ISpecValidatorBacklog backlog)
 		{
-			throw new NotImplementedException();
+			if(Spec == null)
+			{
+				throw new UndefinedSpecException();
+			}
+			else if(!Spec.IsValid(backlog))
+			{
+				configBacklog.SpecNotValid();
+				throw new InvalidSpecException();
+			}
+			else
+			{
+				throw new NotImplementedException();
+			}
 		}
 
 		#endregion

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Ini.Backlogs;
 using Ini.Schema;
 using Ini.Util;
+using Ini.Validation;
 
 namespace Ini.Configuration
 {
@@ -143,10 +144,10 @@ namespace Ini.Configuration
 		/// Determines whether the section conforms to the given section specification.
         /// </summary>
         /// <param name="mode"></param>
-        /// <param name="sectionDefinition"></param>
+		/// <param name="sectionSpec"></param>
         /// <param name="backlog"></param>
         /// <returns></returns>
-        public bool IsValid(ValidationMode mode, SectionSpec sectionDefinition = null, IValidationBacklog backlog = null)
+		public bool IsValid(SectionSpec sectionSpec, ConfigValidationMode mode, ISpecValidatorBacklog backlog)
         {
             throw new NotImplementedException();
         }

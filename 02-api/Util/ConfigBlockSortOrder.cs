@@ -9,7 +9,7 @@ namespace Ini.Util
     /// <summary>
     /// The sort order of sections and options in saved file.
     /// </summary>
-    public enum SortOrder
+    public enum ConfigBlockSortOrder
     {
         /// <summary>
         /// Same as the original file.
