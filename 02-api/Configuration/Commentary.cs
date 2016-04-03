@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Ini.Util.Guid;
 
 namespace Ini.Configuration
 {
@@ -14,6 +15,11 @@ namespace Ini.Configuration
 		/// </summary>
 		public List<string> Lines { get; private set; }
 
+		/// <summary>
+		/// Static identifier generator for instances of this class.
+		/// </summary>
+		public static IGuid<string> identifierGenerator = new SystemGuidGenerator();
+
 		#endregion
 
 		#region Constructor
@@ -21,8 +27,7 @@ namespace Ini.Configuration
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Ini.Configuration.Commentary"/> class.
 		/// </summary>
-		/// <param name="identifier">Identifier.</param>
-		public Commentary(string identifier) : base(identifier)
+		public Commentary() : base(identifierGenerator.Next())
 		{
 			this.Lines = new List<string>();
 		}
