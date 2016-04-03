@@ -9,8 +9,19 @@ namespace Ini.Configuration.Elements
     /// <summary>
 	/// Element of type <see cref="double"/>.
     /// </summary>
-    public class FloatElement : Element<double>
+    public class DoubleElement : Element<double>
     {
+		#region Constructor
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Ini.Configuration.Elements.DoubleElement"/> class.
+		/// </summary>
+		public DoubleElement(double value) : base(value)
+		{
+		}
+
+		#endregion
+
 		#region Validation
 
         /// <summary>

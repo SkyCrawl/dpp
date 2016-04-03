@@ -68,7 +68,6 @@
     <Compile Include="Configuration\Elements\BooleanElement.cs" />
     <Compile Include="Configuration\Elements\Element.cs" />
     <Compile Include="Configuration\Elements\EnumElement.cs" />
-    <Compile Include="Configuration\Elements\FloatElement.cs" />
     <Compile Include="Configuration\Elements\SignedElement.cs" />
     <Compile Include="Configuration\Elements\StringElement.cs" />
     <Compile Include="Configuration\Elements\UnsignedElement.cs" />
@@ -85,11 +84,15 @@
     <Compile Include="Schema\Elements\UnsignedOptionSpec.cs" />
     <Compile Include="Configuration\ConfigBlockBase.cs" />
     <Compile Include="Configuration\Commentary.cs" />
-    <Compile Include="Util\ConfigBlockDictionary.cs" />
     <Compile Include="Util\ConfigBlockSortOrder.cs" />
     <Compile Include="Util\IValidatable.cs" />
     <Compile Include="Util\ValidationMode.cs" />
     <Compile Include="Util\WriterOptions.cs" />
+    <Compile Include="Exceptions\InvariantBrokenException.cs" />
+    <Compile Include="Configuration\Elements\DoubleElement.cs" />
+    <Compile Include="Util\Guid\IGuid.cs" />
+    <Compile Include="Util\Guid\SystemGuidGenerator.cs" />
+    <Compile Include="Util\ConfigBlockDictionary.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -105,5 +108,6 @@
   <ItemGroup />
   <ItemGroup>
     <Folder Include="Util\" />
+    <Folder Include="Util\Guid\" />
   </ItemGroup>
 </Project>

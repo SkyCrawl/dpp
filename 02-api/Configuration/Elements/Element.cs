@@ -22,7 +22,7 @@ namespace Ini.Configuration.Elements
 		/// <summary>
 		/// The type of the element's value. It is bound to the class's
 		/// parametrized type and thus can not be changed. Corresponds
-		/// with the containing option's <see cref="Option.ElementType"/>.
+		/// with the containing option's <see cref="Option.ValueType"/>.
 		/// </summary>
 		public Type ValueType
 		{
@@ -39,6 +39,25 @@ namespace Ini.Configuration.Elements
 
 		#endregion
 
+		#region Constructor
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Ini.Configuration.Elements.Element{T}"/> class.
+		/// </summary>
+		public Element()
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Ini.Configuration.Elements.Element{T}"/> class.
+		/// </summary>
+		public Element(T value)
+		{
+			this.Value = value;
+		}
+
+		#endregion
+
         #region IElement Members
 
         /// <summary>
@@ -46,6 +65,7 @@ namespace Ini.Configuration.Elements
 		/// exceptions are not caught.
         /// </summary>
         /// <typeparam name="OutputType"></typeparam>
+		/// <exception cref="System.InvalidCastException">The specified type was incorrect.</exception>
         /// <returns></returns>
         public OutputType GetValue<OutputType>()
         {

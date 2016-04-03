@@ -29,7 +29,7 @@ namespace Ini.Configuration
 		/// The section's content (instances of <see cref="Option"/> and
 		/// <see cref="Commentary"/>) in insertion order.
         /// </summary>
-		private ConfigBlockDictionary<string, ConfigBlockBase> Content;
+		protected ConfigBlockDictionary<string, ConfigBlockBase> Content;
 
         #endregion
 

@@ -11,6 +11,17 @@ namespace Ini.Configuration.Elements
     /// </summary>
     public class UnsignedElement : Element<ulong>
     {
+		#region Constructor
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Ini.Configuration.Elements.UnsignedElement"/> class.
+		/// </summary>
+		public UnsignedElement(ulong value) : base(value)
+		{
+		}
+
+		#endregion
+
 		#region Validation
 
         /// <summary>

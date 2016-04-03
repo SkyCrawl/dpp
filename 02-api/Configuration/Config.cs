@@ -40,7 +40,7 @@ namespace Ini.Configuration
 		/// in time and consumers of this library should not be made to use a dictionary-specific
 		/// solution. Specialized methods are a better choice.
 		/// </summary>
-		private ConfigBlockDictionary<string, ConfigBlockBase> Content;
+		protected ConfigBlockDictionary<string, ConfigBlockBase> Content;
 
 		#endregion
 

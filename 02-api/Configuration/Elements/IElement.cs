@@ -16,7 +16,7 @@ namespace Ini.Configuration.Elements
         /// <summary>
 		/// The type of the element's value. It is bound to the implementing
 		/// class's parametrized type and thus can not be changed. Corresponds
-		/// with the containing option's <see cref="Option.ElementType"/>.
+		/// with the containing option's <see cref="Option.ValueType"/>.
         /// </summary>
         Type ValueType { get; }
 

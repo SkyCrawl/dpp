@@ -11,6 +11,17 @@ namespace Ini.Configuration.Elements
     /// </summary>
     public class StringElement : Element<string>
     {
+		#region Constructor
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Ini.Configuration.Elements.StringElement"/> class.
+		/// </summary>
+		public StringElement(string value) : base(value)
+		{
+		}
+
+		#endregion
+
 		#region Validation
 
         /// <summary>

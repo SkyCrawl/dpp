@@ -11,17 +11,28 @@ namespace Ini.Configuration.Elements
     /// </summary>
     public class EnumElement : Element<string>
     {
-        #region Properties
+		#region Constructor
 
-        /// <summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Ini.Configuration.Elements.EnumElement"/> class.
+		/// </summary>
+		public EnumElement(string value) : base(value)
+		{
+		}
+
+		#endregion
+
+		#region Public methods
+
+		/// <summary>
 		/// Tries to convert <see aref="Value"/> to a value of the given
 		/// <see cref="Enum"/> type.
-        /// </summary>
-        /// <typeparam name="TEnum"></typeparam>
-        /// <returns></returns>
-        public TEnum GetEnumValue<TEnum>()
-            where TEnum : struct, IConvertible, IComparable, IFormattable
-        {
+		/// </summary>
+		/// <typeparam name="TEnum"></typeparam>
+		/// <returns></returns>
+		public TEnum GetEnumValue<TEnum>()
+			where TEnum : struct, IConvertible, IComparable, IFormattable
+		{
 			if(!typeof(TEnum).IsEnum)
 			{
 				throw new ArgumentException("The parameter type must be an enum.");
@@ -30,9 +41,9 @@ namespace Ini.Configuration.Elements
 			{
 				return (TEnum) Enum.Parse(typeof(TEnum), Value);
 			}
-        }
+		}
 
-        #endregion
+		#endregion
 
 		#region Validation
 

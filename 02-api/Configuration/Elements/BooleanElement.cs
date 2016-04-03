@@ -11,6 +11,17 @@ namespace Ini.Configuration.Elements
     /// </summary>
     public class BooleanElement : Element<bool>
     {
+		#region Constructor
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Ini.Configuration.Elements.BooleanElement"/> class.
+		/// </summary>
+		public BooleanElement(bool value) : base(value)
+		{
+		}
+
+		#endregion
+
         #region Validation
 
         /// <summary>

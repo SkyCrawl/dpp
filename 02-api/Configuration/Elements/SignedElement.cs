@@ -11,6 +11,17 @@ namespace Ini.Configuration.Elements
     /// </summary>
     public class SignedElement : Element<long>
     {
+		#region Constructor
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Ini.Configuration.Elements.SignedElement"/> class.
+		/// </summary>
+		public SignedElement(long value) : base(value)
+		{
+		}
+
+		#endregion
+
 		#region Validation
 
         /// <summary>
