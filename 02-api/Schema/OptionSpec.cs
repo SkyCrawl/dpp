@@ -61,7 +61,7 @@ namespace Ini.Schema
         /// Creates a new section with empty mandatory option values and default optional option values.
         /// </summary>
         /// <returns></returns>
-        public override Option CreateOption()
+		public override Option CreateOptionStub()
         {
             throw new NotImplementedException();
         }

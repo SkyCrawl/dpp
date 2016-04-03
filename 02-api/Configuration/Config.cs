@@ -6,6 +6,8 @@ using Ini.Schema;
 using Ini.Util;
 using Ini.Validation;
 using Ini.Exceptions;
+using System.Collections.ObjectModel;
+using Ini.Configuration.Elements;
 
 namespace Ini.Configuration
 {
@@ -88,7 +90,7 @@ namespace Ini.Configuration
 		/// Adds the specified blocks of content.
 		/// </summary>
 		/// <exception cref="System.ArgumentException">Content with the same identifier has already been added.</exception>
-		/// <param name="content">Content.</param>
+		/// <param name="contents">Content.</param>
 		public void AddAll(IEnumerable<ConfigBlockBase> contents)
 		{
 			foreach(ConfigBlockBase content in contents)
@@ -152,7 +154,7 @@ namespace Ini.Configuration
 		/// <summary>
 		/// Removes the specified options.
 		/// </summary>
-		/// <param name="identifier">Identifier.</param>
+		/// <param name="identifiers">Identifier.</param>
 		public void RemoveAll(IEnumerable<string> identifiers)
 		{
 			foreach(string identifier in identifiers)
@@ -168,6 +170,61 @@ namespace Ini.Configuration
 		{
 			Content.Clear();
 			SectionCount = 0;
+		}
+
+		/// <summary>
+		/// Gets the section with the specified identifier.
+		/// </summary>
+		/// <returns>The section, or null if not found.</returns>
+		/// <param name="identifier">Target section identifier.</param>
+		public Section GetSection(string identifier)
+		{
+			ConfigBlockBase result;
+			if(Content.TryGetValue(identifier, out result))
+			{
+				return result is Section ? (Section) result : null;
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Gets the option with the specified identifier, within the specified section.
+		/// </summary>
+		/// <returns>The option, or null if not found.</returns>
+		/// <param name="sectionIdentifier">Target section identifier.</param>
+		/// <param name="optionIdentifier">Target option identifier.</param>
+		public Option GetOption(string sectionIdentifier, string optionIdentifier)
+		{
+			Section section = GetSection(sectionIdentifier);
+			return section != null ? section.GetOption(optionIdentifier) : null;
+		}
+
+		/// <summary>
+		/// Gets the collection of elements of the option with the specified identifier, within the specified section.
+		/// </summary>
+		/// <returns>The collection of elements, or null if not found.</returns>
+		/// <param name="sectionIdentifier">Target section identifier.</param>
+		/// <param name="optionIdentifier">Target option identifier.</param>
+		public ObservableCollection<IElement> GetElements(string sectionIdentifier, string optionIdentifier)
+		{
+			Option option = GetOption(sectionIdentifier, optionIdentifier);
+			return option != null ? option.Elements : null;
+		}
+
+		/// <summary>
+		/// Gets the specified element of the option with the specified identifier, within the specified section.
+		/// </summary>
+		/// <returns>The element, or null if not found.</returns>
+		/// <param name="sectionIdentifier">Target section identifier.</param>
+		/// <param name="optionIdentifier">Target option identifier.</param>
+		/// <param name="elementIndex">Target element index.</param>
+		public IElement GetElement(string sectionIdentifier, string optionIdentifier, int elementIndex)
+		{
+			Option option = GetOption(sectionIdentifier, optionIdentifier);
+			return option != null ? option.GetElement(elementIndex) : null;
 		}
 
 		/// <summary>

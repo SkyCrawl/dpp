@@ -61,7 +61,24 @@ namespace Ini.Configuration
 		#region Public methods
 
 		/// <summary>
-		/// Returns the value of a single, correctly typed element. If the specified type
+		/// Gets the specified element.
+		/// </summary>
+		/// <returns>The element, or null if not found.</returns>
+		/// <param name="elementIndex">Target element index.</param>
+		public IElement GetElement(int elementIndex)
+		{
+			try
+			{
+				return Elements[elementIndex];
+			}
+			catch(IndexOutOfRangeException)
+			{
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Gets the value of a single, correctly typed element. If the specified type
 		/// is not correct, throws an exception.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
@@ -74,7 +91,7 @@ namespace Ini.Configuration
 		}
 
 		/// <summary>
-		/// Returns the array typed option values.
+		/// Gets an array of correctly typed elements.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <exception cref="System.InvalidCastException">The specified type was incorrect.</exception>

@@ -5,6 +5,8 @@ using Ini.Backlogs;
 using Ini.Schema;
 using Ini.Util;
 using Ini.Validation;
+using System.Collections.ObjectModel;
+using Ini.Configuration.Elements;
 
 namespace Ini.Configuration
 {
@@ -123,6 +125,47 @@ namespace Ini.Configuration
 		{
 			Content.Clear();
 			OptionCount = 0;
+		}
+
+		/// <summary>
+		/// Gets the option with the specified identifier.
+		/// </summary>
+		/// <returns>The option, or null if not found.</returns>
+		/// <param name="optionIdentifier">Target option identifier.</param>
+		public Option GetOption(string optionIdentifier)
+		{
+			ConfigBlockBase result;
+			if(Content.TryGetValue(optionIdentifier, out result))
+			{
+				return result is Option ? (Option) result : null;
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Gets the collection of elements of the option with the specified identifier.
+		/// </summary>
+		/// <returns>The collection of elements, or null if not found.</returns>
+		/// <param name="optionIdentifier">Target option identifier.</param>
+		public ObservableCollection<IElement> GetElements(string optionIdentifier)
+		{
+			Option option = GetOption(optionIdentifier);
+			return option != null ? option.Elements : null;
+		}
+
+		/// <summary>
+		/// Gets the specified element of the option with the specified identifier.
+		/// </summary>
+		/// <returns>The element, or null if not found.</returns>
+		/// <param name="optionIdentifier">Target option identifier.</param>
+		/// <param name="elementIndex">Target element index.</param>
+		public IElement GetElement(string optionIdentifier, int elementIndex)
+		{
+			Option option = GetOption(optionIdentifier);
+			return option != null ? option.GetElement(elementIndex) : null;
 		}
 
 		/// <summary>
