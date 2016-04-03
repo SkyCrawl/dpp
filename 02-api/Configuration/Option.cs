@@ -95,7 +95,7 @@ namespace Ini.Configuration
 		/// <param name="optionSpec"></param>
 		/// <param name="backlog"></param>
 		/// <returns></returns>
-		public bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, ISpecValidatorBacklog backlog)
+		public bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, ISpecValidatorBacklog backlog = null)
 		{
 			throw new NotImplementedException();
 		}

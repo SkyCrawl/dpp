@@ -37,7 +37,7 @@ namespace Ini.Schema
         /// Creates a new section with default option elements.
         /// </summary>
         /// <returns></returns>
-        public Section CreateSection()
+		public Section CreateSectionStub()
         {
             throw new NotImplementedException();
         }
@@ -51,7 +51,7 @@ namespace Ini.Schema
         /// </summary>
         /// <param name="backlog"></param>
         /// <returns></returns>
-        public override bool IsValid(ISpecValidatorBacklog backlog = null)
+		public override bool IsValid(ISpecValidatorBacklog backlog = null)
         {
             throw new NotImplementedException();
         }

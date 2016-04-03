@@ -43,7 +43,7 @@ namespace Ini.Configuration.Elements
 		/// <param name="optionSpec"></param>
         /// <param name="backlog"></param>
         /// <returns></returns>
-		bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorBacklog backlog);
+		bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorBacklog backlog = null);
 
         #endregion
     }

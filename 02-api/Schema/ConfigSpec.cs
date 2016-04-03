@@ -66,7 +66,7 @@ namespace Ini.Schema
 		/// <exception cref="InvalidSpecException">If the schema is not valid.</exception>
         /// <returns>The config stub.</returns>
         /// <param name="backlog">Schema validation backlog.</param>
-		public Config GenerateConfigStub(ISpecValidatorBacklog backlog)
+		public Config CreateConfigStub(ISpecValidatorBacklog backlog)
         {
 			if(!IsValid(backlog))
 			{

@@ -80,7 +80,7 @@ namespace Ini.Configuration.Elements
 		/// <param name="optionSpec"></param>
         /// <param name="backlog"></param>
         /// <returns></returns>
-		public abstract bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorBacklog backlog);
+		public abstract bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorBacklog backlog = null);
 
         #endregion
     }

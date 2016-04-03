@@ -71,7 +71,7 @@ namespace Ini.Configuration
 		#region Public methods managing content
 
 		/// <summary>
-		/// Adds the specified content.
+		/// Adds the specified block of content.
 		/// </summary>
 		/// <exception cref="System.ArgumentException">Content with the same identifier has already been added.</exception>
 		/// <param name="content">Content.</param>
@@ -81,6 +81,19 @@ namespace Ini.Configuration
 			if(content is Section)
 			{
 				SectionCount++;
+			}
+		}
+
+		/// <summary>
+		/// Adds the specified blocks of content.
+		/// </summary>
+		/// <exception cref="System.ArgumentException">Content with the same identifier has already been added.</exception>
+		/// <param name="content">Content.</param>
+		public void AddAll(IEnumerable<ConfigBlockBase> contents)
+		{
+			foreach(ConfigBlockBase content in contents)
+			{
+				Add(content);
 			}
 		}
 
@@ -115,7 +128,7 @@ namespace Ini.Configuration
 		}
 
 		/// <summary>
-		/// Removes Adds the specified option.
+		/// Removes the specified option.
 		/// </summary>
 		/// <param name="identifier">Identifier.</param>
 		public bool Remove(string identifier)
@@ -133,6 +146,18 @@ namespace Ini.Configuration
 			else
 			{
 				return false;
+			}
+		}
+
+		/// <summary>
+		/// Removes the specified options.
+		/// </summary>
+		/// <param name="identifier">Identifier.</param>
+		public void RemoveAll(IEnumerable<string> identifiers)
+		{
+			foreach(string identifier in identifiers)
+			{
+				Remove(identifier);
 			}
 		}
 
@@ -169,7 +194,7 @@ namespace Ini.Configuration
 		/// <param name="mode">Mode.</param>
 		/// <param name="configBacklog">Config backlog.</param>
 		/// <param name="backlog">Specification backlog.</param>
-		public bool IsValid(ConfigValidationMode mode, IConfigWriterBacklog configBacklog, ISpecValidatorBacklog backlog)
+		public bool IsValid(ConfigValidationMode mode, IConfigWriterBacklog configBacklog, ISpecValidatorBacklog backlog = null)
 		{
 			if(Spec == null)
 			{

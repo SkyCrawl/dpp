@@ -32,7 +32,7 @@ namespace Ini.Configuration.Elements
 		/// <param name="optionSpec"></param>
         /// <param name="backlog"></param>
         /// <returns></returns>
-		public override bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorBacklog backlog)
+		public override bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorBacklog backlog = null)
         {
             throw new NotImplementedException();
         }

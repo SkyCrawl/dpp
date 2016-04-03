@@ -24,7 +24,7 @@ namespace Ini.Schema
         /// Creates a new section with empty mandatory option values and default optional option values.
         /// </summary>
         /// <returns></returns>
-        public abstract Option CreateOption();
+        public abstract Option CreateOptionStub();
 
         #endregion
     }

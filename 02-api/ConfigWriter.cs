@@ -78,7 +78,7 @@ namespace Ini
 			}
 			else
 			{
-				// and then only proceed with the writing
+				// and only then proceed with the writing; TODO: don't forget about the sorting order
 				throw new NotImplementedException();
 			}
 		}

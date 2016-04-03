@@ -147,7 +147,7 @@ namespace Ini.Configuration
 		/// <param name="sectionSpec"></param>
         /// <param name="backlog"></param>
         /// <returns></returns>
-		public bool IsValid(SectionSpec sectionSpec, ConfigValidationMode mode, ISpecValidatorBacklog backlog)
+		public bool IsValid(SectionSpec sectionSpec, ConfigValidationMode mode, ISpecValidatorBacklog backlog = null)
         {
             throw new NotImplementedException();
         }
