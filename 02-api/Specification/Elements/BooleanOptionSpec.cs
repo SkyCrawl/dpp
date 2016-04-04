@@ -14,7 +14,7 @@ namespace Ini.Specification.Elements
         /// <summary>
         /// Verifies the integrity of the configuration definition.
         /// </summary>
-		/// <param name="eventLog"></param>
+        /// <param name="eventLog"></param>
         /// <returns></returns>
         public override bool IsValid(ISpecValidatorEventLog eventLog = null)
         {

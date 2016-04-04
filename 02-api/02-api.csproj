@@ -65,10 +65,10 @@
     <Compile Include="Util\ConfigBlockSortOrder.cs" />
     <Compile Include="Exceptions\InvariantBrokenException.cs" />
     <Compile Include="Configuration\Elements\DoubleElement.cs" />
-    <Compile Include="Util\Guid\IGuid.cs" />
-    <Compile Include="Util\Guid\SystemGuidGenerator.cs" />
     <Compile Include="Util\ConfigBlockDictionary.cs" />
     <Compile Include="ConfigWriterOptions.cs" />
+    <Compile Include="Util\Guid\IGuid.cs" />
+    <Compile Include="Util\Guid\SystemGuidGenerator.cs" />
     <Compile Include="Validation\ConfigValidationMode.cs" />
     <Compile Include="Exceptions\InvalidSpecException.cs" />
     <Compile Include="Exceptions\InvalidConfigException.cs" />
@@ -110,9 +110,5 @@
   </Target>
   -->
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="Util\" />
-    <Folder Include="Util\Guid\" />
-    <Folder Include="Validation\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

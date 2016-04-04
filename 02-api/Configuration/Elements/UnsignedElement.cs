@@ -12,27 +12,27 @@ namespace Ini.Configuration.Elements
     /// </summary>
     public class UnsignedElement : Element<ulong>
     {
-		#region Constructor
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Ini.Configuration.Elements.UnsignedElement"/> class.
-		/// </summary>
-		public UnsignedElement(ulong value) : base(value)
-		{
-		}
-
-		#endregion
-
-		#region Validation
+        #region Constructor
 
         /// <summary>
-		/// Determines whether the element conforms to the given option specification.
+        /// Initializes a new instance of the <see cref="Ini.Configuration.Elements.UnsignedElement"/> class.
+        /// </summary>
+        public UnsignedElement(ulong value) : base(value)
+        {
+        }
+
+        #endregion
+
+        #region Validation
+
+        /// <summary>
+        /// Determines whether the element conforms to the given option specification.
         /// </summary>
         /// <param name="mode"></param>
-		/// <param name="optionSpec"></param>
-		/// <param name="eventLog"></param>
+        /// <param name="optionSpec"></param>
+        /// <param name="eventLog"></param>
         /// <returns></returns>
-		public override bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLog eventLog = null)
+        public override bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLog eventLog = null)
         {
             throw new NotImplementedException();
         }

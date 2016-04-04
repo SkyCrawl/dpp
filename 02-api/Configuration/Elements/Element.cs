@@ -13,60 +13,60 @@ namespace Ini.Configuration.Elements
     /// <typeparam name="T"></typeparam>
     public abstract class Element<T> : IElement
     {
-		#region Properties
+        #region Properties
 
-		/// <summary>
-		/// The element's value.
-		/// </summary>
-		public T Value { get; set; }
+        /// <summary>
+        /// The element's value.
+        /// </summary>
+        public T Value { get; set; }
 
-		/// <summary>
-		/// The type of the element's value. It is bound to the class's
-		/// parametrized type and thus can not be changed. Corresponds
-		/// with the containing option's <see cref="Option.ValueType"/>.
-		/// </summary>
-		public Type ValueType
-		{
-			get { return typeof(T); }
-		}
+        /// <summary>
+        /// The type of the element's value. It is bound to the class's
+        /// parametrized type and thus can not be changed. Corresponds
+        /// with the containing option's <see cref="Option.ValueType"/>.
+        /// </summary>
+        public Type ValueType
+        {
+            get { return typeof(T); }
+        }
 
-		/// <summary>
-		/// The element's <see cref="Value"/> as an object.
-		/// </summary>
-		public object ValueObject
-		{
-			get { return Value; }
-		}
+        /// <summary>
+        /// The element's <see cref="Value"/> as an object.
+        /// </summary>
+        public object ValueObject
+        {
+            get { return Value; }
+        }
 
-		#endregion
+        #endregion
 
-		#region Constructor
+        #region Constructor
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Ini.Configuration.Elements.Element{T}"/> class.
-		/// </summary>
-		public Element()
-		{
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Ini.Configuration.Elements.Element{T}"/> class.
+        /// </summary>
+        public Element()
+        {
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Ini.Configuration.Elements.Element{T}"/> class.
-		/// </summary>
-		public Element(T value)
-		{
-			this.Value = value;
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Ini.Configuration.Elements.Element{T}"/> class.
+        /// </summary>
+        public Element(T value)
+        {
+            this.Value = value;
+        }
 
-		#endregion
+        #endregion
 
         #region IElement Members
 
         /// <summary>
         /// The element's value, cast to the output type. Casting
-		/// exceptions are not caught.
+        /// exceptions are not caught.
         /// </summary>
         /// <typeparam name="OutputType"></typeparam>
-		/// <exception cref="System.InvalidCastException">The specified type was incorrect.</exception>
+        /// <exception cref="System.InvalidCastException">The specified type was incorrect.</exception>
         /// <returns></returns>
         public OutputType GetValue<OutputType>()
         {
@@ -77,10 +77,10 @@ namespace Ini.Configuration.Elements
         /// Determines whether the element conforms to the given option specification.
         /// </summary>
         /// <param name="mode"></param>
-		/// <param name="optionSpec"></param>
-		/// <param name="eventLog"></param>
+        /// <param name="optionSpec"></param>
+        /// <param name="eventLog"></param>
         /// <returns></returns>
-		public abstract bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLog eventLog = null);
+        public abstract bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLog eventLog = null);
 
         #endregion
     }

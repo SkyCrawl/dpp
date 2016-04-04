@@ -39,9 +39,9 @@ namespace Ini.Specification
         /// <summary>
         /// Verifies the integrity of the configuration definition.
         /// </summary>
-		/// <param name="eventLog"></param>
+        /// <param name="eventLog"></param>
         /// <returns></returns>
-		public abstract bool IsValid(ISpecValidatorEventLog eventLog = null);
+        public abstract bool IsValid(ISpecValidatorEventLog eventLog = null);
 
         #endregion
     }

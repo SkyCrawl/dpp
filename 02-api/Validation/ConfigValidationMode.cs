@@ -13,7 +13,7 @@ namespace Ini.Validation
         /// </summary>
         Strict,
         /// <summary>
-		/// Relaxed mode without an associated specification, as requested by client.
+        /// Relaxed mode without an associated specification, as requested by client.
         /// </summary>
         Relaxed
     }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Ini.Exceptions
 {
     /// <summary>
-	/// The parsed configuration is syntactically malformed. Semantics is handled by <see cref="InvalidConfigException"/>.
+    /// The parsed configuration is syntactically malformed. Semantics is handled by <see cref="InvalidConfigException"/>.
     /// </summary>
     public class MalformedConfigException : Exception
     {
@@ -21,7 +21,7 @@ namespace Ini.Exceptions
         #region Constructor
 
         /// <summary>
-		/// Initializes a new instance of the <see cref="MalformedConfigException"/> class.
+        /// Initializes a new instance of the <see cref="MalformedConfigException"/> class.
         /// </summary>
         /// <param name="parsingErrors"></param>
         public MalformedConfigException(IEnumerable<string> parsingErrors)
@@ -29,7 +29,7 @@ namespace Ini.Exceptions
         }
 
         /// <summary>
-		/// Initializes a new instance of the <see cref="MalformedConfigException"/> class.
+        /// Initializes a new instance of the <see cref="MalformedConfigException"/> class.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
         /// <param name="parsingErrors"></param>
@@ -39,7 +39,7 @@ namespace Ini.Exceptions
         }
 
         /// <summary>
-		/// Initializes a new instance of the <see cref="MalformedConfigException"/> class.
+        /// Initializes a new instance of the <see cref="MalformedConfigException"/> class.
         /// </summary>
         /// <param name="parsingErrors"></param>
         /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> that holds the serialized object data about the exception being thrown.</param>
@@ -50,7 +50,7 @@ namespace Ini.Exceptions
         }
 
         /// <summary>
-		/// Initializes a new instance of the <see cref="MalformedConfigException"/> class.
+        /// Initializes a new instance of the <see cref="MalformedConfigException"/> class.
         /// </summary>
         /// <param name="parsingErrors"></param>
         /// <param name="message">The error message that explains the reason for the exception.</param>

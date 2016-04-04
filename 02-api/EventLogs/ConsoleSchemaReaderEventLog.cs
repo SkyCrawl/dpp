@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Ini.EventLogs
 {
-	/// <summary>
-	/// An implementation of <see cref="ISchemaReaderEventLog"/> that writes into the console.
-	/// </summary>
-	public class ConsoleSchemaReaderEventLog : ConsoleSchemaValidatorEventLog, ISchemaReaderEventLog
+    /// <summary>
+    /// An implementation of <see cref="ISchemaReaderEventLog"/> that writes into the console.
+    /// </summary>
+    public class ConsoleSchemaReaderEventLog : ConsoleSchemaValidatorEventLog, ISchemaReaderEventLog
     {
         #region ISpecReaderBacklog Members
 
@@ -23,14 +23,14 @@ namespace Ini.EventLogs
             throw new NotImplementedException();
         }
 
-		/// <summary>
-		/// A general parsing/format error has occurred.
-		/// </summary>
-		/// <param name="message"></param>
-		public void SpecMalformed(string message)
-		{
-			throw new NotImplementedException();
-		}
+        /// <summary>
+        /// A general parsing/format error has occurred.
+        /// </summary>
+        /// <param name="message"></param>
+        public void SpecMalformed(string message)
+        {
+            throw new NotImplementedException();
+        }
 
         #endregion
     }

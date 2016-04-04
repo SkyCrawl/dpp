@@ -8,31 +8,31 @@ using Ini.Validation;
 namespace Ini.Configuration.Elements
 {
     /// <summary>
-	/// Element of type <see cref="long"/>.
+    /// Element of type <see cref="long"/>.
     /// </summary>
     public class SignedElement : Element<long>
     {
-		#region Constructor
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Ini.Configuration.Elements.SignedElement"/> class.
-		/// </summary>
-		public SignedElement(long value) : base(value)
-		{
-		}
-
-		#endregion
-
-		#region Validation
+        #region Constructor
 
         /// <summary>
-		/// Determines whether the element conforms to the given option specification.
+        /// Initializes a new instance of the <see cref="Ini.Configuration.Elements.SignedElement"/> class.
+        /// </summary>
+        public SignedElement(long value) : base(value)
+        {
+        }
+
+        #endregion
+
+        #region Validation
+
+        /// <summary>
+        /// Determines whether the element conforms to the given option specification.
         /// </summary>
         /// <param name="mode"></param>
-		/// <param name="optionSpec"></param>
-		/// <param name="eventLog"></param>
+        /// <param name="optionSpec"></param>
+        /// <param name="eventLog"></param>
         /// <returns></returns>
-		public override bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLog eventLog = null)
+        public override bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLog eventLog = null)
         {
             throw new NotImplementedException();
         }

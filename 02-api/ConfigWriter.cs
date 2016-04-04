@@ -16,15 +16,15 @@ namespace Ini
     {
         #region Properties
 
-		/// <summary>
-		/// The config writer event log.
-		/// </summary>
-		protected IConfigWriterEventLog configWriterEventLog;
+        /// <summary>
+        /// The config writer event log.
+        /// </summary>
+        protected IConfigWriterEventLog configWriterEventLog;
 
-		/// <summary>
-		/// The spec validator event log.
-		/// </summary>
-		protected ISpecValidatorEventLog specValidatorEventLog;
+        /// <summary>
+        /// The spec validator event log.
+        /// </summary>
+        protected ISpecValidatorEventLog specValidatorEventLog;
 
         #endregion
 
@@ -33,12 +33,12 @@ namespace Ini
         /// <summary>
         /// Initializes a new instance of the <see cref="Ini.ConfigWriter"/> class.
         /// </summary>
-		/// <param name="specValidatorEventLog">Spec validator event log.</param>
-		/// <param name="configWriterEventLog">Config writer event log.</param>
-		public ConfigWriter(ISpecValidatorEventLog specValidatorEventLog = null, IConfigWriterEventLog configWriterEventLog = null)
+        /// <param name="specValidatorEventLog">Spec validator event log.</param>
+        /// <param name="configWriterEventLog">Config writer event log.</param>
+        public ConfigWriter(ISpecValidatorEventLog specValidatorEventLog = null, IConfigWriterEventLog configWriterEventLog = null)
         {
-			this.configWriterEventLog = configWriterEventLog ?? new ConsoleConfigWriterEventLog();
-			this.specValidatorEventLog = specValidatorEventLog ?? new ConsoleSchemaValidatorEventLog();
+            this.configWriterEventLog = configWriterEventLog ?? new ConsoleConfigWriterEventLog();
+            this.specValidatorEventLog = specValidatorEventLog ?? new ConsoleSchemaValidatorEventLog();
         }
 
         #endregion
@@ -52,15 +52,15 @@ namespace Ini
         /// <param name="configuration"></param>
         /// <param name="options"></param>
         /// <param name="encoding"></param>
-		/// <exception cref="UndefinedSpecException">If the configuration's specification is undefined.</exception>
-		/// <exception cref="InvalidSpecException">If the configuration's specification is invalid.</exception>
-		/// <exception cref="InvalidConfigException">If the configuration is invalid.</exception>
-		public void WriteToFile(string fileName, Config configuration, ConfigWriterOptions options = null, Encoding encoding = null)
+        /// <exception cref="UndefinedSpecException">If the configuration's specification is undefined.</exception>
+        /// <exception cref="InvalidSpecException">If the configuration's specification is invalid.</exception>
+        /// <exception cref="InvalidConfigException">If the configuration is invalid.</exception>
+        public void WriteToFile(string fileName, Config configuration, ConfigWriterOptions options = null, Encoding encoding = null)
         {
-			if(encoding == null)
-			{
-				encoding = Encoding.Default;
-			}
+            if(encoding == null)
+            {
+                encoding = Encoding.Default;
+            }
             using (var stream = File.Open(fileName, FileMode.Create, FileAccess.Write))
             {
                 var writer = new StreamWriter(stream, encoding);
@@ -68,30 +68,30 @@ namespace Ini
             }
         }
 
-		/// <summary>
-		/// Writes the configuration into a text writer.
-		/// </summary>
-		/// <param name="writer"></param>
-		/// <param name="configuration"></param>
-		/// <param name="options"></param>
-		/// <exception cref="UndefinedSpecException">If the configuration's specification is undefined.</exception>
-		/// <exception cref="InvalidSpecException">If the configuration's specification is invalid.</exception>
-		/// <exception cref="InvalidConfigException">If the configuration is invalid.</exception>
-		public void WriteToText(TextWriter writer, Config configuration, ConfigWriterOptions options = null)
-		{
-			// first check validity of both specification and configuration, if defined and required
-			options = options ?? ConfigWriterOptions.GetDefault();
-			if(options.ValidateConfig && !configuration.IsValid(options.ValidationMode, configWriterEventLog, specValidatorEventLog))
-			{
-				configWriterEventLog.ConfigNotValid();
-				throw new InvalidConfigException();
-			}
-			else
-			{
-				// and only then proceed with the writing; TODO: don't forget about the sorting order
-				throw new NotImplementedException();
-			}
-		}
+        /// <summary>
+        /// Writes the configuration into a text writer.
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="configuration"></param>
+        /// <param name="options"></param>
+        /// <exception cref="UndefinedSpecException">If the configuration's specification is undefined.</exception>
+        /// <exception cref="InvalidSpecException">If the configuration's specification is invalid.</exception>
+        /// <exception cref="InvalidConfigException">If the configuration is invalid.</exception>
+        public void WriteToText(TextWriter writer, Config configuration, ConfigWriterOptions options = null)
+        {
+            // first check validity of both specification and configuration, if defined and required
+            options = options ?? ConfigWriterOptions.GetDefault();
+            if(options.ValidateConfig && !configuration.IsValid(options.ValidationMode, configWriterEventLog, specValidatorEventLog))
+            {
+                configWriterEventLog.ConfigNotValid();
+                throw new InvalidConfigException();
+            }
+            else
+            {
+                // and only then proceed with the writing; TODO: don't forget about the sorting order
+                throw new NotImplementedException();
+            }
+        }
 
         #endregion
     }

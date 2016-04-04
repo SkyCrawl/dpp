@@ -8,7 +8,7 @@ namespace Ini.Util
     public enum ConfigBlockSortOrder
     {
         /// <summary>
-		/// Same order as the origin (e.g. file).
+        /// Same order as the origin (e.g. file).
         /// </summary>
         Insertion,
 
@@ -22,9 +22,9 @@ namespace Ini.Util
         /// </summary>
         Ascending,
 
-		/// <summary>
-		/// Top to bottom, lexicographically highest to lowest.
-		/// </summary>
-		Descending
+        /// <summary>
+        /// Top to bottom, lexicographically highest to lowest.
+        /// </summary>
+        Descending
     }
 }

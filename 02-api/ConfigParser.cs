@@ -28,15 +28,15 @@ namespace Ini
 
         #endregion
 
-		#region Properties
+        #region Properties
 
-		/// <summary>
-		/// The configuration being parsed. It's purpose is to preserve what's parsed
-		/// when an exception occurs.
-		/// </summary>
-		protected Config config;
+        /// <summary>
+        /// The configuration being parsed. It's purpose is to preserve what's parsed
+        /// when an exception occurs.
+        /// </summary>
+        protected Config config;
 
-		#endregion
+        #endregion
 
         #region Private types
 
@@ -53,10 +53,10 @@ namespace Ini
         /// <summary>
         /// Initializes a new instance of the <see cref="Ini.ConfigParser"/> class.
         /// </summary>
-		/// <param name="spec">The specification to validate against when parsing the configuration.</param>
-		public ConfigParser(ConfigSpec spec)
+        /// <param name="spec">The specification to validate against when parsing the configuration.</param>
+        public ConfigParser(ConfigSpec spec)
         {
-			this.config = new Config(spec);
+            this.config = new Config(spec);
         }
 
         #endregion
@@ -67,33 +67,33 @@ namespace Ini
         /// Parses the configuration from the text input.
         /// </summary>
         /// <param name="reader"></param>
-		/// <param name="configEventLog"></param>
-		/// <param name="specEventLog"></param>
-		/// <param name="mode"></param>
-		/// <exception cref="Ini.Exceptions.UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
-		/// <exception cref="Ini.Exceptions.InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
-		/// <exception cref="MalformedConfigException">If the configuration's format is malformed.</exception>
+        /// <param name="configEventLog"></param>
+        /// <param name="specEventLog"></param>
+        /// <param name="mode"></param>
+        /// <exception cref="Ini.Exceptions.UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
+        /// <exception cref="Ini.Exceptions.InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
+        /// <exception cref="MalformedConfigException">If the configuration's format is malformed.</exception>
         /// <returns></returns>
-		public Config Parse(TextReader reader, IConfigReaderEventLog configEventLog, ISpecValidatorEventLog specEventLog, ConfigValidationMode mode)
-		{
-			// check preconditions
-			if(mode == ConfigValidationMode.Strict) // we need a valid specification
-			{
-				if(config.Spec == null) // and we have none
-				{
-					configEventLog.SpecNotFound();
-					throw new UndefinedSpecException();
-				}
-				if(!config.Spec.IsValid(specEventLog)) // we have one but it's not valid
-				{
-					configEventLog.SpecNotValid();
+        public Config Parse(TextReader reader, IConfigReaderEventLog configEventLog, ISpecValidatorEventLog specEventLog, ConfigValidationMode mode)
+        {
+            // check preconditions
+            if(mode == ConfigValidationMode.Strict) // we need a valid specification
+            {
+                if(config.Spec == null) // and we have none
+                {
+                    configEventLog.SpecNotFound();
+                    throw new UndefinedSpecException();
+                }
+                if(!config.Spec.IsValid(specEventLog)) // we have one but it's not valid
+                {
+                    configEventLog.SpecNotValid();
 
-					// raise an exception or face undefined behaviour
-					throw new InvalidSpecException();
-				}
-			}
+                    // raise an exception or face undefined behaviour
+                    throw new InvalidSpecException();
+                }
+            }
 
-			// either way, now we have a valid specification or don't need one
+            // either way, now we have a valid specification or don't need one
 
             // PSEUDOCODE:
             /*
@@ -120,32 +120,32 @@ namespace Ini
         /// </summary>
         /// <param name="reader"></param>
         /// <param name="config"></param>
-		/// <param name="configEventLog"></param>
-		/// <param name="specEventLog"></param>
-		/// <param name="mode"></param>
-		/// <exception cref="Ini.Exceptions.UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
-		/// <exception cref="Ini.Exceptions.InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
-		/// <exception cref="MalformedConfigException">If the configuration's format is malformed.</exception>
+        /// <param name="configEventLog"></param>
+        /// <param name="specEventLog"></param>
+        /// <param name="mode"></param>
+        /// <exception cref="Ini.Exceptions.UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
+        /// <exception cref="Ini.Exceptions.InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
+        /// <exception cref="MalformedConfigException">If the configuration's format is malformed.</exception>
         /// <returns></returns>
-		public bool TryParse(TextReader reader, out Config config, IConfigReaderEventLog configEventLog, ISpecValidatorEventLog specEventLog, ConfigValidationMode mode)
+        public bool TryParse(TextReader reader, out Config config, IConfigReaderEventLog configEventLog, ISpecValidatorEventLog specEventLog, ConfigValidationMode mode)
         {
-			try
-			{
-				config = Parse(reader, configEventLog, specEventLog, mode);
-				return true;
-			}
-			catch (Exception)
-			{
-				config = this.config; // return what was parsed before an exception was thrown
-				return false;
-			}
+            try
+            {
+                config = Parse(reader, configEventLog, specEventLog, mode);
+                return true;
+            }
+            catch (Exception)
+            {
+                config = this.config; // return what was parsed before an exception was thrown
+                return false;
+            }
         }
 
         #endregion
 
         #region Private Methods
 
-		private void ParseOption(string option, int lineIndex, Section section, IConfigReaderEventLog eventLog)
+        private void ParseOption(string option, int lineIndex, Section section, IConfigReaderEventLog eventLog)
         {
             string[] splitted = option.Split(new char[] { INNER_OPTION_SEPARATOR }, 2); // splits by first occurrence and limits to two substrings
             if(splitted.Length == 2)
@@ -169,7 +169,7 @@ namespace Ini
             }
         }
 
-		private void ParseElement(int lineIndex, string identifier, string value, Section section, IConfigReaderEventLog eventLog)
+        private void ParseElement(int lineIndex, string identifier, string value, Section section, IConfigReaderEventLog eventLog)
         {
             // hodnota je reprezentována jedním nebo více elementy stejného typu oddělených čárkou (,) nebo dvojtečkou (:), v rámci jedné hodnoty ale vždy buď pouze (,) nebo pouze (:)
             // TODO: semicolon shall be preferred over comma but don't forget about escaping with slashes...

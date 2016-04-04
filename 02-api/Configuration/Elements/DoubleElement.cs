@@ -8,31 +8,31 @@ using Ini.Validation;
 namespace Ini.Configuration.Elements
 {
     /// <summary>
-	/// Element of type <see cref="double"/>.
+    /// Element of type <see cref="double"/>.
     /// </summary>
     public class DoubleElement : Element<double>
     {
-		#region Constructor
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Ini.Configuration.Elements.DoubleElement"/> class.
-		/// </summary>
-		public DoubleElement(double value) : base(value)
-		{
-		}
-
-		#endregion
-
-		#region Validation
+        #region Constructor
 
         /// <summary>
-		/// Determines whether the element conforms to the given option specification.
+        /// Initializes a new instance of the <see cref="Ini.Configuration.Elements.DoubleElement"/> class.
+        /// </summary>
+        public DoubleElement(double value) : base(value)
+        {
+        }
+
+        #endregion
+
+        #region Validation
+
+        /// <summary>
+        /// Determines whether the element conforms to the given option specification.
         /// </summary>
         /// <param name="mode"></param>
-		/// <param name="optionSpec"></param>
-		/// <param name="eventLog"></param>
+        /// <param name="optionSpec"></param>
+        /// <param name="eventLog"></param>
         /// <returns></returns>
-		public override bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLog eventLog = null)
+        public override bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLog eventLog = null)
         {
             throw new NotImplementedException();
         }

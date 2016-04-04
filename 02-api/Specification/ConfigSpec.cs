@@ -56,8 +56,8 @@ namespace Ini.Specification
         /// </summary>
         /// <returns>true</returns>
         /// <c>false</c>
-		/// <param name="eventLog">Schema validation event log.</param>
-		public bool IsValid(ISpecValidatorEventLog eventLog)
+        /// <param name="eventLog">Schema validation event log.</param>
+        public bool IsValid(ISpecValidatorEventLog eventLog)
         {
             throw new NotImplementedException();
         }
@@ -68,10 +68,10 @@ namespace Ini.Specification
         /// </summary>
         /// <exception cref="InvalidSpecException">If the schema is not valid.</exception>
         /// <returns>The config stub.</returns>
-		/// <param name="eventLog">Schema validation event log.</param>
-		public Config CreateConfigStub(ISpecValidatorEventLog eventLog)
+        /// <param name="eventLog">Schema validation event log.</param>
+        public Config CreateConfigStub(ISpecValidatorEventLog eventLog)
         {
-			if(!IsValid(eventLog))
+            if(!IsValid(eventLog))
             {
                 throw new InvalidSpecException();
             }

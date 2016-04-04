@@ -51,9 +51,9 @@ namespace Ini.Specification
         /// <summary>
         /// Verifies the integrity of the configuration section definition.
         /// </summary>
-		/// <param name="eventLog"></param>
+        /// <param name="eventLog"></param>
         /// <returns></returns>
-		public override bool IsValid(ISpecValidatorEventLog eventLog = null)
+        public override bool IsValid(ISpecValidatorEventLog eventLog = null)
         {
             throw new NotImplementedException();
         }
