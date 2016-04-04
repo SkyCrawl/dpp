@@ -97,6 +97,14 @@
     <Compile Include="EventLogs\IConfigWriterEventLog.cs" />
     <Compile Include="EventLogs\ISchemaReaderEventLog.cs" />
     <Compile Include="EventLogs\ISpecValidatorEventLog.cs" />
+    <Compile Include="Util\LinkResolving\LinkNode.cs" />
+    <Compile Include="Util\LinkResolving\LinkTarget.cs" />
+    <Compile Include="Util\LinkResolving\LinkOrigin.cs" />
+    <Compile Include="Util\LinkResolving\LinkBucket.cs" />
+    <Compile Include="Util\LinkResolving\LinkBase.cs" />
+    <Compile Include="Exceptions\LinkCycleException.cs" />
+    <Compile Include="Util\LinkResolving\LinkResolver.cs" />
+    <Compile Include="Util\Extensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -110,5 +118,20 @@
   </Target>
   -->
   <ItemGroup />
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Util\" />
+    <Folder Include="Util\Guid\" />
+    <Folder Include="Validation\" />
+    <Folder Include="Util\LinkResolving\" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <TextStylePolicy EolMarker="Windows" inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/x-csharp" />
+          <CSharpFormattingPolicy AutoPropertyFormatting="ForceOneLine" MethodBraceStyle="EndOfLine" AnonymousMethodBraceStyle="NextLine" PropertyBraceStyle="NextLine" PropertyGetBraceStyle="NextLine" PropertySetBraceStyle="NextLine" EventBraceStyle="NextLine" EventAddBraceStyle="NextLine" EventRemoveBraceStyle="NextLine" StatementBraceStyle="NextLine" ElseNewLinePlacement="NewLine" CatchNewLinePlacement="NewLine" FinallyNewLinePlacement="NewLine" WhileNewLinePlacement="NewLine" BeforeMethodDeclarationParentheses="False" BeforeMethodCallParentheses="False" BeforeConstructorDeclarationParentheses="False" NewLineBeforeConstructorInitializerColon="SameLine" NewLineAfterConstructorInitializerColon="SameLine" BeforeIndexerDeclarationBracket="False" BeforeDelegateDeclarationParentheses="False" AfterDelegateDeclarationParameterComma="True" NewParentheses="False" IfParentheses="False" WhileParentheses="False" ForParentheses="False" ForeachParentheses="False" CatchParentheses="False" SwitchParentheses="False" LockParentheses="False" UsingParentheses="False" SpacesBeforeBrackets="False" SpacesAfterTypecast="True" MethodCallArgumentWrapping="WrapIfTooLong" MethodDeclarationParameterWrapping="WrapIfTooLong" AlignToFirstMethodDeclarationParameter="False" IndexerDeclarationParameterWrapping="WrapIfTooLong" AlignToFirstIndexerDeclarationParameter="False" IndexerArgumentWrapping="WrapIfTooLong" inheritsSet="Mono" inheritsScope="text/x-csharp" scope="text/x-csharp" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
 </Project>

@@ -112,6 +112,14 @@ namespace Ini
              * 
              * Meanwhile, catch exceptions and report with 'backlog'.
              */
+
+			/*
+			 * After that, we need to mind links and divide the parsing process into phases:
+			 * 1) First parse every option and element as string.
+			 * 2) Look at the string values, find links and register them into a resolver instance.
+			 * 3) Once we have all sections and options parsed like that, resolve links on the resolver.
+			 * 4) And finally, we can interpret the option values in their correct contexts.
+			 */
             return config;
         }
 
@@ -136,49 +144,6 @@ namespace Ini
                 config = this.config; // return what was parsed before an exception was thrown
                 return false;
             }
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private void ParseOption(string option, int lineIndex, Section section, IConfigReaderEventLog eventLog)
-        {
-            string[] splitted = option.Split(new char[] { INNER_OPTION_SEPARATOR }, 2); // splits by first occurrence and limits to two substrings
-            if(splitted.Length == 2)
-            {
-                string optionIdentifier = TrimWhitespaces(splitted[0]);
-                string optionValue = TrimWhitespaces(splitted[1]);
-
-                if(IsIdentifierWellFormed(optionIdentifier, IdentifierType.OPTION))
-                {
-                    ParseElement(lineIndex, optionIdentifier, optionValue, section, eventLog);
-                }
-                else
-                {
-                    // TODO: maybe more elaborate?
-                    eventLog.ConfigMalformed(lineIndex, string.Format("Error at line {0}: identifier is not well formed.", lineIndex));
-                }
-            }
-            else
-            {
-                eventLog.ConfigMalformed(lineIndex, string.Format("Error at line {0}: can not parse option because of missing '{1}'.", lineIndex, INNER_OPTION_SEPARATOR));
-            }
-        }
-
-        private void ParseElement(int lineIndex, string identifier, string value, Section section, IConfigReaderEventLog eventLog)
-        {
-            // hodnota je reprezentována jedním nebo více elementy stejného typu oddělených čárkou (,) nebo dvojtečkou (:), v rámci jedné hodnoty ale vždy buď pouze (,) nebo pouze (:)
-            // TODO: semicolon shall be preferred over comma but don't forget about escaping with slashes...
-            // TODO: type checks
-
-            // Option option = null; // TODO
-            // section.Options.Add(identifier, option);
-        }
-
-        private void TypeCheck()
-        {
-            // TODO:
         }
 
         #endregion

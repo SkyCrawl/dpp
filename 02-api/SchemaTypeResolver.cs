@@ -15,7 +15,7 @@ namespace Ini
 		#region Fields
 
 		/// <summary>
-		/// Contains mapping of YAML option type tags (e.g. "!String") and instances
+		/// Contains mapping of YAML option type tags (e.g. "!String") to instances
 		/// of the corresponding library type. See class hierarchy for <see cref="OptionSpec"/>.
 		/// Mapping a tag to 'null' will eventually result in a null reference exception.
 		/// </summary>
