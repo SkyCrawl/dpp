@@ -40,16 +40,6 @@ namespace Ini
         #region Public Methods
 
         /// <summary>
-        /// Registers a user defined option type. 
-        /// </summary>
-        /// <param name="yamlIdentifier">The identifer of the option used in Yaml</param>
-        /// <param name="optionType">The user defined type of the option</param>
-        public void RegisterType(string yamlIdentifier, Type optionType)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         /// Creates an instance of <see cref="ConfigSpec"/> from the given path and encoding.
         /// </summary>
         /// <returns>The config read and parsed from the given path and encoding.</returns>

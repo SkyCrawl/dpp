@@ -96,6 +96,7 @@
     <Compile Include="Specification\Elements\SignedOptionSpec.cs" />
     <Compile Include="Specification\Elements\StringOptionSpec.cs" />
     <Compile Include="Specification\Elements\UnsignedOptionSpec.cs" />
+    <Compile Include="SpecTypeResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
