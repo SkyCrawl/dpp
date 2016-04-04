@@ -14,14 +14,14 @@ namespace Ini.Util
 		/// <summary>
 		/// The inner ordered dictionary.
 		/// </summary>
-		private OrderedDictionary Dictionary;
+		protected OrderedDictionary dictionary;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Ini.Util.ConfigBlockDictionary{TKey,TValue}"/> class.
 		/// </summary>
 		public ConfigBlockDictionary()
 		{
-			this.Dictionary = new OrderedDictionary();
+			this.dictionary = new OrderedDictionary();
 		}
 
 		#region IDictionary implementation
@@ -34,7 +34,7 @@ namespace Ini.Util
 		/// <param name="value">Value.</param>
 		public void Add(TKey identifier, TValue value)
 		{
-			Dictionary.Add(identifier, value);
+			dictionary.Add(identifier, value);
 		}
 
 		/// <summary>
@@ -44,7 +44,7 @@ namespace Ini.Util
 		/// <param name="identifier">Identifier.</param>
 		public bool ContainsKey(TKey identifier)
 		{
-			return Dictionary.Contains(identifier);
+			return dictionary.Contains(identifier);
 		}
 			
 		/// <summary>
@@ -53,10 +53,10 @@ namespace Ini.Util
 		/// <param name="identifier">Identifier.</param>
 		public bool Remove(TKey identifier)
 		{
-			bool contains = Dictionary.Contains(identifier);
+			bool contains = dictionary.Contains(identifier);
 			if(contains)
 			{
-				Dictionary.Remove(identifier);
+				dictionary.Remove(identifier);
 			}
 			return contains;
 		}
@@ -69,7 +69,7 @@ namespace Ini.Util
 		/// <param name="value">Value.</param>
 		public bool TryGetValue(TKey identifier, out TValue value)
 		{
-			value = ContainsKey(identifier) ? (TValue) Dictionary[identifier] : default(TValue);
+			value = ContainsKey(identifier) ? (TValue) dictionary[identifier] : default(TValue);
 			return value != default(TValue);
 		}
 
@@ -83,7 +83,7 @@ namespace Ini.Util
 			{
 				if(ContainsKey(identifier))
 				{
-					return (TValue) Dictionary[identifier];
+					return (TValue) dictionary[identifier];
 				}
 				else
 				{
@@ -92,7 +92,7 @@ namespace Ini.Util
 			}
 			set
 			{
-				Dictionary[identifier] = value;
+				dictionary[identifier] = value;
 			}
 		}
 	
@@ -103,7 +103,7 @@ namespace Ini.Util
 		{
 			get
 			{
-				return (ICollection<TKey>) Dictionary.Keys;
+				return (ICollection<TKey>) dictionary.Keys;
 			}
 		}
 
@@ -114,7 +114,7 @@ namespace Ini.Util
 		{
 			get
 			{
-				return (ICollection<TValue>) Dictionary.Values;
+				return (ICollection<TValue>) dictionary.Values;
 			}
 		}
 
@@ -129,7 +129,7 @@ namespace Ini.Util
 		/// <param name="entry">Entry.</param>
 		public void Add(KeyValuePair<TKey, TValue> entry)
 		{
-			Dictionary.Add(entry.Key, entry.Value);
+			dictionary.Add(entry.Key, entry.Value);
 		}
 
 		/// <summary>
@@ -137,7 +137,7 @@ namespace Ini.Util
 		/// </summary>
 		public void Clear()
 		{
-			Dictionary.Clear();
+			dictionary.Clear();
 		}
 			
 		/// <summary>
@@ -179,7 +179,7 @@ namespace Ini.Util
 		{
 			get
 			{
-				return Dictionary.Count;
+				return dictionary.Count;
 			}
 		}
 
@@ -191,7 +191,7 @@ namespace Ini.Util
 		{
 			get
 			{
-				return Dictionary.IsReadOnly;
+				return dictionary.IsReadOnly;
 			}
 		}
 
@@ -205,7 +205,7 @@ namespace Ini.Util
 		/// <returns>The enumerator.</returns>
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return Dictionary.GetEnumerator();
+			return dictionary.GetEnumerator();
 		}
 
 		/// <summary>
@@ -214,7 +214,7 @@ namespace Ini.Util
 		/// <returns>The enumerator.</returns>
 		IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
 		{
-			return ((IEnumerable<KeyValuePair<TKey, TValue>>) Dictionary).GetEnumerator();
+			return ((IEnumerable<KeyValuePair<TKey, TValue>>) dictionary).GetEnumerator();
 		}
 
 		#endregion

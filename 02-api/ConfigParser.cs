@@ -6,6 +6,7 @@ using Ini.Configuration;
 using Ini.Specification;
 using Ini.Util;
 using Ini.Validation;
+using Ini.Exceptions;
 
 namespace Ini
 {
@@ -14,7 +15,7 @@ namespace Ini
     /// </summary>
     public class ConfigParser
     {
-        #region Fields
+        #region Constants
 
         const string IDENTIFIER_START_CHAR_REGEX = "[a-zA-Z.:$]";
         const string IDENTIFIER_SUFFIX_CHAR_REGEX = "[a-zA-Z0-9_~\\-.:$ ]";
@@ -27,7 +28,17 @@ namespace Ini
 
         #endregion
 
-        #region Enums
+		#region Properties
+
+		/// <summary>
+		/// The configuration being parsed. It's purpose is to preserve what's parsed
+		/// when an exception occurs.
+		/// </summary>
+		protected Config config;
+
+		#endregion
+
+        #region Private types
 
         enum IdentifierType
         {
@@ -40,12 +51,12 @@ namespace Ini
         #region Constructor
 
         /// <summary>
-		/// Initializes a new instance of the <see cref="ConfigParser"/> class.
+        /// Initializes a new instance of the <see cref="Ini.ConfigParser"/> class.
         /// </summary>
-        /// <param name="schema">The schema.</param>
-        public ConfigParser(ConfigSpec schema = null)
+		/// <param name="spec">The specification to validate against when parsing the configuration.</param>
+		public ConfigParser(ConfigSpec spec)
         {
-
+			this.config = new Config(spec);
         }
 
         #endregion
@@ -56,12 +67,33 @@ namespace Ini
         /// Parses the configuration from the text input.
         /// </summary>
         /// <param name="reader"></param>
-        /// <param name="backlog"></param>
-        /// <param name="options"></param>
+		/// <param name="configBacklog"></param>
+		/// <param name="specBacklog"></param>
+		/// <param name="mode"></param>
+		/// <exception cref="Ini.Exceptions.UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
+		/// <exception cref="Ini.Exceptions.InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
+		/// <exception cref="MalformedConfigException">If the configuration's format is malformed.</exception>
         /// <returns></returns>
-        public Config Parse(TextReader reader, IConfigReaderBacklog backlog, ConfigValidationMode options)
-        {
-			Config result = new Config();
+		public Config Parse(TextReader reader, IConfigReaderBacklog configBacklog, ISpecValidatorBacklog specBacklog, ConfigValidationMode mode)
+		{
+			// check preconditions
+			if(mode == ConfigValidationMode.Strict) // we need a valid specification
+			{
+				if(config.Spec == null) // and we have none
+				{
+					configBacklog.SpecNotFound();
+					throw new UndefinedSpecException();
+				}
+				if(!config.Spec.IsValid(specBacklog)) // we have one but it's not valid
+				{
+					configBacklog.SpecNotValid();
+
+					// raise an exception or face undefined behaviour
+					throw new InvalidSpecException();
+				}
+			}
+
+			// either way, now we have a valid specification or don't need one
 
             // PSEUDOCODE:
             /*
@@ -80,7 +112,7 @@ namespace Ini
              * 
              * Meanwhile, catch exceptions and report with 'backlog'.
              */
-            return result;
+            return config;
         }
 
         /// <summary>
@@ -88,14 +120,25 @@ namespace Ini
         /// </summary>
         /// <param name="reader"></param>
         /// <param name="config"></param>
-        /// <param name="backlog"></param>
-        /// <param name="options"></param>
+		/// <param name="configBacklog"></param>
+		/// <param name="specBacklog"></param>
+		/// <param name="mode"></param>
+		/// <exception cref="Ini.Exceptions.UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
+		/// <exception cref="Ini.Exceptions.InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
+		/// <exception cref="MalformedConfigException">If the configuration's format is malformed.</exception>
         /// <returns></returns>
-        public bool TryParse(TextReader reader, out Config config, IConfigReaderBacklog backlog, ConfigValidationMode options)
+		public bool TryParse(TextReader reader, out Config config, IConfigReaderBacklog configBacklog, ISpecValidatorBacklog specBacklog, ConfigValidationMode mode)
         {
-			// TODO: if commentary:
-			// System.Guid.NewGuid()
-            throw new NotImplementedException();
+			try
+			{
+				config = Parse(reader, configBacklog, specBacklog, mode);
+				return true;
+			}
+			catch (Exception)
+			{
+				config = this.config; // return what was parsed before an exception was thrown
+				return false;
+			}
         }
 
         #endregion
@@ -117,12 +160,12 @@ namespace Ini
                 else
                 {
                     // TODO: maybe more elaborate?
-                    backlog.ParsingError(lineIndex, string.Format("Error at line {0}: identifier is not well formed.", lineIndex));
+                    backlog.ConfigMalformed(lineIndex, string.Format("Error at line {0}: identifier is not well formed.", lineIndex));
                 }
             }
             else
             {
-                backlog.ParsingError(lineIndex, string.Format("Error at line {0}: can not parse option because of missing '{1}'.", lineIndex, INNER_OPTION_SEPARATOR));
+                backlog.ConfigMalformed(lineIndex, string.Format("Error at line {0}: can not parse option because of missing '{1}'.", lineIndex, INNER_OPTION_SEPARATOR));
             }
         }
 

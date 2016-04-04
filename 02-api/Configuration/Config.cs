@@ -19,17 +19,17 @@ namespace Ini.Configuration
         #region Properties
 
 		/// <summary>
+		/// The schema this configuration should conform to. It can be changed during runtime to
+		/// perform checks against user-defined schemas.
+		/// </summary>
+		public ConfigSpec Spec { get; private set; }
+
+		/// <summary>
 		/// Readonly origin of this configuration. Can be a system path, a URL or anything else really.
 		/// The main purpose of this field is for backlogs to be able to denote what configuration
 		/// or specification is being processed.
 		/// </summary>
-		public string Origin { get; private set; }
-
-        /// <summary>
-        /// The schema this configuration should conform to. It can be changed during runtime to
-		/// perform checks against user-defined schemas.
-        /// </summary>
-		public ConfigSpec Spec { get; set; }
+		public string Origin { get; set; }
 
 		/// <summary>
 		/// Gets the count of underlying sections.
@@ -44,28 +44,21 @@ namespace Ini.Configuration
 		/// in time and consumers of this library should not be made to use a dictionary-specific
 		/// solution. Specialized methods are a better choice.
 		/// </summary>
-		protected ConfigBlockDictionary<string, ConfigBlockBase> Content;
+		protected ConfigBlockDictionary<string, ConfigBlockBase> content;
 
 		#endregion
 
         #region Constructor
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Configuration"/> class.
-        /// </summary>
-		public Config(ConfigSpec schema = null) : this(null, schema)
-        {
-        }
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Configuration"/> class.
 		/// </summary>
-		public Config(string origin, ConfigSpec schema = null)
+		public Config(ConfigSpec schema = null)
 		{
-            this.Origin = origin;
 			this.Spec = schema;
+			this.Origin = null;
 			this.SectionCount = 0;
-			this.Content = new ConfigBlockDictionary<string, ConfigBlockBase>();
+			this.content = new ConfigBlockDictionary<string, ConfigBlockBase>();
 		}
 
         #endregion
@@ -79,7 +72,7 @@ namespace Ini.Configuration
 		/// <param name="content">Content.</param>
 		public void Add(ConfigBlockBase content)
 		{
-			Content.Add(content.Identifier, content);
+			this.content.Add(content.Identifier, content);
 			if(content is Section)
 			{
 				SectionCount++;
@@ -105,7 +98,7 @@ namespace Ini.Configuration
 		/// <param name="identifier">Identifier.</param>
 		public bool Contains(string identifier)
 		{
-			return Content.ContainsKey(identifier);
+			return this.content.ContainsKey(identifier);
 		}
 
 		/// <summary>
@@ -115,7 +108,7 @@ namespace Ini.Configuration
 		/// <param name="identifier">Identifier.</param>
 		public ConfigBlockBase GetContent(string identifier)
 		{
-			return Content[identifier];
+			return this.content[identifier];
 		}
 
 		/// <summary>
@@ -126,7 +119,7 @@ namespace Ini.Configuration
 		/// <param name="content">Content.</param>
 		public bool TryGetContent(string identifier, out ConfigBlockBase content)
 		{
-			return Content.TryGetValue(identifier, out content);
+			return this.content.TryGetValue(identifier, out content);
 		}
 
 		/// <summary>
@@ -136,9 +129,9 @@ namespace Ini.Configuration
 		public bool Remove(string identifier)
 		{
 			ConfigBlockBase value;
-			if(Content.TryGetValue(identifier, out value))
+			if(this.content.TryGetValue(identifier, out value))
 			{
-				Content.Remove(identifier);
+				this.content.Remove(identifier);
 				if(value is Section)
 				{
 					SectionCount--;
@@ -168,7 +161,7 @@ namespace Ini.Configuration
 		/// </summary>
 		public void Clear()
 		{
-			Content.Clear();
+			this.content.Clear();
 			SectionCount = 0;
 		}
 
@@ -184,7 +177,7 @@ namespace Ini.Configuration
 		public Section GetSection(string identifier)
 		{
 			ConfigBlockBase result;
-			if(Content.TryGetValue(identifier, out result))
+			if(this.content.TryGetValue(identifier, out result))
 			{
 				return result is Section ? (Section) result : null;
 			}
@@ -253,7 +246,7 @@ namespace Ini.Configuration
 		/// <returns>The collection.</returns>
 		public ConfigBlockDictionary<string, ConfigBlockBase> GetContent()
 		{
-			return Content;
+			return this.content;
 		}
 
 		#endregion
@@ -296,7 +289,7 @@ namespace Ini.Configuration
 		/// <returns>The enumerator.</returns>
 		public IEnumerator<KeyValuePair<string, ConfigBlockBase>> GetEnumerator()
 		{
-			return ((IEnumerable<KeyValuePair<string, ConfigBlockBase>>) Content).GetEnumerator();
+			return ((IEnumerable<KeyValuePair<string, ConfigBlockBase>>) content).GetEnumerator();
 		}
 
 		/// <summary>
@@ -305,7 +298,7 @@ namespace Ini.Configuration
 		/// <returns>The enumerator.</returns>
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return ((IEnumerable) Content).GetEnumerator();
+			return ((IEnumerable) content).GetEnumerator();
 		}
 
 		#endregion

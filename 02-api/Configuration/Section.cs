@@ -32,7 +32,7 @@ namespace Ini.Configuration
 		/// The section's content (instances of <see cref="Option"/> and
 		/// <see cref="Commentary"/>) in insertion order.
         /// </summary>
-		protected ConfigBlockDictionary<string, ConfigBlockBase> Content;
+		protected ConfigBlockDictionary<string, ConfigBlockBase> content;
 
         #endregion
 
@@ -45,7 +45,7 @@ namespace Ini.Configuration
         {
 			this.TrailingCommentary = commentary;
 			this.OptionCount = 0;
-			this.Content = new ConfigBlockDictionary<string, ConfigBlockBase>();
+			this.content = new ConfigBlockDictionary<string, ConfigBlockBase>();
         }
 
         #endregion
@@ -59,7 +59,7 @@ namespace Ini.Configuration
 		/// <param name="content">Content.</param>
 		public void Add(ConfigBlockBase content)
 		{
-			Content.Add(content.Identifier, content);
+			this.content.Add(content.Identifier, content);
 			if(content is Option)
 			{
 				OptionCount++;
@@ -72,7 +72,7 @@ namespace Ini.Configuration
 		/// <param name="identifier">Identifier.</param>
 		public bool Contains(string identifier)
 		{
-			return Content.ContainsKey(identifier);
+			return this.content.ContainsKey(identifier);
 		}
 
 		/// <summary>
@@ -82,7 +82,7 @@ namespace Ini.Configuration
 		/// <param name="identifier">Identifier.</param>
 		public ConfigBlockBase GetContent(string identifier)
 		{
-			return Content[identifier];
+			return this.content[identifier];
 		}
 
 		/// <summary>
@@ -93,7 +93,7 @@ namespace Ini.Configuration
 		/// <param name="content">Content.</param>
 		public bool TryGetContent(string identifier, out ConfigBlockBase content)
 		{
-			return Content.TryGetValue(identifier, out content);
+			return this.content.TryGetValue(identifier, out content);
 		}
 
 		/// <summary>
@@ -103,9 +103,9 @@ namespace Ini.Configuration
 		public bool Remove(string identifier)
 		{
 			ConfigBlockBase value;
-			if(Content.TryGetValue(identifier, out value))
+			if(this.content.TryGetValue(identifier, out value))
 			{
-				Content.Remove(identifier);
+				this.content.Remove(identifier);
 				if(value is Option)
 				{
 					OptionCount--;
@@ -123,7 +123,7 @@ namespace Ini.Configuration
 		/// </summary>
 		public void Clear()
 		{
-			Content.Clear();
+			this.content.Clear();
 			OptionCount = 0;
 		}
 
@@ -139,7 +139,7 @@ namespace Ini.Configuration
 		public Option GetOption(string optionIdentifier)
 		{
 			ConfigBlockBase result;
-			if(Content.TryGetValue(optionIdentifier, out result))
+			if(this.content.TryGetValue(optionIdentifier, out result))
 			{
 				return result is Option ? (Option) result : null;
 			}
@@ -193,7 +193,7 @@ namespace Ini.Configuration
 		/// <returns>The collection.</returns>
 		public ConfigBlockDictionary<string, ConfigBlockBase> GetContent()
 		{
-			return Content;
+			return this.content;
 		}
 
 		#endregion
@@ -222,7 +222,7 @@ namespace Ini.Configuration
 		/// <returns>The enumerator.</returns>
 		public IEnumerator<KeyValuePair<string, ConfigBlockBase>> GetEnumerator()
 		{
-			return ((IEnumerable<KeyValuePair<string, ConfigBlockBase>>) Content).GetEnumerator();
+			return ((IEnumerable<KeyValuePair<string, ConfigBlockBase>>) content).GetEnumerator();
 		}
 
 		/// <summary>
@@ -231,7 +231,7 @@ namespace Ini.Configuration
 		/// <returns>The enumerator.</returns>
 		System.Collections.IEnumerator IEnumerable.GetEnumerator()
 		{
-			return ((IEnumerable) Content).GetEnumerator();
+			return ((IEnumerable) content).GetEnumerator();
 		}
 
 		#endregion

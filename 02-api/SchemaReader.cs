@@ -23,7 +23,7 @@ namespace Ini
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SpecReader"/> class.
+		/// Initializes a new instance of the <see cref="SchemaReader"/> class.
         /// </summary>
         /// <param name="backlog">The backlog.</param>
         public SchemaReader(ISchemaReaderBacklog backlog = null)
@@ -60,6 +60,7 @@ namespace Ini
         /// <param name="filePath">The given path.</param>
         /// <param name="spec">The config read and parsed from the given reader.</param>
         /// <param name="encoding">The given encoding.</param>
+		/// <exception cref="Ini.Exceptions.MalformedSchemaException">If the schema is malformed.</exception>
         public bool TryLoadFromFile(string filePath, out ConfigSpec spec, Encoding encoding = null)
         {
             try
@@ -80,6 +81,7 @@ namespace Ini
         /// </summary>
         /// <returns>The config read and parsed from the given reader.</returns>
         /// <param name="reader">The given reader.</param>
+		/// <exception cref="Ini.Exceptions.MalformedSchemaException">If the schema is malformed.</exception>
         public ConfigSpec LoadFromText(TextReader reader)
         {
             throw new NotImplementedException();
@@ -92,6 +94,7 @@ namespace Ini
         /// <returns>True if the configuration is parsed successfully.</returns>
         /// <param name="reader">The given reader.</param>
         /// <param name="spec">The config read and parsed from the given reader.</param>
+		/// <exception cref="Ini.Exceptions.MalformedSchemaException">If the schema is malformed.</exception>
         public bool TryLoadFromText(TextReader reader, out ConfigSpec spec)
         {
             try

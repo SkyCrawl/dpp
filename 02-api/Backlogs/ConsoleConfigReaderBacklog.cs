@@ -24,15 +24,31 @@ namespace Ini.Backlogs
 			throw new NotImplementedException();
 		}
 
-        /// <summary>
-        /// A general parsing/format error has occurred.
-        /// </summary>
-        /// <param name="lineIndex">Line number where the error occurred.</param>
-        /// <param name="message">Message of the error.</param>
-        public void ParsingError(int lineIndex, string message)
-        {
-            throw new NotImplementedException();
-        }
+		/// <summary>
+		/// Strict validation mode was applied and no associated specification was specified.
+		/// </summary>
+		public void SpecNotFound()
+		{
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Strict validation mode was applied and the associated specification is not valid.
+		/// </summary>
+		public void SpecNotValid()
+		{
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// A general parsing/format error has occurred.
+		/// </summary>
+		/// <param name="lineIndex">Line number where the error occurred.</param>
+		/// <param name="message">Message of the error.</param>
+		public void ConfigMalformed(int lineIndex, string message)
+		{
+			throw new NotImplementedException();
+		}
 
         #endregion
     }

@@ -6,10 +6,9 @@ using Ini.Validation;
 namespace Ini.Backlogs
 {
 	/// <summary>
-	/// Interface providing information about reading configurations,
-	/// as well validating them.
+	/// Interface providing information about reading configurations.
 	/// </summary>
-	public interface IConfigReaderBacklog : IConfigValidatorBacklog
+	public interface IConfigReaderBacklog
     {
 		/// <summary>
 		/// The associated reader will now parse a new configuration. Consumers
@@ -21,10 +20,20 @@ namespace Ini.Backlogs
 		void NewConfig(string configOrigin, string schemaOrigin = null, ConfigValidationMode mode = ConfigValidationMode.Strict);
 
 		/// <summary>
+		/// Strict validation mode was applied and no associated specification was specified.
+		/// </summary>
+		void SpecNotFound();
+
+		/// <summary>
+		/// Strict validation mode was applied and the associated specification is not valid.
+		/// </summary>
+		void SpecNotValid();
+
+		/// <summary>
 		/// A general parsing/format error has occurred.
 		/// </summary>
 		/// <param name="lineIndex">Line number where the error occurred.</param>
 		/// <param name="message">Message of the error.</param>
-		void ParsingError(int lineIndex, string message);
+		void ConfigMalformed(int lineIndex, string message);
     }
 }

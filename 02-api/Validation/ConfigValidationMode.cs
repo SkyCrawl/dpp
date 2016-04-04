@@ -9,11 +9,11 @@ namespace Ini.Validation
     public enum ConfigValidationMode
     {
         /// <summary>
-        /// Strict mode, as requested by client.
+        /// Strict validation against an associated specification, as requested by client.
         /// </summary>
         Strict,
         /// <summary>
-		/// Strict mode, as requested by client.
+		/// Relaxed mode without an associated specification, as requested by client.
         /// </summary>
         Relaxed
     }

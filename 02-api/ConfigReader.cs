@@ -18,21 +18,28 @@ namespace Ini
         #region Fields
 
         /// <summary>
-        /// A user-specified or default backlog for handling errors and parsing messages.
+        /// TODO
         /// </summary>
-		protected IConfigReaderBacklog backlog;
+		protected IConfigReaderBacklog configBacklog;
+
+		/// <summary>
+		/// TODO
+		/// </summary>
+		protected ISpecValidatorBacklog specBacklog;
 
         #endregion
 
         #region Constructor
 
         /// <summary>
-		/// Initializes a new instance of the <see cref="ConfigReader"/> class.
+        /// Initializes a new instance of the <see cref="Ini.ConfigReader"/> class.
         /// </summary>
-        /// <param name="backlog">The backlog.</param>
-        public ConfigReader(IConfigReaderBacklog backlog = null)
+        /// <param name="configBacklog">Config backlog.</param>
+        /// <param name="specBacklog">Spec backlog.</param>
+		public ConfigReader(IConfigReaderBacklog configBacklog = null, ISpecValidatorBacklog specBacklog = null)
         {
-            this.backlog = backlog ?? new ConsoleConfigReaderBacklog();
+            this.configBacklog = configBacklog ?? new ConsoleConfigReaderBacklog();
+			this.specBacklog = specBacklog ?? new ConsoleSchemaValidatorBacklog();
         }
 
         #endregion
@@ -45,9 +52,12 @@ namespace Ini
         /// <returns>The config read and parsed from the given path and encoding.</returns>
 		/// <param name="configPath">The given path.</param>
         /// <param name="mode">The validation mode.</param>
-        /// <param name="schema">The schema.</param>
+        /// <param name="spec">The schema.</param>
         /// <param name="encoding">The given encoding.</param>
-		public Config LoadFromFile(string configPath, ConfigSpec schema = null, ConfigValidationMode mode = ConfigValidationMode.Strict, Encoding encoding = null)
+		/// <exception cref="Ini.Exceptions.UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
+		/// <exception cref="Ini.Exceptions.InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
+		/// <exception cref="Ini.Exceptions.MalformedConfigException">If the configuration's format is malformed.</exception>
+		public Config LoadFromFile(string configPath, ConfigSpec spec, ConfigValidationMode mode = ConfigValidationMode.Strict, Encoding encoding = null)
         {
 			if(encoding == null)
 			{
@@ -55,7 +65,9 @@ namespace Ini
 			}
 			using (var fileStream = new FileStream(configPath, FileMode.Open, FileAccess.Read))
             {
-				return LoadFromText(new StreamReader(fileStream, encoding), schema, mode);
+				Config result = LoadFromText(new StreamReader(fileStream, encoding), spec, mode);
+				result.Origin = configPath;
+				return result;
             }
         }
 
@@ -63,20 +75,25 @@ namespace Ini
         /// Creates an instance of <see cref="Configuration"/> from the given path and encoding.
         /// </summary>
         /// <returns>True if the configuration is parsed successfully.</returns>
-        /// <param name="filePath">The given path.</param>
+		/// <param name="configPath">The given path.</param>
         /// <param name="configuration">The config read and parsed from the given reader.</param>
         /// <param name="mode">The validation mode.</param>
-        /// <param name="schema">The schema.</param>
+        /// <param name="spec">The schema.</param>
         /// <param name="encoding">The given encoding.</param>
-		public bool TryLoadFromFile(string filePath, out Config configuration, ConfigSpec schema = null, ConfigValidationMode mode = ConfigValidationMode.Strict, Encoding encoding = null)
+		/// <exception cref="Ini.Exceptions.UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
+		/// <exception cref="Ini.Exceptions.InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
+		/// <exception cref="Ini.Exceptions.MalformedConfigException">If the configuration's format is malformed.</exception>
+		public bool TryLoadFromFile(string configPath, out Config configuration, ConfigSpec spec, ConfigValidationMode mode = ConfigValidationMode.Strict, Encoding encoding = null)
         {
 			if(encoding == null)
 			{
 				encoding = Encoding.Default;
 			}
-            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+			using (var fileStream = new FileStream(configPath, FileMode.Open, FileAccess.Read))
             {
-				return TryLoadFromText(new StreamReader(fileStream, encoding), out configuration, schema, mode);
+				bool result = TryLoadFromText(new StreamReader(fileStream, encoding), out configuration, spec, mode);
+				configuration.Origin = configPath;
+				return result;
             }
         }
 
@@ -87,11 +104,14 @@ namespace Ini
         /// <returns>The config read and parsed from the given reader.</returns>
         /// <param name="reader">The given reader.</param>
         /// <param name="mode">The validation mode.</param>
-        /// <param name="schema">The schema.</param>
-		public Config LoadFromText(TextReader reader, ConfigSpec schema = null, ConfigValidationMode mode = ConfigValidationMode.Strict)
+        /// <param name="spec">The schema.</param>
+		/// <exception cref="Ini.Exceptions.UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
+		/// <exception cref="Ini.Exceptions.InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
+		/// <exception cref="Ini.Exceptions.MalformedConfigException">If the configuration's format is malformed.</exception>
+		public Config LoadFromText(TextReader reader, ConfigSpec spec, ConfigValidationMode mode = ConfigValidationMode.Strict)
         {
-            ConfigParser parser = new ConfigParser(schema);
-            return parser.Parse(reader, backlog, mode);
+            ConfigParser parser = new ConfigParser(spec);
+			return parser.Parse(reader, configBacklog, specBacklog, mode);
         }
 
         /// <summary>
@@ -102,11 +122,14 @@ namespace Ini
         /// <param name="reader">The given reader.</param>
         /// <param name="configuration">The config read and parsed from the given reader.</param>
         /// <param name="mode">The validation mode.</param>
-        /// <param name="schema">The schema.</param>
-		public bool TryLoadFromText(TextReader reader, out Config configuration, ConfigSpec schema = null, ConfigValidationMode mode = ConfigValidationMode.Strict)
+        /// <param name="spec">The schema.</param>
+		/// <exception cref="Ini.Exceptions.UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
+		/// <exception cref="Ini.Exceptions.InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
+		/// <exception cref="Ini.Exceptions.MalformedConfigException">If the configuration's format is malformed.</exception>
+		public bool TryLoadFromText(TextReader reader, out Config configuration, ConfigSpec spec, ConfigValidationMode mode = ConfigValidationMode.Strict)
         {
-            ConfigParser parser = new ConfigParser(schema);
-            return parser.TryParse(reader, out configuration, backlog, mode);
+            ConfigParser parser = new ConfigParser(spec);
+			return parser.TryParse(reader, out configuration, configBacklog, specBacklog, mode);
         }
 
         #endregion

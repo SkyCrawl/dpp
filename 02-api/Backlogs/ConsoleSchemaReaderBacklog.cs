@@ -23,14 +23,14 @@ namespace Ini.Backlogs
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Information about a general parsing error occured.
-        /// </summary>
-        /// <param name="message"></param>
-        public void ParsingError(string message)
-        {
-            throw new NotImplementedException();
-        }
+		/// <summary>
+		/// A general parsing/format error has occurred.
+		/// </summary>
+		/// <param name="message"></param>
+		public void SpecMalformed(string message)
+		{
+			throw new NotImplementedException();
+		}
 
         #endregion
     }

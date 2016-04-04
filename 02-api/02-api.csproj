@@ -46,7 +46,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exceptions\InvalidConfigFormatException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ConfigParser.cs" />
     <Compile Include="ConfigReader.cs" />
@@ -71,7 +70,6 @@
     <Compile Include="Util\ConfigBlockDictionary.cs" />
     <Compile Include="ConfigWriterOptions.cs" />
     <Compile Include="Validation\ConfigValidationMode.cs" />
-    <Compile Include="Exceptions\InvalidSchemaFormatException.cs" />
     <Compile Include="Exceptions\InvalidSpecException.cs" />
     <Compile Include="Exceptions\InvalidConfigException.cs" />
     <Compile Include="Exceptions\UndefinedSpecException.cs" />
@@ -97,6 +95,8 @@
     <Compile Include="Backlogs\ConsoleConfigValidatorBacklog.cs" />
     <Compile Include="SchemaTypeResolver.cs" />
     <Compile Include="SchemaReader.cs" />
+    <Compile Include="Exceptions\MalformedConfigException.cs" />
+    <Compile Include="Exceptions\MalformedSchemaException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

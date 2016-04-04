@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace Ini.Backlogs
 {
 	/// <summary>
-	/// Interface providing information about reading schemas as well validating them.
+	/// Interface providing information about reading schemas.
 	/// </summary>
-	public interface ISchemaReaderBacklog : ISpecValidatorBacklog
+	public interface ISchemaReaderBacklog
     {
 		/// <summary>
 		/// The associated reader will now parse a new schema. Consumers will
@@ -19,9 +19,9 @@ namespace Ini.Backlogs
 		void NewSpec(string schemaOrigin);
 
         /// <summary>
-        /// Information about a general parsing error occured.
+		/// A general parsing/format error has occurred.
         /// </summary>
         /// <param name="message"></param>
-        void ParsingError(string message);
+        void SpecMalformed(string message);
     }
 }

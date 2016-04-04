@@ -19,12 +19,12 @@ namespace Ini
 		/// <summary>
 		/// The config writer backlog.
 		/// </summary>
-		protected IConfigWriterBacklog ConfigWriterBacklog;
+		protected IConfigWriterBacklog configWriterBacklog;
 
 		/// <summary>
 		/// The spec validator backlog.
 		/// </summary>
-		protected ISpecValidatorBacklog SpecValidatorBacklog;
+		protected ISpecValidatorBacklog specValidatorBacklog;
 
         #endregion
 
@@ -37,8 +37,8 @@ namespace Ini
 		/// <param name="configWriterBacklog">Config writer backlog.</param>
 		public ConfigWriter(ISpecValidatorBacklog specValidatorBacklog = null, IConfigWriterBacklog configWriterBacklog = null)
         {
-			this.ConfigWriterBacklog = configWriterBacklog ?? new ConsoleConfigWriterBacklog();
-			this.SpecValidatorBacklog = specValidatorBacklog ?? new ConsoleSchemaValidatorBacklog();
+			this.configWriterBacklog = configWriterBacklog ?? new ConsoleConfigWriterBacklog();
+			this.specValidatorBacklog = specValidatorBacklog ?? new ConsoleSchemaValidatorBacklog();
         }
 
         #endregion
@@ -52,6 +52,9 @@ namespace Ini
         /// <param name="configuration"></param>
         /// <param name="options"></param>
         /// <param name="encoding"></param>
+		/// <exception cref="UndefinedSpecException">If the configuration's specification is undefined.</exception>
+		/// <exception cref="InvalidSpecException">If the configuration's specification is invalid.</exception>
+		/// <exception cref="InvalidConfigException">If the configuration is invalid.</exception>
 		public void WriteToFile(string fileName, Config configuration, ConfigWriterOptions options = null, Encoding encoding = null)
         {
 			if(encoding == null)
@@ -78,9 +81,9 @@ namespace Ini
 		{
 			// first check validity of both specification and configuration, if defined and required
 			options = options ?? ConfigWriterOptions.GetDefault();
-			if(options.ValidateConfig && !configuration.IsValid(options.ValidationMode, ConfigWriterBacklog, SpecValidatorBacklog))
+			if(options.ValidateConfig && !configuration.IsValid(options.ValidationMode, configWriterBacklog, specValidatorBacklog))
 			{
-				ConfigWriterBacklog.ConfigNotValid();
+				configWriterBacklog.ConfigNotValid();
 				throw new InvalidConfigException();
 			}
 			else
