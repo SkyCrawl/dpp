@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Ini.Configuration;
-using Ini.Backlogs;
+using Ini.EventLogs;
 using Ini.Util;
 using Ini.Exceptions;
 
@@ -17,14 +17,14 @@ namespace Ini
         #region Properties
 
 		/// <summary>
-		/// The config writer backlog.
+		/// The config writer event log.
 		/// </summary>
-		protected IConfigWriterBacklog configWriterBacklog;
+		protected IConfigWriterEventLog configWriterEventLog;
 
 		/// <summary>
-		/// The spec validator backlog.
+		/// The spec validator event log.
 		/// </summary>
-		protected ISpecValidatorBacklog specValidatorBacklog;
+		protected ISpecValidatorEventLog specValidatorEventLog;
 
         #endregion
 
@@ -33,12 +33,12 @@ namespace Ini
         /// <summary>
         /// Initializes a new instance of the <see cref="Ini.ConfigWriter"/> class.
         /// </summary>
-		/// <param name="specValidatorBacklog">Spec validator backlog.</param>
-		/// <param name="configWriterBacklog">Config writer backlog.</param>
-		public ConfigWriter(ISpecValidatorBacklog specValidatorBacklog = null, IConfigWriterBacklog configWriterBacklog = null)
+		/// <param name="specValidatorEventLog">Spec validator event log.</param>
+		/// <param name="configWriterEventLog">Config writer event log.</param>
+		public ConfigWriter(ISpecValidatorEventLog specValidatorEventLog = null, IConfigWriterEventLog configWriterEventLog = null)
         {
-			this.configWriterBacklog = configWriterBacklog ?? new ConsoleConfigWriterBacklog();
-			this.specValidatorBacklog = specValidatorBacklog ?? new ConsoleSchemaValidatorBacklog();
+			this.configWriterEventLog = configWriterEventLog ?? new ConsoleConfigWriterEventLog();
+			this.specValidatorEventLog = specValidatorEventLog ?? new ConsoleSchemaValidatorEventLog();
         }
 
         #endregion
@@ -81,9 +81,9 @@ namespace Ini
 		{
 			// first check validity of both specification and configuration, if defined and required
 			options = options ?? ConfigWriterOptions.GetDefault();
-			if(options.ValidateConfig && !configuration.IsValid(options.ValidationMode, configWriterBacklog, specValidatorBacklog))
+			if(options.ValidateConfig && !configuration.IsValid(options.ValidationMode, configWriterEventLog, specValidatorEventLog))
 			{
-				configWriterBacklog.ConfigNotValid();
+				configWriterEventLog.ConfigNotValid();
 				throw new InvalidConfigException();
 			}
 			else

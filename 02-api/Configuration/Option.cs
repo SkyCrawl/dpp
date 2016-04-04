@@ -6,7 +6,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using Ini.Specification;
 using Ini.Configuration.Elements;
-using Ini.Backlogs;
+using Ini.EventLogs;
 using Ini.Util;
 using Ini.Exceptions;
 using Ini.Validation;
@@ -121,9 +121,9 @@ namespace Ini.Configuration
 		/// </summary>
 		/// <param name="mode"></param>
 		/// <param name="optionSpec"></param>
-		/// <param name="backlog"></param>
+		/// <param name="eventLog"></param>
 		/// <returns></returns>
-		public bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, ISpecValidatorBacklog backlog = null)
+		public bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, ISpecValidatorEventLog eventLog = null)
 		{
 			throw new NotImplementedException();
 		}

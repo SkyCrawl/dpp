@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Ini.Backlogs;
+using Ini.EventLogs;
 using Ini.Configuration;
 using YamlDotNet.Serialization;
 
@@ -51,9 +51,9 @@ namespace Ini.Specification
         /// <summary>
         /// Verifies the integrity of the configuration section definition.
         /// </summary>
-        /// <param name="backlog"></param>
+		/// <param name="eventLog"></param>
         /// <returns></returns>
-        public override bool IsValid(ISpecValidatorBacklog backlog = null)
+		public override bool IsValid(ISpecValidatorEventLog eventLog = null)
         {
             throw new NotImplementedException();
         }

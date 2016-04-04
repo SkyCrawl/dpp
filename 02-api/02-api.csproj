@@ -83,20 +83,20 @@
     <Compile Include="Specification\Elements\SignedOptionSpec.cs" />
     <Compile Include="Specification\Elements\StringOptionSpec.cs" />
     <Compile Include="Specification\Elements\UnsignedOptionSpec.cs" />
-    <Compile Include="Backlogs\ConsoleSchemaReaderBacklog.cs" />
-    <Compile Include="Backlogs\ISchemaReaderBacklog.cs" />
-    <Compile Include="Backlogs\ConsoleConfigReaderBacklog.cs" />
-    <Compile Include="Backlogs\ConsoleSchemaValidatorBacklog.cs" />
-    <Compile Include="Backlogs\ConsoleConfigWriterBacklog.cs" />
-    <Compile Include="Backlogs\IConfigReaderBacklog.cs" />
-    <Compile Include="Backlogs\ISpecValidatorBacklog.cs" />
-    <Compile Include="Backlogs\IConfigWriterBacklog.cs" />
-    <Compile Include="Backlogs\IConfigValidatorBacklog.cs" />
-    <Compile Include="Backlogs\ConsoleConfigValidatorBacklog.cs" />
     <Compile Include="SchemaTypeResolver.cs" />
     <Compile Include="SchemaReader.cs" />
     <Compile Include="Exceptions\MalformedConfigException.cs" />
     <Compile Include="Exceptions\MalformedSchemaException.cs" />
+    <Compile Include="EventLogs\ConsoleConfigReaderEventLog.cs" />
+    <Compile Include="EventLogs\ConsoleConfigValidatorEventLog.cs" />
+    <Compile Include="EventLogs\ConsoleConfigWriterEventLog.cs" />
+    <Compile Include="EventLogs\ConsoleSchemaReaderEventLog.cs" />
+    <Compile Include="EventLogs\ConsoleSchemaValidatorEventLog.cs" />
+    <Compile Include="EventLogs\IConfigReaderEventLog.cs" />
+    <Compile Include="EventLogs\IConfigValidatorEventLog.cs" />
+    <Compile Include="EventLogs\IConfigWriterEventLog.cs" />
+    <Compile Include="EventLogs\ISchemaReaderEventLog.cs" />
+    <Compile Include="EventLogs\ISpecValidatorEventLog.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

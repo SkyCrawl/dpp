@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Ini.Backlogs;
+using Ini.EventLogs;
 using Ini.Specification;
 using Ini.Util;
 using Ini.Validation;
@@ -78,9 +78,9 @@ namespace Ini.Configuration.Elements
         /// </summary>
         /// <param name="mode"></param>
 		/// <param name="optionSpec"></param>
-        /// <param name="backlog"></param>
+		/// <param name="eventLog"></param>
         /// <returns></returns>
-		public abstract bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorBacklog backlog = null);
+		public abstract bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLog eventLog = null);
 
         #endregion
     }

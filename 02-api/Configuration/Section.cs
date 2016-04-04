@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Ini.Backlogs;
+using Ini.EventLogs;
 using Ini.Specification;
 using Ini.Util;
 using Ini.Validation;
@@ -205,9 +205,9 @@ namespace Ini.Configuration
         /// </summary>
         /// <param name="mode"></param>
 		/// <param name="sectionSpec"></param>
-        /// <param name="backlog"></param>
+		/// <param name="eventLog"></param>
         /// <returns></returns>
-		public bool IsValid(SectionSpec sectionSpec, ConfigValidationMode mode, ISpecValidatorBacklog backlog = null)
+		public bool IsValid(SectionSpec sectionSpec, ConfigValidationMode mode, ISpecValidatorEventLog eventLog = null)
         {
             throw new NotImplementedException();
         }

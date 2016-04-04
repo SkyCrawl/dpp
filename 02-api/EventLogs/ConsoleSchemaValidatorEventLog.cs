@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Ini.Backlogs
+namespace Ini.EventLogs
 {
 	/// <summary>
-	/// An implementation of <see cref="ISpecValidatorBacklog"/> that writes into the console.
+	/// An implementation of <see cref="ISpecValidatorEventLog"/> that writes into the console.
 	/// </summary>
-	public class ConsoleSchemaValidatorBacklog : ISpecValidatorBacklog
+	public class ConsoleSchemaValidatorEventLog : ISpecValidatorEventLog
     {
         #region IValidationBacklog Members
 

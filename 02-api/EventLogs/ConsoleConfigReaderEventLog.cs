@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using Ini.Util;
 using Ini.Validation;
 
-namespace Ini.Backlogs
+namespace Ini.EventLogs
 {
 	/// <summary>
-	/// An implementation of <see cref="IConfigReaderBacklog"/> that writes into the console.
+	/// An implementation of <see cref="IConfigReaderEventLog"/> that writes into the console.
 	/// </summary>
-	public class ConsoleConfigReaderBacklog : ConsoleConfigValidatorBacklog, IConfigReaderBacklog
+	public class ConsoleConfigReaderEventLog : ConsoleConfigValidatorEventLog, IConfigReaderEventLog
     {
         #region IParsingBacklog Members
 

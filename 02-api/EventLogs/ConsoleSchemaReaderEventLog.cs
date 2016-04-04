@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ini.Backlogs
+namespace Ini.EventLogs
 {
 	/// <summary>
-	/// An implementation of <see cref="ISchemaReaderBacklog"/> that writes into the console.
+	/// An implementation of <see cref="ISchemaReaderEventLog"/> that writes into the console.
 	/// </summary>
-	public class ConsoleSchemaReaderBacklog : ConsoleSchemaValidatorBacklog, ISchemaReaderBacklog
+	public class ConsoleSchemaReaderEventLog : ConsoleSchemaValidatorEventLog, ISchemaReaderEventLog
     {
         #region ISpecReaderBacklog Members
 

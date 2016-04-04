@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Ini.Backlogs
+namespace Ini.EventLogs
 {
 	/// <summary>
 	/// Interface providing information about validating specifications.
 	/// </summary>
-    public interface ISpecValidatorBacklog
+    public interface ISpecValidatorEventLog
     {
 		/// <summary>
 		/// A duplicate section has been found in the associated specification.

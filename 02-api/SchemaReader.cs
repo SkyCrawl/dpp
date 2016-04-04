@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using Ini.Backlogs;
+using Ini.EventLogs;
 using Ini.Specification;
 
 namespace Ini
@@ -14,9 +14,9 @@ namespace Ini
         #region Fields
 
         /// <summary>
-        /// A user-specified or default backlog for handling errors and parsing messages.
+        /// A user-specified or default event log for handling errors and parsing messages.
         /// </summary>
-        protected ISchemaReaderBacklog backlog;
+        protected ISchemaReaderEventLog eventLog;
 
         #endregion
 
@@ -25,10 +25,10 @@ namespace Ini
         /// <summary>
 		/// Initializes a new instance of the <see cref="SchemaReader"/> class.
         /// </summary>
-        /// <param name="backlog">The backlog.</param>
-        public SchemaReader(ISchemaReaderBacklog backlog = null)
+		/// <param name="eventLog">The event log.</param>
+		public SchemaReader(ISchemaReaderEventLog eventLog = null)
         {
-            this.backlog = backlog ?? new ConsoleSchemaReaderBacklog();
+			this.eventLog = eventLog ?? new ConsoleSchemaReaderEventLog();
         }
 
         #endregion

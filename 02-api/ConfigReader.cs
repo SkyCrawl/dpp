@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Ini.Configuration;
 using Ini.Specification;
-using Ini.Backlogs;
+using Ini.EventLogs;
 using Ini.Util;
 using Ini.Validation;
 
@@ -20,12 +20,12 @@ namespace Ini
         /// <summary>
         /// TODO
         /// </summary>
-		protected IConfigReaderBacklog configBacklog;
+		protected IConfigReaderEventLog configEventLog;
 
 		/// <summary>
 		/// TODO
 		/// </summary>
-		protected ISpecValidatorBacklog specBacklog;
+		protected ISpecValidatorEventLog specEventLog;
 
         #endregion
 
@@ -34,12 +34,12 @@ namespace Ini
         /// <summary>
         /// Initializes a new instance of the <see cref="Ini.ConfigReader"/> class.
         /// </summary>
-        /// <param name="configBacklog">Config backlog.</param>
-        /// <param name="specBacklog">Spec backlog.</param>
-		public ConfigReader(IConfigReaderBacklog configBacklog = null, ISpecValidatorBacklog specBacklog = null)
+		/// <param name="configEventLog">Config event log.</param>
+		/// <param name="specEventLog">Spec event log.</param>
+		public ConfigReader(IConfigReaderEventLog configEventLog = null, ISpecValidatorEventLog specEventLog = null)
         {
-            this.configBacklog = configBacklog ?? new ConsoleConfigReaderBacklog();
-			this.specBacklog = specBacklog ?? new ConsoleSchemaValidatorBacklog();
+			this.configEventLog = configEventLog ?? new ConsoleConfigReaderEventLog();
+			this.specEventLog = specEventLog ?? new ConsoleSchemaValidatorEventLog();
         }
 
         #endregion
@@ -111,7 +111,7 @@ namespace Ini
 		public Config LoadFromText(TextReader reader, ConfigSpec spec, ConfigValidationMode mode = ConfigValidationMode.Strict)
         {
             ConfigParser parser = new ConfigParser(spec);
-			return parser.Parse(reader, configBacklog, specBacklog, mode);
+			return parser.Parse(reader, configEventLog, specEventLog, mode);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace Ini
 		public bool TryLoadFromText(TextReader reader, out Config configuration, ConfigSpec spec, ConfigValidationMode mode = ConfigValidationMode.Strict)
         {
             ConfigParser parser = new ConfigParser(spec);
-			return parser.TryParse(reader, out configuration, configBacklog, specBacklog, mode);
+			return parser.TryParse(reader, out configuration, configEventLog, specEventLog, mode);
         }
 
         #endregion

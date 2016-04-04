@@ -1,21 +1,18 @@
 ﻿using System;
 
-namespace Ini.Backlogs
+namespace Ini
 {
 	/// <summary>
-	/// An implementation of <see cref="IConfigValidatorBacklog"/> that writes into the console.
+	/// Interface providing information about validating configurations.
 	/// </summary>
-	public class ConsoleConfigValidatorBacklog : IConfigValidatorBacklog
+	public interface IConfigValidatorEventLog
 	{
 		/// <summary>
 		/// A duplicate section has been found in the associated configuration.
 		/// </summary>
 		/// <param name="lineIndex">Line number of the duplicate.</param>
 		/// <param name="sectionIdentifier">Containing section's identifier.</param>
-		public void DuplicateSection(int lineIndex, string sectionIdentifier)
-		{
-			throw new NotImplementedException();
-		}
+		void DuplicateSection(int lineIndex, string sectionIdentifier);
 
 		/// <summary>
 		/// A duplicate option within a section has been found in the associated configuration.
@@ -23,9 +20,6 @@ namespace Ini.Backlogs
 		/// <param name="lineIndex">Line number of the duplicate.</param>
 		/// <param name="sectionIdentifier">The containing section's identifier.</param>
 		/// <param name="optionIdentifier">The involved option's identifier.</param>
-		public void DuplicateOption(int lineIndex, string sectionIdentifier, string optionIdentifier)
-		{
-			throw new NotImplementedException();
-		}
+		void DuplicateOption(int lineIndex, string sectionIdentifier, string optionIdentifier);
 	}
 }

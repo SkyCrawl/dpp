@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ini.Backlogs
+namespace Ini.EventLogs
 {
 	/// <summary>
 	/// Interface providing information about reading schemas.
 	/// </summary>
-	public interface ISchemaReaderBacklog
+	public interface ISchemaReaderEventLog
     {
 		/// <summary>
 		/// The associated reader will now parse a new schema. Consumers will

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Ini.Backlogs;
+using Ini.EventLogs;
 using Ini.Specification;
 using Ini.Util;
 using Ini.Validation;
@@ -26,7 +26,7 @@ namespace Ini.Configuration
 
 		/// <summary>
 		/// Readonly origin of this configuration. Can be a system path, a URL or anything else really.
-		/// The main purpose of this field is for backlogs to be able to denote what configuration
+		/// The main purpose of this field is for event logs to be able to denote what configuration
 		/// or specification is being processed.
 		/// </summary>
 		public string Origin { get; set; }
@@ -256,21 +256,21 @@ namespace Ini.Configuration
 		/// <summary>
 		/// Determines whether the configuration conforms to <see cref="Spec"/>.
 		/// </summary>
-		/// <returns><c>true</c> if this instance is valid the specified mode configBacklog schemaBacklog; otherwise, <c>false</c>.</returns>
+		/// <returns><c>true</c> if this instance validates against the specified mode and associated specification; otherwise, <c>false</c>.</returns>
 		/// <exception cref="UndefinedSpecException">If the specification is undefined.</exception>
 		/// <exception cref="InvalidSpecException">If the schema is invalid.</exception>
 		/// <param name="mode">Mode.</param>
-		/// <param name="configBacklog">Config backlog.</param>
-		/// <param name="specBacklog">Specification backlog.</param>
-		public bool IsValid(ConfigValidationMode mode, IConfigWriterBacklog configBacklog, ISpecValidatorBacklog specBacklog = null)
+		/// <param name="configEventLog">Config event log.</param>
+		/// <param name="specEventLog">Specification event log.</param>
+		public bool IsValid(ConfigValidationMode mode, IConfigWriterEventLog configEventLog, ISpecValidatorEventLog specEventLog = null)
 		{
 			if(Spec == null)
 			{
 				throw new UndefinedSpecException();
 			}
-			else if(!Spec.IsValid(specBacklog))
+			else if(!Spec.IsValid(specEventLog))
 			{
-				configBacklog.SpecNotValid();
+				configEventLog.SpecNotValid();
 				throw new InvalidSpecException();
 			}
 			else

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Ini.Backlogs
+namespace Ini.EventLogs
 {
     /// <summary>
-	/// An implementation of <see cref="IConfigWriterBacklog"/> that writes into the console.
+	/// An implementation of <see cref="IConfigWriterEventLog"/> that writes into the console.
     /// </summary>
-	public class ConsoleConfigWriterBacklog : ConsoleConfigValidatorBacklog, IConfigWriterBacklog
+	public class ConsoleConfigWriterEventLog : ConsoleConfigValidatorEventLog, IConfigWriterEventLog
     {
 		#region IConfigWriterBacklog implementation
 

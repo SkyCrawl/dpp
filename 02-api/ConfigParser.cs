@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text.RegularExpressions;
-using Ini.Backlogs;
+using Ini.EventLogs;
 using Ini.Configuration;
 using Ini.Specification;
 using Ini.Util;
@@ -67,26 +67,26 @@ namespace Ini
         /// Parses the configuration from the text input.
         /// </summary>
         /// <param name="reader"></param>
-		/// <param name="configBacklog"></param>
-		/// <param name="specBacklog"></param>
+		/// <param name="configEventLog"></param>
+		/// <param name="specEventLog"></param>
 		/// <param name="mode"></param>
 		/// <exception cref="Ini.Exceptions.UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
 		/// <exception cref="Ini.Exceptions.InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
 		/// <exception cref="MalformedConfigException">If the configuration's format is malformed.</exception>
         /// <returns></returns>
-		public Config Parse(TextReader reader, IConfigReaderBacklog configBacklog, ISpecValidatorBacklog specBacklog, ConfigValidationMode mode)
+		public Config Parse(TextReader reader, IConfigReaderEventLog configEventLog, ISpecValidatorEventLog specEventLog, ConfigValidationMode mode)
 		{
 			// check preconditions
 			if(mode == ConfigValidationMode.Strict) // we need a valid specification
 			{
 				if(config.Spec == null) // and we have none
 				{
-					configBacklog.SpecNotFound();
+					configEventLog.SpecNotFound();
 					throw new UndefinedSpecException();
 				}
-				if(!config.Spec.IsValid(specBacklog)) // we have one but it's not valid
+				if(!config.Spec.IsValid(specEventLog)) // we have one but it's not valid
 				{
-					configBacklog.SpecNotValid();
+					configEventLog.SpecNotValid();
 
 					// raise an exception or face undefined behaviour
 					throw new InvalidSpecException();
@@ -120,18 +120,18 @@ namespace Ini
         /// </summary>
         /// <param name="reader"></param>
         /// <param name="config"></param>
-		/// <param name="configBacklog"></param>
-		/// <param name="specBacklog"></param>
+		/// <param name="configEventLog"></param>
+		/// <param name="specEventLog"></param>
 		/// <param name="mode"></param>
 		/// <exception cref="Ini.Exceptions.UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
 		/// <exception cref="Ini.Exceptions.InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
 		/// <exception cref="MalformedConfigException">If the configuration's format is malformed.</exception>
         /// <returns></returns>
-		public bool TryParse(TextReader reader, out Config config, IConfigReaderBacklog configBacklog, ISpecValidatorBacklog specBacklog, ConfigValidationMode mode)
+		public bool TryParse(TextReader reader, out Config config, IConfigReaderEventLog configEventLog, ISpecValidatorEventLog specEventLog, ConfigValidationMode mode)
         {
 			try
 			{
-				config = Parse(reader, configBacklog, specBacklog, mode);
+				config = Parse(reader, configEventLog, specEventLog, mode);
 				return true;
 			}
 			catch (Exception)
@@ -145,7 +145,7 @@ namespace Ini
 
         #region Private Methods
 
-        private void ParseOption(string option, int lineIndex, Section section, IConfigReaderBacklog backlog)
+		private void ParseOption(string option, int lineIndex, Section section, IConfigReaderEventLog eventLog)
         {
             string[] splitted = option.Split(new char[] { INNER_OPTION_SEPARATOR }, 2); // splits by first occurrence and limits to two substrings
             if(splitted.Length == 2)
@@ -155,21 +155,21 @@ namespace Ini
 
                 if(IsIdentifierWellFormed(optionIdentifier, IdentifierType.OPTION))
                 {
-                    ParseElement(lineIndex, optionIdentifier, optionValue, section, backlog);
+                    ParseElement(lineIndex, optionIdentifier, optionValue, section, eventLog);
                 }
                 else
                 {
                     // TODO: maybe more elaborate?
-                    backlog.ConfigMalformed(lineIndex, string.Format("Error at line {0}: identifier is not well formed.", lineIndex));
+                    eventLog.ConfigMalformed(lineIndex, string.Format("Error at line {0}: identifier is not well formed.", lineIndex));
                 }
             }
             else
             {
-                backlog.ConfigMalformed(lineIndex, string.Format("Error at line {0}: can not parse option because of missing '{1}'.", lineIndex, INNER_OPTION_SEPARATOR));
+                eventLog.ConfigMalformed(lineIndex, string.Format("Error at line {0}: can not parse option because of missing '{1}'.", lineIndex, INNER_OPTION_SEPARATOR));
             }
         }
 
-        private void ParseElement(int lineIndex, string identifier, string value, Section section, IConfigReaderBacklog backlog)
+		private void ParseElement(int lineIndex, string identifier, string value, Section section, IConfigReaderEventLog eventLog)
         {
             // hodnota je reprezentována jedním nebo více elementy stejného typu oddělených čárkou (,) nebo dvojtečkou (:), v rámci jedné hodnoty ale vždy buď pouze (,) nebo pouze (:)
             // TODO: semicolon shall be preferred over comma but don't forget about escaping with slashes...

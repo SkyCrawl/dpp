@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using YamlDotNet.Serialization;
-using Ini.Backlogs;
+using Ini.EventLogs;
 using Ini.Util;
 
 namespace Ini.Specification
@@ -39,9 +39,9 @@ namespace Ini.Specification
         /// <summary>
         /// Verifies the integrity of the configuration definition.
         /// </summary>
-        /// <param name="backlog"></param>
+		/// <param name="eventLog"></param>
         /// <returns></returns>
-        public abstract bool IsValid(ISpecValidatorBacklog backlog = null);
+		public abstract bool IsValid(ISpecValidatorEventLog eventLog = null);
 
         #endregion
     }

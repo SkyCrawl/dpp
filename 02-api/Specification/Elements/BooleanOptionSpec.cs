@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Ini.Backlogs;
+using Ini.EventLogs;
 
 namespace Ini.Specification.Elements
 {
@@ -14,9 +14,9 @@ namespace Ini.Specification.Elements
         /// <summary>
         /// Verifies the integrity of the configuration definition.
         /// </summary>
-        /// <param name="backlog"></param>
+		/// <param name="eventLog"></param>
         /// <returns></returns>
-        public override bool IsValid(ISpecValidatorBacklog backlog = null)
+        public override bool IsValid(ISpecValidatorEventLog eventLog = null)
         {
             throw new NotImplementedException();
         }
