@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Ini.Backlogs;
 using Ini.Specification;
 
@@ -12,7 +9,7 @@ namespace Ini
     /// <summary>
     /// TODO
     /// </summary>
-    public class SpecReader
+    public class SchemaReader
     {
         #region Fields
 
@@ -29,7 +26,7 @@ namespace Ini
         /// Initializes a new instance of the <see cref="SpecReader"/> class.
         /// </summary>
         /// <param name="backlog">The backlog.</param>
-        public SpecReader(ISchemaReaderBacklog backlog = null)
+        public SchemaReader(ISchemaReaderBacklog backlog = null)
         {
             this.backlog = backlog ?? new ConsoleSchemaReaderBacklog();
         }

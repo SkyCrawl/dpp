@@ -48,7 +48,6 @@
   <ItemGroup>
     <Compile Include="Exceptions\InvalidConfigFormatException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpecReader.cs" />
     <Compile Include="ConfigParser.cs" />
     <Compile Include="ConfigReader.cs" />
     <Compile Include="ConfigWriter.cs" />
@@ -86,7 +85,6 @@
     <Compile Include="Specification\Elements\SignedOptionSpec.cs" />
     <Compile Include="Specification\Elements\StringOptionSpec.cs" />
     <Compile Include="Specification\Elements\UnsignedOptionSpec.cs" />
-    <Compile Include="SpecTypeResolver.cs" />
     <Compile Include="Backlogs\ConsoleSchemaReaderBacklog.cs" />
     <Compile Include="Backlogs\ISchemaReaderBacklog.cs" />
     <Compile Include="Backlogs\ConsoleConfigReaderBacklog.cs" />
@@ -97,6 +95,8 @@
     <Compile Include="Backlogs\IConfigWriterBacklog.cs" />
     <Compile Include="Backlogs\IConfigValidatorBacklog.cs" />
     <Compile Include="Backlogs\ConsoleConfigValidatorBacklog.cs" />
+    <Compile Include="SchemaTypeResolver.cs" />
+    <Compile Include="SchemaReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -10,7 +10,7 @@ namespace Ini
 	/// <summary>
 	/// Type resolver for YAML deserialization.
 	/// </summary>
-	public class SpecTypeResolver : INodeTypeResolver
+	public class SchemaTypeResolver : INodeTypeResolver
 	{
 		#region Fields
 

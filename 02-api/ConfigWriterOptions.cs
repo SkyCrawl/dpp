@@ -25,9 +25,20 @@ namespace Ini
         public ConfigValidationMode ValidationMode { get; set; }
 
         /// <summary>
-        /// Sort order to use when writing the configuration.
+		/// Sort order to use for sections when writing the configuration. The library
+		/// will make a best effort to preserve commentary blocks' positions but it can not
+		/// make any promises. Commentary blocks will stick to the first section below them,
+		/// as defined by the original order.
         /// </summary>
-        public ConfigBlockSortOrder SortOrder { get; set; }
+        public ConfigBlockSortOrder SectionSortOrder { get; set; }
+
+		/// <summary>
+		/// Sort order to use for options when writing the configuration. The library
+		/// will make a best effort to preserve commentary blocks' positions but it can not
+		/// make any promises. Commentary blocks will stick to the first option below them,
+		/// as defined by the original order.
+		/// </summary>
+		public ConfigBlockSortOrder OptionSortOrder { get; set; }
 
 		/// <summary>
 		/// Gets default writer options.
@@ -38,7 +49,8 @@ namespace Ini
 			ConfigWriterOptions result = new ConfigWriterOptions();
 			result.ValidateConfig = true;
 			result.ValidationMode = ConfigValidationMode.Strict;
-			result.SortOrder = ConfigBlockSortOrder.InsertionOrder;
+			result.SectionSortOrder = ConfigBlockSortOrder.Insertion;
+			result.OptionSortOrder = ConfigBlockSortOrder.Insertion;
 			return result;
 		}
     }

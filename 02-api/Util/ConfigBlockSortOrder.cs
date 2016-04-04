@@ -1,34 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ini.Util
 {
     /// <summary>
-    /// The sort order of sections and options in saved file.
+    /// The identifier-based sort order to apply before saving a configuration.
     /// </summary>
     public enum ConfigBlockSortOrder
     {
         /// <summary>
-        /// Same as the original file.
+		/// Same order as the origin (e.g. file).
         /// </summary>
-        InsertionOrder,
+        Insertion,
 
         /// <summary>
-        /// Same order as in schema.
+        /// Same order as in the associated schema.
         /// </summary>
-        SchemaOrder,
+        Schema,
 
         /// <summary>
-        /// 
+        /// Top to bottom, lexicographically lowest to highest.
         /// </summary>
-        IdentifierAscendingOrder,
+        Ascending,
 
 		/// <summary>
-		/// 
+		/// Top to bottom, lexicographically highest to lowest.
 		/// </summary>
-		IdentifierDescendingOrder
+		Descending
     }
 }

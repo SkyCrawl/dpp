@@ -20,7 +20,7 @@ namespace apitest
             var specString = file.ReadToEnd();
 
             var deserializer = new Deserializer();
-			deserializer.TypeResolvers.Insert(0, new SpecTypeResolver());
+			deserializer.TypeResolvers.Insert(0, new SchemaTypeResolver());
 
             var reader = new StringReader(specString);
             var deserializedSpec = deserializer.Deserialize<ConfigSpec>(reader);
