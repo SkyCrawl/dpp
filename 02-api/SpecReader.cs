@@ -19,7 +19,7 @@ namespace Ini
         /// <summary>
         /// A user-specified or default backlog for handling errors and parsing messages.
         /// </summary>
-        private ISchemaReaderBacklog backlog;
+        protected ISchemaReaderBacklog backlog;
 
         #endregion
 
@@ -32,7 +32,6 @@ namespace Ini
         public SpecReader(ISchemaReaderBacklog backlog = null)
         {
             this.backlog = backlog ?? new ConsoleSchemaReaderBacklog();
-            this.backlog.GetHashCode(); // TODO: remove! (this only gets rid of an annoying warning)
         }
 
         #endregion

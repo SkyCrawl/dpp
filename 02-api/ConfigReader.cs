@@ -20,7 +20,7 @@ namespace Ini
         /// <summary>
         /// A user-specified or default backlog for handling errors and parsing messages.
         /// </summary>
-        private IConfigReaderBacklog backlog;
+		protected IConfigReaderBacklog backlog;
 
         #endregion
 

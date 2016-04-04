@@ -127,6 +127,10 @@ namespace Ini.Configuration
 			OptionCount = 0;
 		}
 
+		#endregion
+
+		#region Public methods querying content
+
 		/// <summary>
 		/// Gets the option with the specified identifier.
 		/// </summary>
@@ -169,12 +173,25 @@ namespace Ini.Configuration
 		}
 
 		/// <summary>
+		/// Gets the specified element of the option with the specified identifier.
+		/// The output type is correctly typed.
+		/// </summary>
+		/// <returns>The element, or null if not found.</returns>
+		/// <param name="optionIdentifier">Target option identifier.</param>
+		/// <param name="elementIndex">Target element index.</param>
+		/// <exception cref="InvalidCastException">If the specified type was not correct.</exception>
+		public T GetElement<T>(string optionIdentifier, int elementIndex) where T : IElement
+		{
+			return (T) GetElement(optionIdentifier, elementIndex);
+		}
+
+		/// <summary>
 		/// Gets the underlying collection, for custom processing or alterations. Use only
 		/// if you know what you're doing. <see cref="OptionCount"/> is being managed
 		/// manually.
 		/// </summary>
 		/// <returns>The collection.</returns>
-		public ConfigBlockDictionary<string, ConfigBlockBase> GetCollection()
+		public ConfigBlockDictionary<string, ConfigBlockBase> GetContent()
 		{
 			return Content;
 		}

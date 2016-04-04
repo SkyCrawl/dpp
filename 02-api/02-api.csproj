@@ -70,20 +70,10 @@
     <Compile Include="Util\Guid\IGuid.cs" />
     <Compile Include="Util\Guid\SystemGuidGenerator.cs" />
     <Compile Include="Util\ConfigBlockDictionary.cs" />
-    <Compile Include="Backlogs\IConfigReaderBacklog.cs" />
-    <Compile Include="Backlogs\ConsoleConfigReaderBacklog.cs" />
-    <Compile Include="Backlogs\IConfigWriterBacklog.cs" />
-    <Compile Include="Backlogs\IConfigValidatorBacklog.cs" />
-    <Compile Include="Backlogs\ConsoleConfigWriterBacklog.cs" />
-    <Compile Include="Backlogs\ConsoleConfigValidatorBacklog.cs" />
     <Compile Include="ConfigWriterOptions.cs" />
-    <Compile Include="Backlogs\ISchemaReaderBacklog.cs" />
     <Compile Include="Validation\ConfigValidationMode.cs" />
-    <Compile Include="Backlogs\ConsoleSchemaReaderBacklog.cs" />
-    <Compile Include="Backlogs\ConsoleSchemaValidatorBacklog.cs" />
     <Compile Include="Exceptions\InvalidSchemaFormatException.cs" />
     <Compile Include="Exceptions\InvalidSpecException.cs" />
-    <Compile Include="Backlogs\ISpecValidatorBacklog.cs" />
     <Compile Include="Exceptions\InvalidConfigException.cs" />
     <Compile Include="Exceptions\UndefinedSpecException.cs" />
     <Compile Include="Specification\SpecBlockBase.cs" />
@@ -97,6 +87,16 @@
     <Compile Include="Specification\Elements\StringOptionSpec.cs" />
     <Compile Include="Specification\Elements\UnsignedOptionSpec.cs" />
     <Compile Include="SpecTypeResolver.cs" />
+    <Compile Include="Backlogs\ConsoleSchemaReaderBacklog.cs" />
+    <Compile Include="Backlogs\ISchemaReaderBacklog.cs" />
+    <Compile Include="Backlogs\ConsoleConfigReaderBacklog.cs" />
+    <Compile Include="Backlogs\ConsoleSchemaValidatorBacklog.cs" />
+    <Compile Include="Backlogs\ConsoleConfigWriterBacklog.cs" />
+    <Compile Include="Backlogs\IConfigReaderBacklog.cs" />
+    <Compile Include="Backlogs\ISpecValidatorBacklog.cs" />
+    <Compile Include="Backlogs\IConfigWriterBacklog.cs" />
+    <Compile Include="Backlogs\IConfigValidatorBacklog.cs" />
+    <Compile Include="Backlogs\ConsoleConfigValidatorBacklog.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -172,6 +172,10 @@ namespace Ini.Configuration
 			SectionCount = 0;
 		}
 
+		#endregion
+
+		#region Public methods querying content
+
 		/// <summary>
 		/// Gets the section with the specified identifier.
 		/// </summary>
@@ -228,12 +232,26 @@ namespace Ini.Configuration
 		}
 
 		/// <summary>
+		/// Gets the specified element of the option with the specified identifier, within the specified section.
+		/// The output type is correctly typed.
+		/// </summary>
+		/// <returns>The element, or null if not found.</returns>
+		/// <param name="sectionIdentifier">Target section identifier.</param>
+		/// <param name="optionIdentifier">Target option identifier.</param>
+		/// <param name="elementIndex">Target element index.</param>
+		/// <exception cref="InvalidCastException">If the specified type was not correct.</exception>
+		public T GetElement<T>(string sectionIdentifier, string optionIdentifier, int elementIndex) where T : IElement
+		{
+			return (T) GetElement(sectionIdentifier, optionIdentifier, elementIndex);
+		}
+
+		/// <summary>
 		/// Gets the underlying collection, for custom processing or alterations. Use only
 		/// if you know what you're doing. <see cref="SectionCount"/> is being managed
 		/// manually.
 		/// </summary>
 		/// <returns>The collection.</returns>
-		public ConfigBlockDictionary<string, ConfigBlockBase> GetCollection()
+		public ConfigBlockDictionary<string, ConfigBlockBase> GetContent()
 		{
 			return Content;
 		}

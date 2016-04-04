@@ -78,6 +78,17 @@ namespace Ini.Configuration
 		}
 
 		/// <summary>
+		/// Gets the specified element, correctly typed.
+		/// </summary>
+		/// <returns>The element, or null if not found.</returns>
+		/// <param name="elementIndex">Target element index.</param>
+		/// <exception cref="InvalidCastException">If the specified type was not correct.</exception>
+		public T GetElement<T>(int elementIndex) where T : IElement
+		{
+			return (T) GetElement(elementIndex);
+		}
+
+		/// <summary>
 		/// Gets the value of a single, correctly typed element. If the specified type
 		/// is not correct, throws an exception.
 		/// </summary>

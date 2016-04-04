@@ -16,8 +16,15 @@ namespace Ini
     {
         #region Properties
 
-		private IConfigWriterBacklog ConfigWriterBacklog;
-		private ISpecValidatorBacklog SpecValidatorBacklog;
+		/// <summary>
+		/// The config writer backlog.
+		/// </summary>
+		protected IConfigWriterBacklog ConfigWriterBacklog;
+
+		/// <summary>
+		/// The spec validator backlog.
+		/// </summary>
+		protected ISpecValidatorBacklog SpecValidatorBacklog;
 
         #endregion
 
