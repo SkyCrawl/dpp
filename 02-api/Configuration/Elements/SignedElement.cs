@@ -15,7 +15,15 @@ namespace Ini.Configuration.Elements
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Ini.Configuration.Elements.SignedElement"/> class.
+        /// Initializes a new instance of the <see cref="SignedElement"/> class.
+        /// </summary>
+        public SignedElement()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SignedElement"/> class
+        /// with an initial value.
         /// </summary>
         public SignedElement(long value) : base(value)
         {
@@ -28,9 +36,9 @@ namespace Ini.Configuration.Elements
         /// <summary>
         /// Determines whether the element conforms to the given option specification.
         /// </summary>
-        /// <param name="mode"></param>
-        /// <param name="optionSpec"></param>
-        /// <param name="eventLog"></param>
+        /// <param name="optionSpec">The option specification.</param>
+        /// <param name="mode">The validation mode.</param>
+        /// <param name="eventLog">The validation event log.</param>
         /// <returns></returns>
         public override bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLog eventLog = null)
         {

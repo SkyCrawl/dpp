@@ -7,7 +7,7 @@ using Ini.Specification;
 namespace Ini
 {
     /// <summary>
-    /// TODO
+    /// The class used to parse configuration schema.
     /// </summary>
     public class SchemaReader
     {
@@ -23,7 +23,8 @@ namespace Ini
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SchemaReader"/> class.
+        /// Initializes a new instance of the <see cref="SchemaReader"/> class
+        /// with an option to supply a user defined event log.
         /// </summary>
         /// <param name="eventLog">The event log.</param>
         public SchemaReader(ISchemaReaderEventLog eventLog = null)
@@ -36,11 +37,12 @@ namespace Ini
         #region Public Methods
 
         /// <summary>
-        /// Creates an instance of <see cref="ConfigSpec"/> from the given path and encoding.
+        /// Creates an instance of <see cref="ConfigSpec"/> from a YAML file.
         /// </summary>
-        /// <returns>The config read and parsed from the given path and encoding.</returns>
-        /// <param name="filePath">The given path.</param>
-        /// <param name="encoding">The given encoding.</param>
+        /// <returns>The configuration specification read and parsed from the given path and encoding.</returns>
+        /// <param name="filePath">The path to a file in YAML format.</param>
+        /// <param name="encoding">The file encoding.</param>
+        /// <exception cref="Ini.Exceptions.MalformedSchemaException">If the schema is malformed.</exception>
         public ConfigSpec LoadFromFile(string filePath, Encoding encoding = null)
         {
             if(encoding == null)
@@ -54,13 +56,12 @@ namespace Ini
         }
 
         /// <summary>
-        /// Creates an instance of <see cref="ConfigSpec"/> from the given path and encoding.
+        /// Creates an instance of <see cref="ConfigSpec"/> from a YAML file.
         /// </summary>
         /// <returns>True if the configuration is parsed successfully.</returns>
-        /// <param name="filePath">The given path.</param>
+        /// <param name="filePath">The path to a file in YAML format.</param>
         /// <param name="spec">The config read and parsed from the given reader.</param>
         /// <param name="encoding">The given encoding.</param>
-        /// <exception cref="Ini.Exceptions.MalformedSchemaException">If the schema is malformed.</exception>
         public bool TryLoadFromFile(string filePath, out ConfigSpec spec, Encoding encoding = null)
         {
             try
@@ -76,11 +77,11 @@ namespace Ini
         }
 
         /// <summary>
-        /// Creates an instance of <see cref="ConfigSpec"/> from the given reader. Can be used to load a config
-        /// from a file or memory. Use the other ready-to-use factory methods for loading config from files, however.
+        /// Creates an instance of <see cref="ConfigSpec"/> from the given reader. Can be used to load a configuration
+        /// specification from a file or memory.
         /// </summary>
-        /// <returns>The config read and parsed from the given reader.</returns>
-        /// <param name="reader">The given reader.</param>
+        /// <returns>The configuration specification read and parsed from the given reader.</returns>
+        /// <param name="reader">The reader with a specification in YAML format.</param>
         /// <exception cref="Ini.Exceptions.MalformedSchemaException">If the schema is malformed.</exception>
         public ConfigSpec LoadFromText(TextReader reader)
         {
@@ -88,13 +89,12 @@ namespace Ini
         }
 
         /// <summary>
-        /// Creates an instance of <see cref="ConfigSpec"/> from the given reader. Can be used to load a config
-        /// from a file or memory. Use the other ready-to-use factory methods for loading config from files, however.
+        /// Creates an instance of <see cref="ConfigSpec"/> from the given reader. Can be used to load a configuration
+        /// specification from a file or memory.
         /// </summary>
         /// <returns>True if the configuration is parsed successfully.</returns>
-        /// <param name="reader">The given reader.</param>
-        /// <param name="spec">The config read and parsed from the given reader.</param>
-        /// <exception cref="Ini.Exceptions.MalformedSchemaException">If the schema is malformed.</exception>
+        /// <param name="reader">The reader with a specification in YAML format.</param>
+        /// <param name="spec">The configuration specification read and parsed from the given reader.</param>
         public bool TryLoadFromText(TextReader reader, out ConfigSpec spec)
         {
             try

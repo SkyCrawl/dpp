@@ -8,31 +8,39 @@ using Ini.Validation;
 namespace Ini.Configuration.Elements
 {
     /// <summary>
-	/// Element of type <see cref="string"/>.
+    /// Element of type <see cref="string"/>.
     /// </summary>
     public class StringElement : Element<string>
     {
-		#region Constructor
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Ini.Configuration.Elements.StringElement"/> class.
-		/// </summary>
-		public StringElement(string value) : base(value)
-		{
-		}
-
-		#endregion
-
-		#region Validation
+        #region Constructor
 
         /// <summary>
-		/// Determines whether the element conforms to the given option specification.
+        /// Initializes a new instance of the <see cref="StringElement"/> class.
         /// </summary>
-        /// <param name="mode"></param>
-		/// <param name="optionSpec"></param>
-		/// <param name="eventLog"></param>
+        public StringElement()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StringElement"/> class
+        /// with an initial value.
+        /// </summary>
+        public StringElement(string value) : base(value)
+        {
+        }
+
+        #endregion
+
+        #region Validation
+
+        /// <summary>
+        /// Determines whether the element conforms to the given option specification.
+        /// </summary>
+        /// <param name="optionSpec">The option specification.</param>
+        /// <param name="mode">The validation mode.</param>
+        /// <param name="eventLog">The validation event log.</param>
         /// <returns></returns>
-		public override bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLog eventLog = null)
+        public override bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLog eventLog = null)
         {
             throw new NotImplementedException();
         }

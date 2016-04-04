@@ -39,9 +39,9 @@ namespace Ini.Configuration.Elements
         /// <summary>
         /// Determines whether the element conforms to the given option specification.
         /// </summary>
-        /// <param name="mode"></param>
-        /// <param name="optionSpec"></param>
-        /// <param name="eventLog"></param>
+        /// <param name="mode">The validation mode.</param>
+        /// <param name="optionSpec">The option specification.</param>
+        /// <param name="eventLog">The validation event log.</param>
         /// <returns></returns>
         bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLog eventLog = null);
 

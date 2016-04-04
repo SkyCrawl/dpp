@@ -31,10 +31,11 @@ namespace Ini
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Ini.ConfigWriter"/> class.
+        /// Initializes a new instance of the <see cref="Ini.ConfigWriter"/> class
+        /// with an option to supply user defined validation and writer log.
         /// </summary>
-        /// <param name="specValidatorEventLog">Spec validator event log.</param>
-        /// <param name="configWriterEventLog">Config writer event log.</param>
+        /// <param name="specValidatorEventLog">Specification validator event log.</param>
+        /// <param name="configWriterEventLog">Configuration writer event log.</param>
         public ConfigWriter(ISpecValidatorEventLog specValidatorEventLog = null, IConfigWriterEventLog configWriterEventLog = null)
         {
             this.configWriterEventLog = configWriterEventLog ?? new ConsoleConfigWriterEventLog();
@@ -80,7 +81,7 @@ namespace Ini
         public void WriteToText(TextWriter writer, Config configuration, ConfigWriterOptions options = null)
         {
             // first check validity of both specification and configuration, if defined and required
-            options = options ?? ConfigWriterOptions.GetDefault();
+            options = options ?? ConfigWriterOptions.Default;
             if(options.ValidateConfig && !configuration.IsValid(options.ValidationMode, configWriterEventLog, specValidatorEventLog))
             {
                 configWriterEventLog.ConfigNotValid();

@@ -10,6 +10,24 @@ namespace Ini
     /// </summary>
     public class ConfigWriterOptions
     {
+        #region Properties
+
+        /// <summary>
+        /// Gets default writer options.
+        /// </summary>
+        public static ConfigWriterOptions Default
+        {
+            get
+            {
+                ConfigWriterOptions result = new ConfigWriterOptions();
+                result.ValidateConfig = true;
+                result.ValidationMode = ConfigValidationMode.Strict;
+                result.SectionSortOrder = ConfigBlockSortOrder.Insertion;
+                result.OptionSortOrder = ConfigBlockSortOrder.Insertion;
+                return result;
+            }
+        }
+
         /// <summary>
         /// Gets or sets a value indicating whether to validate the configuration
         /// by its associated specification (if defined) before writing it. The
@@ -40,18 +58,6 @@ namespace Ini
         /// </summary>
         public ConfigBlockSortOrder OptionSortOrder { get; set; }
 
-        /// <summary>
-        /// Gets default writer options.
-        /// </summary>
-        /// <returns>The default.</returns>
-        public static ConfigWriterOptions GetDefault()
-        {
-            ConfigWriterOptions result = new ConfigWriterOptions();
-            result.ValidateConfig = true;
-            result.ValidationMode = ConfigValidationMode.Strict;
-            result.SectionSortOrder = ConfigBlockSortOrder.Insertion;
-            result.OptionSortOrder = ConfigBlockSortOrder.Insertion;
-            return result;
-        }
+        #endregion
     }
 }

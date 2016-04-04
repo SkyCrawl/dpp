@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Ini.Util.Guid;
 
@@ -25,7 +26,7 @@ namespace Ini.Configuration
 		#region Constructor
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Ini.Configuration.Commentary"/> class.
+		/// Initializes a new instance of the <see cref="Commentary"/> class.
 		/// </summary>
 		public Commentary() : base(identifierGenerator.Next())
 		{
@@ -49,7 +50,7 @@ namespace Ini.Configuration
 		/// Gets the content enumerator.
 		/// </summary>
 		/// <returns>The enumerator.</returns>
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return Lines.GetEnumerator();
 		}

@@ -66,10 +66,10 @@ namespace Ini
         /// <summary>
         /// Parses the configuration from the text input.
         /// </summary>
-        /// <param name="reader"></param>
-        /// <param name="configEventLog"></param>
-        /// <param name="specEventLog"></param>
-        /// <param name="mode"></param>
+        /// <param name="reader">The reader with configuration file</param>
+        /// <param name="configEventLog">The config reader event log.</param>
+        /// <param name="specEventLog">The spec validator event log.</param>
+        /// <param name="mode">The validation mode.</param>
         /// <exception cref="Ini.Exceptions.UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
         /// <exception cref="Ini.Exceptions.InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
         /// <exception cref="MalformedConfigException">If the configuration's format is malformed.</exception>
@@ -116,17 +116,14 @@ namespace Ini
         }
 
         /// <summary>
-        /// TODO
+        /// Parses the configuration from the text input.
         /// </summary>
-        /// <param name="reader"></param>
-        /// <param name="config"></param>
-        /// <param name="configEventLog"></param>
-        /// <param name="specEventLog"></param>
-        /// <param name="mode"></param>
-        /// <exception cref="Ini.Exceptions.UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
-        /// <exception cref="Ini.Exceptions.InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
-        /// <exception cref="MalformedConfigException">If the configuration's format is malformed.</exception>
-        /// <returns></returns>
+        /// <param name="reader">The reader with configuration file</param>
+        /// <param name="config">The parsed configuration file.</param>
+        /// <param name="configEventLog">The config reader event log.</param>
+        /// <param name="specEventLog">The spec validator event log.</param>
+        /// <param name="mode">The validation mode.</param>
+        /// <returns>True if the configuration is parsed successfully.</returns>
         public bool TryParse(TextReader reader, out Config config, IConfigReaderEventLog configEventLog, ISpecValidatorEventLog specEventLog, ConfigValidationMode mode)
         {
             try
