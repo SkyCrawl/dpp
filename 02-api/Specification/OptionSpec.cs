@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Ini.Configuration;
+using YamlDotNet.Serialization;
 
 namespace Ini.Specification
 {
@@ -14,6 +15,7 @@ namespace Ini.Specification
         /// <summary>
         /// True if the option has only single value.
         /// </summary>
+        [YamlMember(Alias = "single_value")]
         public bool HasSingleValue { get; set; }
 
         #endregion
@@ -39,6 +41,7 @@ namespace Ini.Specification
         /// <summary>
         /// Default value if the element is optional.
         /// </summary>
+        [YamlMember(Alias = "default_value")]
         public List<T> DefaultValues { get; set; }
 
         #endregion
@@ -46,7 +49,7 @@ namespace Ini.Specification
         #region Constructor
 
         /// <summary>
-		/// Initializes a new instance of the <see cref="OptionSpec{T}"/> class.
+        /// Initializes a new instance of the <see cref="OptionSpec{T}"/> class.
         /// </summary>
         public OptionSpec()
         {
@@ -61,7 +64,7 @@ namespace Ini.Specification
         /// Creates a new section with empty mandatory option values and default optional option values.
         /// </summary>
         /// <returns></returns>
-		public override Option CreateOptionStub()
+        public override Option CreateOptionStub()
         {
             throw new NotImplementedException();
         }

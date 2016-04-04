@@ -1,55 +1,65 @@
-- Sekce1:												# mandatory
-	mandatory: yes										# mandatory
-	description: the purpose of Sekce1					# mandatory
-	options:											# optional
-		- Option 1:										# mandatory
-		  	 mandatory: yes								# mandatory
-			 description: the purpose of Option 1		# mandatory
-			 single_value: yes							# mandatory (TODO: 'value: single|multiple" instead?)
-			 element_type: string						# mandatory ??? (TODO: optional and 'string' by default? also, maybe 'value_type' instead?)
-		- Option 2:
-		  	 mandatory: yes
-			 description: the purpose of Option 2
-			 single_value: no
-			 element_type: signed
-			 allowed_values: (-5, 5)					# mandatory (TODO: "value_range" instead?)
-		- Option 3:
-		  	 mandatory: no
-			 description: the purpose of Option 3
-			 single_value: no
-			 element_type: enum
-			 default_value: t							# mandatory (TODO: 'value_default' instead?)
-
-- Cisla:
-	mandatory: no
-	description: the purpose of Cisla
-	options:
-		- cele:
-			mandatory: yes
-			description: the purpose of cele
-			single_value: yes
-			element_type: signed
-		- cele_bin:
-			mandatory: no
-			description: the purpose of cele_bin
-			single_value: yes
-			element_type: signed
-			default_value: 0b00000001
-		- cele_hex:
-			mandatory: no
-			description: the purpose of cele_hex
-			single_value: no
-			element_type: signed
-			default_value: 0xABCD
-		- float1:
-			mandatory: yes
-			description: the purpose of float1
-			single_value: yes
-			element_type: float
-		- float2:
-			mandatory: no
-			description: the purpose of float2
-			single_value: no
-			element_type: float		
-			default_value: 3.14159265359
-		  	 
+origin: The configuration origin
+sections:
+- identifier: Sekce1							# mandatory
+  mandatory: true								# mandatory
+  description: the purpose of Sekce1			# mandatory
+  options:										# optional
+  - !String
+    identifier: Option 1						# mandatory
+    mandatory: true								# mandatory
+    description: the purpose of Option 1		# mandatory
+    single_value: true							# mandatory (TODO: 'value: single|multiple" instead?)
+  - !Signed
+    identifier: Option 2
+    mandatory: true
+    description: the purpose of Option 2
+    single_value: false
+    min_value: -5
+    max_value: 5
+  - !Enum
+    identifier: Option 3
+    mandatory: false
+    description: the purpose of Option 3
+    single_value: false
+    default_value:								# mandatory (TODO: 'value_default' instead?)
+    - Value1
+    allowed_values:
+    - Value1
+    - Value2
+    - Value3
+- identifier: Cisla
+  mandatory: false
+  description: the purpose of Cisla
+  options:
+  - !Signed
+    identifier: cele
+    mandatory: true
+    description: the purpose of cele
+    single_value: true
+  - !Signed
+    identifier: cele_bin
+    mandatory: false
+    description: the purpose of cele_bin
+    single_value: true
+    default_value:
+    - 0b00000001
+  - !Unsigned
+    identifier: cele_hex
+    mandatory: false
+    description: the purpose of cele_hex
+    single_value: false
+    default_value:
+    - 0xABCD
+  - !Float
+    identifier: float1
+    mandatory: true
+    description: the purpose of float1
+    single_value: true
+  - !Float
+    identifier: float2
+    mandatory: false
+    description: the purpose of float2
+    single_value: false
+    default_value:
+    - 3.14159265359
+             

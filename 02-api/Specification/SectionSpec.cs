@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Ini.Backlogs;
 using Ini.Configuration;
+using YamlDotNet.Serialization;
 
 namespace Ini.Specification
 {
@@ -15,6 +16,7 @@ namespace Ini.Specification
         /// <summary>
         /// The list of section options.
         /// </summary>
+        [YamlMember(Alias = "options")]
         public List<OptionSpec> Options { get; set; }
 
         #endregion
@@ -22,7 +24,7 @@ namespace Ini.Specification
         #region Constructor
 
         /// <summary>
-		/// Initializes a new instance of the <see cref="SectionSpec"/> class.
+        /// Initializes a new instance of the <see cref="SectionSpec"/> class.
         /// </summary>
         public SectionSpec()
         {
@@ -37,7 +39,7 @@ namespace Ini.Specification
         /// Creates a new section with default option elements.
         /// </summary>
         /// <returns></returns>
-		public Section CreateSectionStub()
+        public Section CreateSectionStub()
         {
             throw new NotImplementedException();
         }
@@ -51,7 +53,7 @@ namespace Ini.Specification
         /// </summary>
         /// <param name="backlog"></param>
         /// <returns></returns>
-		public override bool IsValid(ISpecValidatorBacklog backlog = null)
+        public override bool IsValid(ISpecValidatorBacklog backlog = null)
         {
             throw new NotImplementedException();
         }

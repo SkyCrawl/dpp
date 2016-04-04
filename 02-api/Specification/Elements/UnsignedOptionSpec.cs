@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Ini.Backlogs;
+using YamlDotNet.Serialization;
 
 namespace Ini.Specification.Elements
 {
@@ -14,11 +15,13 @@ namespace Ini.Specification.Elements
         /// <summary>
         /// The minimal value.
         /// </summary>
+        [YamlMember(Alias = "min_value")]
         public ulong MinValue { get; set; }
 
         /// <summary>
         /// The maximal value.
         /// </summary>
+        [YamlMember(Alias = "max_value")]
         public ulong MaxValue { get; set; }
 
         #endregion
@@ -26,7 +29,7 @@ namespace Ini.Specification.Elements
         #region Constructor
 
         /// <summary>
-		/// Initializes a new instance of the <see cref="UnsignedOptionSpec"/> class.
+        /// Initializes a new instance of the <see cref="UnsignedOptionSpec"/> class.
         /// </summary>
         public UnsignedOptionSpec()
         {

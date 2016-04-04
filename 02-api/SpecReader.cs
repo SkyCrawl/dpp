@@ -32,12 +32,22 @@ namespace Ini
         public SpecReader(ISchemaReaderBacklog backlog = null)
         {
             this.backlog = backlog ?? new ConsoleSchemaReaderBacklog();
-			this.backlog.GetHashCode(); // TODO: remove! (this only gets rid of an annoying warning)
+            this.backlog.GetHashCode(); // TODO: remove! (this only gets rid of an annoying warning)
         }
 
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Registers a user defined option type. 
+        /// </summary>
+        /// <param name="yamlIdentifier">The identifer of the option used in Yaml</param>
+        /// <param name="optionType">The user defined type of the option</param>
+        public void RegisterType(string yamlIdentifier, Type optionType)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Creates an instance of <see cref="ConfigSpec"/> from the given path and encoding.
@@ -47,10 +57,10 @@ namespace Ini
         /// <param name="encoding">The given encoding.</param>
         public ConfigSpec LoadFromFile(string filePath, Encoding encoding = null)
         {
-			if(encoding == null)
-			{
-				encoding = Encoding.Default;
-			}
+            if(encoding == null)
+            {
+                encoding = Encoding.Default;
+            }
             using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
                 return LoadFromText(new StreamReader(fileStream, encoding));

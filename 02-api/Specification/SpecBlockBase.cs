@@ -41,7 +41,7 @@ namespace Ini.Specification
         /// </summary>
         /// <param name="backlog"></param>
         /// <returns></returns>
-		public abstract bool IsValid(ISpecValidatorBacklog backlog = null);
+        public abstract bool IsValid(ISpecValidatorBacklog backlog = null);
 
         #endregion
     }

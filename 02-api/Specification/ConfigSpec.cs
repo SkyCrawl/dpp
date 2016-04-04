@@ -4,6 +4,7 @@ using System.Text;
 using Ini.Configuration;
 using Ini.Backlogs;
 using Ini.Exceptions;
+using YamlDotNet.Serialization;
 
 namespace Ini.Specification
 {
@@ -14,14 +15,16 @@ namespace Ini.Specification
     {
         #region Properties
 
-		/// <summary>
-		/// Path to the configuration, if any.
-		/// </summary>
-		public string Origin { get; set; }
+        /// <summary>
+        /// Path to the configuration, if any.
+        /// </summary>
+        [YamlMember(Alias = "origin")]
+        public string Origin { get; set; }
 
-		/// <summary>
+        /// <summary>
         /// The list of configuration sections.
         /// </summary>
+        [YamlMember(Alias = "sections")]
         public List<SectionSpec> Sections { get; set; }
 
         #endregion
@@ -31,17 +34,17 @@ namespace Ini.Specification
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigSpec"/> class.
         /// </summary>
-		public ConfigSpec() : this(null)
+        public ConfigSpec() : this(null)
         {
         }
 
         /// <summary>
-		/// Initializes a new instance of the <see cref="ConfigSpec"/> class.
+        /// Initializes a new instance of the <see cref="ConfigSpec"/> class.
         /// </summary>
-		public ConfigSpec(string origin)
+        public ConfigSpec(string origin)
         {
-			this.Origin = origin;
-			this.Sections = new List<SectionSpec>();
+            this.Origin = origin;
+            this.Sections = new List<SectionSpec>();
         }
 
         #endregion
@@ -60,22 +63,22 @@ namespace Ini.Specification
         }
 
         /// <summary>
-		/// Generates a default configuration from this specification. Throws
-		/// an exception if the schema is not valid.
+        /// Generates a default configuration from this specification. Throws
+        /// an exception if the schema is not valid.
         /// </summary>
-		/// <exception cref="InvalidSpecException">If the schema is not valid.</exception>
+        /// <exception cref="InvalidSpecException">If the schema is not valid.</exception>
         /// <returns>The config stub.</returns>
         /// <param name="backlog">Schema validation backlog.</param>
-		public Config CreateConfigStub(ISpecValidatorBacklog backlog)
+        public Config CreateConfigStub(ISpecValidatorBacklog backlog)
         {
-			if(!IsValid(backlog))
-			{
-				throw new InvalidSpecException();
-			}
-			else
-			{
-				throw new NotImplementedException();
-			}
+            if(!IsValid(backlog))
+            {
+                throw new InvalidSpecException();
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         #endregion
