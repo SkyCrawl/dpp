@@ -27,7 +27,7 @@ sections:
     - Value3
 ```
 
-See a more detailed example in `Examples/example.yml`.
+See a more detailed example in `02-api-test/Examples/example.yml`.
 
 
 ## Creating configuration
@@ -41,7 +41,7 @@ Option 1 = value 1
 Option 2  =  Value1:Value2:Value3
 ```
 
-Again, for a more detailed example, see `Examples/config.txt`.
+Again, for a more detailed example, see `02-api-test/Examples/config.txt`.
 
 ## Reading configuration
 
