@@ -115,6 +115,9 @@ Global
 		$0.StandardHeader = $3
 		$3.Text = 
 		$3.IncludeInNewFiles = True
+		$0.DotNetNamingPolicy = $4
+		$4.DirectoryNamespaceAssociation = None
+		$4.ResourceNamePolicy = FileFormatDefault
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

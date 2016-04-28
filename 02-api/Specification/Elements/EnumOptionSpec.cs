@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Ini.EventLogs;
+using Ini.EventLoggers;
 using YamlDotNet.Serialization;
 
 namespace Ini.Specification.Elements
@@ -39,7 +39,7 @@ namespace Ini.Specification.Elements
         /// </summary>
         /// <param name="eventLog"></param>
         /// <returns></returns>
-        public override bool IsValid(ISpecValidatorEventLog eventLog = null)
+        public override bool IsValid(ISpecValidatorEventLogger eventLog = null)
         {
             throw new NotImplementedException();
         }

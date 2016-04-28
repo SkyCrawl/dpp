@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Ini.EventLogs;
+using Ini.EventLoggers;
 using Ini.Specification;
 using Ini.Util;
 using Ini.Validation;
 using System.Collections.ObjectModel;
 using Ini.Configuration.Elements;
+using System.Collections.Specialized;
+using Ini.Exceptions;
 
 namespace Ini.Configuration
 {
@@ -46,6 +48,7 @@ namespace Ini.Configuration
             this.TrailingCommentary = commentary;
             this.OptionCount = 0;
             this.content = new ConfigBlockDictionary<string, ConfigBlockBase>();
+            this.content.CollectionChanged += new NotifyCollectionChangedEventHandler(OnContentChanged);
         }
 
         #endregion
@@ -53,7 +56,7 @@ namespace Ini.Configuration
         #region Public methods managing content
 
         /// <summary>
-        /// Adds the specified content.
+        /// Adds the specified content to the section.
         /// </summary>
         /// <exception cref="System.ArgumentException">Content with the same identifier has already been added.</exception>
         /// <param name="content">Content.</param>
@@ -207,9 +210,47 @@ namespace Ini.Configuration
         /// <param name="sectionSpec"></param>
         /// <param name="eventLog"></param>
         /// <returns></returns>
-        public bool IsValid(SectionSpec sectionSpec, ConfigValidationMode mode, ISpecValidatorEventLog eventLog = null)
+        public bool IsValid(SectionSpec sectionSpec, ConfigValidationMode mode, ISpecValidatorEventLogger eventLog = null)
         {
             throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Keeping internal state
+
+        /// <summary>
+        /// The delegate for <see cref="INotifyCollectionChanged"/>.
+        /// </summary>
+        /// <param name="sender">The observed collection.</param>
+        /// <param name="e">Changes that occurred.</param>
+        protected void OnContentChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                case NotifyCollectionChangedAction.Replace:
+                    foreach(ConfigBlockBase item in e.NewItems)
+                    {
+                        if(item is Section)
+                        {
+                            throw new InvariantBrokenException(string.Format(
+                                "'{0}' can not contain instances of '{1}'.",
+                                this.GetType().ToString(),
+                                item.GetType().ToString()));
+                        }
+                    }
+                    break;
+
+                case NotifyCollectionChangedAction.Move:
+                case NotifyCollectionChangedAction.Remove:
+                case NotifyCollectionChangedAction.Reset:
+                    // one or more items were moved or removed - that doesn't break any invariant
+                    break;
+
+                default:
+                    throw new ArgumentException("Unknown enum value: " + e.Action.ToString());
+            }
         }
 
         #endregion

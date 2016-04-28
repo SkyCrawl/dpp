@@ -1,13 +1,30 @@
 ﻿using System;
+using System.IO;
 
-namespace Ini.EventLogs
+namespace Ini.EventLoggers
 {
 	/// <summary>
-	/// An implementation of <see cref="IConfigValidatorEventLog"/> that writes into the console.
+    /// An implementation of <see cref="IConfigValidatorEventLogger"/> that writes a text writer.
 	/// </summary>
-	public class ConsoleConfigValidatorEventLog : IConfigValidatorEventLog
+	public class ConfigValidatorEventLogger : IConfigValidatorEventLogger
 	{
-		/// <summary>
+        /// <summary>
+        /// The output stream to write event logs to.
+        /// </summary>
+        protected TextWriter writer;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConfigValidatorEventLogger"/> class.
+        /// </summary>
+        /// <param name="writer">The output stream to write event logs to.</param>
+        public ConfigValidatorEventLogger(TextWriter writer)
+        {
+            this.writer = writer;
+        }
+
+        #region IConfigValidatorEventLog Members
+
+        /// <summary>
 		/// A duplicate section has been found in the associated configuration.
 		/// </summary>
 		/// <param name="lineIndex">Line number of the duplicate.</param>
@@ -27,5 +44,7 @@ namespace Ini.EventLogs
 		{
 			throw new NotImplementedException();
 		}
+
+        #endregion
 	}
 }

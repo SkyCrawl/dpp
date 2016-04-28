@@ -4,43 +4,58 @@ using System.IO;
 using System.Text;
 using Ini.Configuration;
 using Ini.Specification;
-using Ini.EventLogs;
+using Ini.EventLoggers;
 using Ini.Util;
 using Ini.Validation;
 
 namespace Ini
 {
     /// <summary>
-    /// The class used to read configuration from various sources.
+    /// The class used to read configuration from various sources. While consumers
+    /// can specify arbitrary output for the event loggers (see constructors), they
+    /// are not public so as to avoid unnecessary issues when manipulating with them
+    /// while a task is running.
     /// </summary>
     public class ConfigReader
     {
         #region Fields
 
         /// <summary>
-        /// The config reader event log.
+        /// The specification validator event logger.
         /// </summary>
-        protected IConfigReaderEventLog configEventLog;
+        protected ISpecValidatorEventLogger specEventLogger;
 
         /// <summary>
-        /// The spec validator event log.
+        /// The configuration reader event logger.
         /// </summary>
-        protected ISpecValidatorEventLog specEventLog;
+        protected IConfigReaderEventLogger configEventLogger;
 
         #endregion
 
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Ini.ConfigReader"/> class
-        /// with an option to supply user defined reader and validaton log.
+        /// Initializes a new instance of the <see cref="Ini.ConfigReader"/> class, with
+        /// user-defined logger output.
         /// </summary>
-        /// <param name="configEventLog">Config event log.</param>
-        /// <param name="specEventLog">Spec event log.</param>
-        public ConfigReader(IConfigReaderEventLog configEventLog = null, ISpecValidatorEventLog specEventLog = null)
+        /// <param name="specEventOutput">Specification validator event logger output.</param>
+        /// <param name="configEventOutput">Configuration reader event logger output.</param>
+        public ConfigReader(TextWriter specEventOutput = null, TextWriter configEventOutput = null)
         {
-            this.configEventLog = configEventLog ?? new ConsoleConfigReaderEventLog();
-            this.specEventLog = specEventLog ?? new ConsoleSchemaValidatorEventLog();
+            this.specEventLogger = new SchemaValidatorEventLogger(specEventOutput ?? Console.Out);
+            this.configEventLogger = new ConfigReaderEventLogger(configEventOutput ?? Console.Out);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Ini.ConfigReader"/> class, with
+        /// user-defined loggers.
+        /// </summary>
+        /// <param name="specEventLogger">Specification validator event logger.</param>
+        /// <param name="configEventLogger">Configuration reader event logger.</param>
+        public ConfigReader(ISpecValidatorEventLogger specEventLogger, IConfigReaderEventLogger configEventLogger)
+        {
+            this.specEventLogger = specEventLogger ?? new SchemaValidatorEventLogger(Console.Out);
+            this.configEventLogger = configEventLogger ?? new ConfigReaderEventLogger(Console.Out);
         }
 
         #endregion
@@ -66,7 +81,7 @@ namespace Ini
             }
             using (var fileStream = new FileStream(configPath, FileMode.Open, FileAccess.Read))
             {
-                Config result = LoadFromText(new StreamReader(fileStream, encoding), spec, mode);
+                Config result = LoadFromText(configPath, new StreamReader(fileStream, encoding), spec, mode);
                 result.Origin = configPath;
                 return result;
             }
@@ -89,7 +104,7 @@ namespace Ini
             }
             using (var fileStream = new FileStream(configPath, FileMode.Open, FileAccess.Read))
             {
-                bool result = TryLoadFromText(new StreamReader(fileStream, encoding), out configuration, spec, mode);
+                bool result = TryLoadFromText(configPath, new StreamReader(fileStream, encoding), out configuration, spec, mode);
                 configuration.Origin = configPath;
                 return result;
             }
@@ -100,16 +115,17 @@ namespace Ini
         /// from a file or memory. Use the other ready-to-use factory methods for loading config from files, however.
         /// </summary>
         /// <returns>The config read and parsed from the given reader.</returns>
+        /// <param name="origin">The configuration's origin. Will be forwarded into the logger.</param>
         /// <param name="reader">The given reader.</param>
-        /// <param name="mode">The validation mode.</param>
         /// <param name="spec">The schema.</param>
+        /// <param name="mode">The validation mode.</param>
         /// <exception cref="Ini.Exceptions.UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
         /// <exception cref="Ini.Exceptions.InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
         /// <exception cref="Ini.Exceptions.MalformedConfigException">If the configuration's format is malformed.</exception>
-        public Config LoadFromText(TextReader reader, ConfigSpec spec, ConfigValidationMode mode = ConfigValidationMode.Strict)
+        public Config LoadFromText(string origin, TextReader reader, ConfigSpec spec, ConfigValidationMode mode = ConfigValidationMode.Strict)
         {
             ConfigParser parser = new ConfigParser(spec);
-            return parser.Parse(reader, configEventLog, specEventLog, mode);
+            return parser.Parse(reader, configEventLogger, specEventLogger, mode);
         }
 
         /// <summary>
@@ -117,14 +133,15 @@ namespace Ini
         /// from a file or memory. Use the other ready-to-use factory methods for loading config from files, however.
         /// </summary>
         /// <returns>True if the configuration is parsed successfully.</returns>
+        /// <param name="origin">The configuration's origin. Will be forwarded into the logger.</param>
         /// <param name="reader">The given reader.</param>
         /// <param name="configuration">The config read and parsed from the given reader.</param>
-        /// <param name="mode">The validation mode.</param>
         /// <param name="spec">The schema.</param>
-        public bool TryLoadFromText(TextReader reader, out Config configuration, ConfigSpec spec, ConfigValidationMode mode = ConfigValidationMode.Strict)
+        /// <param name="mode">The validation mode.</param>
+        public bool TryLoadFromText(string origin, TextReader reader, out Config configuration, ConfigSpec spec, ConfigValidationMode mode = ConfigValidationMode.Strict)
         {
             ConfigParser parser = new ConfigParser(spec);
-            return parser.TryParse(reader, out configuration, configEventLog, specEventLog, mode);
+            return parser.TryParse(reader, out configuration, configEventLogger, specEventLogger, mode);
         }
 
         #endregion

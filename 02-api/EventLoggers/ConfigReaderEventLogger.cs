@@ -2,14 +2,23 @@
 using System.Collections.Generic;
 using Ini.Util;
 using Ini.Validation;
+using System.IO;
 
-namespace Ini.EventLogs
+namespace Ini.EventLoggers
 {
     /// <summary>
-    /// An implementation of <see cref="IConfigReaderEventLog"/> that writes into the console.
+    /// An implementation of <see cref="IConfigReaderEventLogger"/> that writes a text writer.
     /// </summary>
-    public class ConsoleConfigReaderEventLog : ConsoleConfigValidatorEventLog, IConfigReaderEventLog
+    public class ConfigReaderEventLogger : ConfigValidatorEventLogger, IConfigReaderEventLogger
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConfigReaderEventLogger"/> class.
+        /// </summary>
+        /// <param name="writer">The output stream to write event logs to.</param>
+        public ConfigReaderEventLogger(TextWriter writer) : base(writer)
+        {
+        }
+
         #region IParsingBacklog Members
 
         /// <summary>

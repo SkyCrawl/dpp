@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using Ini.Util;
 using Ini.Validation;
 
-namespace Ini.EventLogs
+namespace Ini.EventLoggers
 {
     /// <summary>
     /// Interface providing information about reading configurations.
     /// </summary>
-    public interface IConfigReaderEventLog
+    public interface IConfigReaderEventLogger
     {
         /// <summary>
         /// The associated reader will now parse a new configuration. Consumers

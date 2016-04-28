@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using Ini;
 
-namespace Ini.EventLogs
+namespace Ini.EventLoggers
 {
     /// <summary>
     /// Interface providing information about unexpected events
     /// when trying to write a configuration.
     /// </summary>
-    public interface IConfigWriterEventLog : IConfigValidatorEventLog
+    public interface IConfigWriterEventLogger : IConfigValidatorEventLogger
     {
         /// <summary>
         /// The configuration's schema is not valid. The operation's

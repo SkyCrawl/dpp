@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Ini.EventLogs;
+using Ini.EventLoggers;
 using Ini.Specification;
 using Ini.Util;
 using Ini.Validation;
@@ -40,7 +40,7 @@ namespace Ini.Configuration.Elements
         /// <param name="mode">The validation mode.</param>
         /// <param name="eventLog">The validation event log.</param>
         /// <returns></returns>
-        public override bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLog eventLog = null)
+        public override bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger eventLog = null)
         {
             throw new NotImplementedException();
         }

@@ -1,43 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Ini.EventLogs
+namespace Ini.EventLoggers
 {
     /// <summary>
-    /// An implementation of <see cref="ISpecValidatorEventLog"/> that writes into the console.
+    /// Interface providing information about validating specifications.
     /// </summary>
-    public class ConsoleSchemaValidatorEventLog : ISpecValidatorEventLog
+    public interface ISpecValidatorEventLogger
     {
-        #region IValidationBacklog Members
-
         /// <summary>
         /// A duplicate section has been found in the associated specification.
         /// </summary>
         /// <param name="sectionIdentifier">Containing section's identifier.</param>
-        public void DuplicateSection(string sectionIdentifier)
-        {
-            throw new NotImplementedException();
-        }
+        void DuplicateSection(string sectionIdentifier);
 
         /// <summary>
         /// A duplicate option within a section has been found in the associated specification.
         /// </summary>
         /// <param name="sectionIdentifier">The containing section's identifier.</param>
         /// <param name="optionIdentifier">The involved option's identifier.</param>
-        public void DuplicateOption(string sectionIdentifier, string optionIdentifier)
-        {
-            throw new NotImplementedException();
-        }
+        void DuplicateOption(string sectionIdentifier, string optionIdentifier);
 
         /// <summary>
         /// Default value is expected for the given option.
         /// </summary>
         /// <param name="sectionIdentifier">The containing section's identifier.</param>
         /// <param name="optionIdentifier">The involved option's identifier.</param>
-        public void DefaultValueExpected(string sectionIdentifier, string optionIdentifier)
-        {
-            throw new NotImplementedException();
-        }
+        void DefaultValueExpected(string sectionIdentifier, string optionIdentifier);
 
         /// <summary>
         /// An option's default value is invalid.
@@ -46,11 +35,6 @@ namespace Ini.EventLogs
         /// <param name="optionIdentifier">The involved option's identifier.</param>
         /// <param name="elementIndex">Index of the affected element.</param>
         /// <param name="value">The affected value.</param>
-        public void DefaultValueInvalid(string sectionIdentifier, string optionIdentifier, int elementIndex, object value)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
+        void DefaultValueInvalid(string sectionIdentifier, string optionIdentifier, int elementIndex, object value); // TODO: a single encapsulation type instead of "value"
     }
 }

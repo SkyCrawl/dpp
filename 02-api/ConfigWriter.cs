@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Ini.Configuration;
-using Ini.EventLogs;
+using Ini.EventLoggers;
 using Ini.Util;
 using Ini.Exceptions;
 
@@ -17,29 +17,41 @@ namespace Ini
         #region Properties
 
         /// <summary>
-        /// The config writer event log.
+        /// The specification validator event logger.
         /// </summary>
-        protected IConfigWriterEventLog configWriterEventLog;
+        protected ISpecValidatorEventLogger specValidatorEventLogger;
 
         /// <summary>
-        /// The spec validator event log.
+        /// The configuration writer event logger.
         /// </summary>
-        protected ISpecValidatorEventLog specValidatorEventLog;
+        protected IConfigWriterEventLogger configWriterEventLogger;
 
         #endregion
 
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Ini.ConfigWriter"/> class
-        /// with an option to supply user defined validation and writer log.
+        /// Initializes a new instance of the <see cref="Ini.ConfigWriter"/> class, with
+        /// user-defined logger output.
         /// </summary>
-        /// <param name="specValidatorEventLog">Specification validator event log.</param>
-        /// <param name="configWriterEventLog">Configuration writer event log.</param>
-        public ConfigWriter(ISpecValidatorEventLog specValidatorEventLog = null, IConfigWriterEventLog configWriterEventLog = null)
+        /// <param name="specValidatorOutput">Specification validation event logger output.</param>
+        /// <param name="configWriterOutput">Configuration writer event logger output.</param>
+        public ConfigWriter(TextWriter specValidatorOutput = null, TextWriter configWriterOutput = null)
         {
-            this.configWriterEventLog = configWriterEventLog ?? new ConsoleConfigWriterEventLog();
-            this.specValidatorEventLog = specValidatorEventLog ?? new ConsoleSchemaValidatorEventLog();
+            this.specValidatorEventLogger = new SchemaValidatorEventLogger(specValidatorOutput ?? Console.Out);
+            this.configWriterEventLogger = new ConfigWriterEventLogger(configWriterOutput ?? Console.Out);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Ini.ConfigWriter"/> class, with
+        /// user-defined loggers.
+        /// </summary>
+        /// <param name="specValidatorEventLogger">Specification validation event logger.</param>
+        /// <param name="configWriterEventLogger">Configuration writer event logger.</param>
+        public ConfigWriter(ISpecValidatorEventLogger specValidatorEventLogger, IConfigWriterEventLogger configWriterEventLogger)
+        {
+            this.specValidatorEventLogger = specValidatorEventLogger ?? new SchemaValidatorEventLogger(Console.Out);
+            this.configWriterEventLogger = configWriterEventLogger ?? new ConfigWriterEventLogger(Console.Out);
         }
 
         #endregion
@@ -82,9 +94,9 @@ namespace Ini
         {
             // first check validity of both specification and configuration, if defined and required
             options = options ?? ConfigWriterOptions.Default;
-            if(options.ValidateConfig && !configuration.IsValid(options.ValidationMode, configWriterEventLog, specValidatorEventLog))
+            if(options.ValidateConfig && !configuration.IsValid(options.ValidationMode, configWriterEventLogger, specValidatorEventLogger))
             {
-                configWriterEventLog.ConfigNotValid();
+                configWriterEventLogger.ConfigNotValid();
                 throw new InvalidConfigException();
             }
             else

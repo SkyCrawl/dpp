@@ -4,7 +4,7 @@ using System.Linq;
 using Ini.Configuration;
 using Ini.Exceptions;
 using Ini.Configuration.Elements;
-using Ini.EventLogs;
+using Ini.EventLoggers;
 
 namespace Ini.Util.LinkResolving
 {
@@ -82,7 +82,7 @@ namespace Ini.Util.LinkResolving
 		/// </summary>
 		/// <param name="config">The source configuration.</param>
 		/// <param name="configEventLog">A related event log.</param>
-		public void ResolveLinks(Config config, IConfigReaderEventLog configEventLog)
+		public void ResolveLinks(Config config, IConfigReaderEventLogger configEventLog)
 		{
 			while(unresolvedBuckets.Count > 0)
 			{

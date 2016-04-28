@@ -13,19 +13,21 @@ namespace Ini
         #region Properties
 
         /// <summary>
-        /// Gets default writer options.
+        /// Gets the default writer options. You can access the field
+        /// and change the defaults as you see fit.
         /// </summary>
-        public static ConfigWriterOptions Default
+        public static ConfigWriterOptions Default;
+
+        /// <summary>
+        /// Just an initializer of the <see cref="Default"/> static field.
+        /// </summary>
+        static ConfigWriterOptions()
         {
-            get
-            {
-                ConfigWriterOptions result = new ConfigWriterOptions();
-                result.ValidateConfig = true;
-                result.ValidationMode = ConfigValidationMode.Strict;
-                result.SectionSortOrder = ConfigBlockSortOrder.Insertion;
-                result.OptionSortOrder = ConfigBlockSortOrder.Insertion;
-                return result;
-            }
+            Default = new ConfigWriterOptions();
+            Default.ValidateConfig = true;
+            Default.ValidationMode = ConfigValidationMode.Strict;
+            Default.SectionSortOrder = ConfigBlockSortOrder.Insertion;
+            Default.OptionSortOrder = ConfigBlockSortOrder.Insertion;
         }
 
         /// <summary>

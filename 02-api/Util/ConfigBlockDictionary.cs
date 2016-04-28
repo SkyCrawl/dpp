@@ -7,21 +7,33 @@ using Ini.Configuration;
 namespace Ini.Util
 {
 	/// <summary>
-	/// Dictionary storing blocks of configuration while keeping insertion order.
+	/// Dictionary storing blocks of configuration while keeping insertion order. Also implements the
+    /// <see cref="INotifyCollectionChanged"/> to keep track of changes to the collection.
 	/// </summary>
-	public class ConfigBlockDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>> where TValue : ConfigBlockBase
+    public class ConfigBlockDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>>, INotifyCollectionChanged where TValue : ConfigBlockBase
 	{
 		/// <summary>
 		/// The inner ordered dictionary.
 		/// </summary>
 		protected OrderedDictionary dictionary;
 
+        #region INotifyCollectionChanged implementation
+
+        /// <summary>
+        /// The delegate to receive information about changes to this collection.
+        /// </summary>
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        #endregion
+
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Ini.Util.ConfigBlockDictionary{TKey,TValue}"/> class.
-		/// </summary>
-		public ConfigBlockDictionary()
+        /// Initializes a new instance of the <see cref="Ini.Util.ConfigBlockDictionary{TKey,TValue}"/> class.
+        /// </summary>
+        /// <param name="eventHandler">Event handler.</param>
+        public ConfigBlockDictionary(NotifyCollectionChangedEventHandler eventHandler = null)
 		{
 			this.dictionary = new OrderedDictionary();
+            this.CollectionChanged = eventHandler;
 		}
 
 		#region IDictionary implementation
@@ -34,6 +46,7 @@ namespace Ini.Util
 		/// <param name="value">Value.</param>
 		public void Add(TKey identifier, TValue value)
 		{
+            CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, identifier));
 			dictionary.Add(identifier, value);
 		}
 
@@ -56,6 +69,7 @@ namespace Ini.Util
 			bool contains = dictionary.Contains(identifier);
 			if(contains)
 			{
+                CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, identifier));
 				dictionary.Remove(identifier);
 			}
 			return contains;
@@ -92,7 +106,11 @@ namespace Ini.Util
 			}
 			set
 			{
+                CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(
+                    ContainsKey(identifier) ? NotifyCollectionChangedAction.Replace : NotifyCollectionChangedAction.Add,
+                    identifier));
 				dictionary[identifier] = value;
+
 			}
 		}
 	
@@ -129,7 +147,7 @@ namespace Ini.Util
 		/// <param name="entry">Entry.</param>
 		public void Add(KeyValuePair<TKey, TValue> entry)
 		{
-			dictionary.Add(entry.Key, entry.Value);
+            Add(entry.Key, entry.Value);
 		}
 
 		/// <summary>
@@ -137,6 +155,7 @@ namespace Ini.Util
 		/// </summary>
 		public void Clear()
 		{
+            CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 			dictionary.Clear();
 		}
 			

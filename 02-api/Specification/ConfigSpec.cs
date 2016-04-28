@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Ini.Configuration;
-using Ini.EventLogs;
+using Ini.EventLoggers;
 using Ini.Exceptions;
 using YamlDotNet.Serialization;
 
@@ -57,7 +57,7 @@ namespace Ini.Specification
         /// <returns>true</returns>
         /// <c>false</c>
         /// <param name="eventLog">Schema validation event log.</param>
-        public bool IsValid(ISpecValidatorEventLog eventLog)
+        public bool IsValid(ISpecValidatorEventLogger eventLog)
         {
             throw new NotImplementedException();
         }
@@ -69,7 +69,7 @@ namespace Ini.Specification
         /// <exception cref="InvalidSpecException">If the schema is not valid.</exception>
         /// <returns>The config stub.</returns>
         /// <param name="eventLog">Schema validation event log.</param>
-        public Config CreateConfigStub(ISpecValidatorEventLog eventLog)
+        public Config CreateConfigStub(ISpecValidatorEventLogger eventLog)
         {
             if(!IsValid(eventLog))
             {

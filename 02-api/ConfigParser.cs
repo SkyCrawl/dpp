@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text.RegularExpressions;
-using Ini.EventLogs;
+using Ini.EventLoggers;
 using Ini.Configuration;
 using Ini.Specification;
 using Ini.Util;
@@ -25,6 +25,20 @@ namespace Ini
         const string SECTION_IDENTIFIER_REGEX = "^\\[" + IDENTIFIER_REGEX + "\\]$";
 
         const char INNER_OPTION_SEPARATOR = '=';
+        const char COMMENTARY_STARTER = ';';
+        const string ESCAPE_SEQUENCE = "\\";
+
+        /// <summary>
+        /// Use the first capture group to match the filtered string token. Meaning of the regex:
+        /// leading whitespaces are ignored, up until the first non-whitespace character.
+        /// </summary>
+        const string FILTER_LEADING_WHITESPACES_REGEX = "^\\s*(.*?)$";
+
+        /// <summary>
+        /// Use the first capture group to match the filtered string token. Meaning of the regex:
+        /// trailing whitespaces are ignored, up until the last one prefixed with <see cref="ESCAPE_SEQUENCE"/>.
+        /// </summary>
+        const string FILTER_TRAILING_WHITESPACES_REGEX = "^(.*?(?:" + ESCAPE_SEQUENCE + "\\s)?)\\s*$";
 
         #endregion
 
@@ -74,7 +88,7 @@ namespace Ini
         /// <exception cref="Ini.Exceptions.InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
         /// <exception cref="MalformedConfigException">If the configuration's format is malformed.</exception>
         /// <returns></returns>
-        public Config Parse(TextReader reader, IConfigReaderEventLog configEventLog, ISpecValidatorEventLog specEventLog, ConfigValidationMode mode)
+        public Config Parse(TextReader reader, IConfigReaderEventLogger configEventLog, ISpecValidatorEventLogger specEventLog, ConfigValidationMode mode)
         {
             // check preconditions
             if(mode == ConfigValidationMode.Strict) // we need a valid specification
@@ -94,6 +108,21 @@ namespace Ini
             }
 
             // either way, now we have a valid specification or don't need one
+            string line;
+            int lineIndex = 0;
+            while((line = reader.ReadLine()) != null)
+            {
+                // preparation
+                lineIndex++;
+                line = TrimWhitespaces(RemoveTrailingCommentary(line));
+
+                // handle sections
+                if(IsIdentifierWellFormed(line, IdentifierType.SECTION))
+                {
+                    // string identifier = TrimWhitespaces(line.Substring(1, line.Length - 2));
+
+                }
+            }
 
             // PSEUDOCODE:
             /*
@@ -132,7 +161,7 @@ namespace Ini
         /// <param name="specEventLog">The spec validator event log.</param>
         /// <param name="mode">The validation mode.</param>
         /// <returns>True if the configuration is parsed successfully.</returns>
-        public bool TryParse(TextReader reader, out Config config, IConfigReaderEventLog configEventLog, ISpecValidatorEventLog specEventLog, ConfigValidationMode mode)
+        public bool TryParse(TextReader reader, out Config config, IConfigReaderEventLogger configEventLog, ISpecValidatorEventLogger specEventLog, ConfigValidationMode mode)
         {
             try
             {
@@ -197,8 +226,8 @@ namespace Ini
         /// <param name="token">The token to trim leading whitespaces from.</param>
         private static string TrimLeadingWhitespaces(string token)
         {
-            // mezery na začátku identifikátoru nebo volby se ignorují, pokud jim nepředchází znak '\'
-            return null;
+            Match match = Regex.Match(token, FILTER_LEADING_WHITESPACES_REGEX);
+            return match.Success ? match.Groups[1].Value : token;
         }
 
         /// <summary>
@@ -209,18 +238,19 @@ namespace Ini
         /// <param name="token">The token to trim trailing whitespaces from.</param>
         private static string TrimTrailingWhitespaces(string token)
         {
-            // mezery na konci identifikátoru nebo volby se ignorují, pokud jim nepředchází znak '\'
-            return null;
+            Match match = Regex.Match(token, FILTER_TRAILING_WHITESPACES_REGEX);
+            return match.Success ? match.Groups[1].Value : token;
         }
 
         /// <summary>
-        /// Removes trailing commentary from a config token, as per the specification. After that, trims trailing whitespaces.
+        /// Removes trailing commentary from a config token, as per the specification.
         /// </summary>
         /// <returns>The given token, with trailing commentary removed.</returns>
         /// <param name="token">The token to remove trailing commentary from.</param>
         private static string RemoveTrailingCommentary(string token)
         {
-            return null;
+            int firstSemicolonIndex = token.IndexOf(COMMENTARY_STARTER);
+            return firstSemicolonIndex == -1 ? token : token.Substring(0, firstSemicolonIndex);
         }
 
         #endregion

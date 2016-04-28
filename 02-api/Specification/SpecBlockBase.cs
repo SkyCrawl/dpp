@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using YamlDotNet.Serialization;
-using Ini.EventLogs;
+using Ini.EventLoggers;
 using Ini.Util;
 
 namespace Ini.Specification
@@ -41,7 +41,7 @@ namespace Ini.Specification
         /// </summary>
         /// <param name="eventLog"></param>
         /// <returns></returns>
-        public abstract bool IsValid(ISpecValidatorEventLog eventLog = null);
+        public abstract bool IsValid(ISpecValidatorEventLogger eventLog = null);
 
         #endregion
     }

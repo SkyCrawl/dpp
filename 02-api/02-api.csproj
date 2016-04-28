@@ -87,16 +87,6 @@
     <Compile Include="SchemaReader.cs" />
     <Compile Include="Exceptions\MalformedConfigException.cs" />
     <Compile Include="Exceptions\MalformedSchemaException.cs" />
-    <Compile Include="EventLogs\ConsoleConfigReaderEventLog.cs" />
-    <Compile Include="EventLogs\ConsoleConfigValidatorEventLog.cs" />
-    <Compile Include="EventLogs\ConsoleConfigWriterEventLog.cs" />
-    <Compile Include="EventLogs\ConsoleSchemaReaderEventLog.cs" />
-    <Compile Include="EventLogs\ConsoleSchemaValidatorEventLog.cs" />
-    <Compile Include="EventLogs\IConfigReaderEventLog.cs" />
-    <Compile Include="EventLogs\IConfigValidatorEventLog.cs" />
-    <Compile Include="EventLogs\IConfigWriterEventLog.cs" />
-    <Compile Include="EventLogs\ISchemaReaderEventLog.cs" />
-    <Compile Include="EventLogs\ISpecValidatorEventLog.cs" />
     <Compile Include="Util\LinkResolving\LinkNode.cs" />
     <Compile Include="Util\LinkResolving\LinkTarget.cs" />
     <Compile Include="Util\LinkResolving\LinkOrigin.cs" />
@@ -105,9 +95,20 @@
     <Compile Include="Exceptions\LinkCycleException.cs" />
     <Compile Include="Util\LinkResolving\LinkResolver.cs" />
     <Compile Include="Util\Extensions.cs" />
+    <Compile Include="EventLoggers\ConfigReaderEventLogger.cs" />
+    <Compile Include="EventLoggers\ConfigValidatorEventLogger.cs" />
+    <Compile Include="EventLoggers\ConfigWriterEventLogger.cs" />
+    <Compile Include="EventLoggers\SchemaReaderEventLogger.cs" />
+    <Compile Include="EventLoggers\SchemaValidatorEventLogger.cs" />
+    <Compile Include="EventLoggers\IConfigReaderEventLogger.cs" />
+    <Compile Include="EventLoggers\IConfigValidatorEventLogger.cs" />
+    <Compile Include="EventLoggers\IConfigWriterEventLogger.cs" />
+    <Compile Include="EventLoggers\ISchemaReaderEventLogger.cs" />
+    <Compile Include="EventLoggers\ISpecValidatorEventLogger.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

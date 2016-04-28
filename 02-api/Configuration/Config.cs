@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Ini.EventLogs;
+using System.Collections.Specialized;
+using Ini.EventLoggers;
 using Ini.Specification;
 using Ini.Util;
 using Ini.Validation;
@@ -59,6 +60,7 @@ namespace Ini.Configuration
             this.Origin = null;
             this.SectionCount = 0;
             this.content = new ConfigBlockDictionary<string, ConfigBlockBase>();
+            this.content.CollectionChanged += new NotifyCollectionChangedEventHandler(OnContentChanged);
         }
 
         #endregion
@@ -66,7 +68,7 @@ namespace Ini.Configuration
         #region Public methods managing content
 
         /// <summary>
-        /// Adds the specified block of content.
+        /// Adds the specified block of content to the configuration.
         /// </summary>
         /// <exception cref="System.ArgumentException">Content with the same identifier has already been added.</exception>
         /// <param name="content">Content.</param>
@@ -80,7 +82,7 @@ namespace Ini.Configuration
         }
 
         /// <summary>
-        /// Adds the specified blocks of content.
+        /// Adds the specified blocks of content to the configuration.
         /// </summary>
         /// <exception cref="System.ArgumentException">Content with the same identifier has already been added.</exception>
         /// <param name="contents">Content.</param>
@@ -93,7 +95,8 @@ namespace Ini.Configuration
         }
 
         /// <summary>
-        /// Determines whether the section contains content with the specified identifier.
+        /// Determines whether the configuration contains the specified identifier. This
+        /// method only inspects direct child content.
         /// </summary>
         /// <param name="identifier">Identifier.</param>
         public bool Contains(string identifier)
@@ -102,7 +105,8 @@ namespace Ini.Configuration
         }
 
         /// <summary>
-        /// Gets the content associated to the specified identifier.
+        /// Gets the content associated to the specified identifier. This method only inspects
+        /// direct child content.
         /// </summary>
         /// <exception cref="System.Collections.Generic.KeyNotFoundException">Identifier not found.</exception>
         /// <param name="identifier">Identifier.</param>
@@ -113,6 +117,7 @@ namespace Ini.Configuration
 
         /// <summary>
         /// Outputs content with the specified identifier and returns true if found.
+        /// This method only inspects direct child content.
         /// </summary>
         /// <returns><c>true</c>, if value was found, <c>false</c> otherwise.</returns>
         /// <param name="identifier">Identifier.</param>
@@ -123,7 +128,7 @@ namespace Ini.Configuration
         }
 
         /// <summary>
-        /// Removes the specified option.
+        /// Removes content with the specified identifier.
         /// </summary>
         /// <param name="identifier">Identifier.</param>
         public bool Remove(string identifier)
@@ -145,7 +150,7 @@ namespace Ini.Configuration
         }
 
         /// <summary>
-        /// Removes the specified options.
+        /// Removes cntent with the specified identifiers.
         /// </summary>
         /// <param name="identifiers">Identifier.</param>
         public void RemoveAll(IEnumerable<string> identifiers)
@@ -157,7 +162,7 @@ namespace Ini.Configuration
         }
 
         /// <summary>
-        /// Clear the whole section.
+        /// Clear the whole configuration.
         /// </summary>
         public void Clear()
         {
@@ -262,7 +267,7 @@ namespace Ini.Configuration
         /// <param name="mode">Mode.</param>
         /// <param name="configEventLog">Config event log.</param>
         /// <param name="specEventLog">Specification event log.</param>
-        public bool IsValid(ConfigValidationMode mode, IConfigWriterEventLog configEventLog, ISpecValidatorEventLog specEventLog = null)
+        public bool IsValid(ConfigValidationMode mode, IConfigWriterEventLogger configEventLog, ISpecValidatorEventLogger specEventLog = null)
         {
             if(Spec == null)
             {
@@ -276,6 +281,44 @@ namespace Ini.Configuration
             else
             {
                 throw new NotImplementedException();
+            }
+        }
+
+        #endregion
+
+        #region Keeping internal state
+
+        /// <summary>
+        /// The delegate for <see cref="INotifyCollectionChanged"/>.
+        /// </summary>
+        /// <param name="sender">The observed collection.</param>
+        /// <param name="e">Changes that occurred.</param>
+        protected void OnContentChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                case NotifyCollectionChangedAction.Replace:
+                    foreach(ConfigBlockBase item in e.NewItems)
+                    {
+                        if(item is Option)
+                        {
+                            throw new InvariantBrokenException(string.Format(
+                                "'{0}' can not contain instances of '{1}'.",
+                                this.GetType().ToString(),
+                                item.GetType().ToString()));
+                        }
+                    }
+                    break;
+
+                case NotifyCollectionChangedAction.Move:
+                case NotifyCollectionChangedAction.Remove:
+                case NotifyCollectionChangedAction.Reset:
+                    // one or more items were moved or removed - that doesn't break any invariant
+                    break;
+
+                default:
+                    throw new ArgumentException("Unknown enum value: " + e.Action.ToString());
             }
         }
 

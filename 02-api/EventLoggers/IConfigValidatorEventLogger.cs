@@ -5,7 +5,7 @@ namespace Ini
 	/// <summary>
 	/// Interface providing information about validating configurations.
 	/// </summary>
-	public interface IConfigValidatorEventLog
+	public interface IConfigValidatorEventLogger
 	{
 		/// <summary>
 		/// A duplicate section has been found in the associated configuration.

@@ -3,14 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
-namespace Ini.EventLogs
+namespace Ini.EventLoggers
 {
     /// <summary>
-    /// An implementation of <see cref="ISchemaReaderEventLog"/> that writes into the console.
+    /// An implementation of <see cref="ISchemaReaderEventLogger"/> that writes a text writer.
     /// </summary>
-    public class ConsoleSchemaReaderEventLog : ConsoleSchemaValidatorEventLog, ISchemaReaderEventLog
+    public class SchemaReaderEventLogger : SchemaValidatorEventLogger, ISchemaReaderEventLogger
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SchemaReaderEventLogger"/> class.
+        /// </summary>
+        /// <param name="writer">The output stream to write event logs to.</param>
+        public SchemaReaderEventLogger(TextWriter writer) : base(writer)
+        {
+        }
+
         #region ISpecReaderBacklog Members
 
         /// <summary>

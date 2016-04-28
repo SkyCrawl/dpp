@@ -1,8 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using Ini.EventLogs;
+using Ini.EventLoggers;
 using Ini.Specification;
+using YamlDotNet.Core.Events;
+using YamlDotNet.Serialization;
+using Ini.Exceptions;
 
 namespace Ini
 {
@@ -14,22 +17,32 @@ namespace Ini
         #region Fields
 
         /// <summary>
-        /// A user-specified or default event log for handling errors and parsing messages.
+        /// The specification reader event logger.
         /// </summary>
-        protected ISchemaReaderEventLog eventLog;
+        protected ISchemaReaderEventLogger specReaderEventLogger;
 
         #endregion
 
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SchemaReader"/> class
-        /// with an option to supply a user defined event log.
+        /// Initializes a new instance of the <see cref="Ini.SchemaReader"/> class, with
+        /// user-defined logger output.
         /// </summary>
-        /// <param name="eventLog">The event log.</param>
-        public SchemaReader(ISchemaReaderEventLog eventLog = null)
+        /// <param name="specReaderOutput">Specification reader event logger output.</param>
+        public SchemaReader(TextWriter specReaderOutput = null)
         {
-            this.eventLog = eventLog ?? new ConsoleSchemaReaderEventLog();
+            this.specReaderEventLogger = new SchemaReaderEventLogger(specReaderOutput ?? Console.Out);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Ini.SchemaReader"/> class, with
+        /// user-defined logger.
+        /// </summary>
+        /// <param name="specReaderEventLogger">Specification reader event logger.</param>
+        public SchemaReader(ISchemaReaderEventLogger specReaderEventLogger)
+        {
+            this.specReaderEventLogger = specReaderEventLogger ?? new SchemaReaderEventLogger(Console.Out);
         }
 
         #endregion
@@ -51,7 +64,7 @@ namespace Ini
             }
             using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
-                return LoadFromText(new StreamReader(fileStream, encoding));
+                return LoadFromText(filePath, new StreamReader(fileStream, encoding));
             }
         }
 
@@ -81,11 +94,26 @@ namespace Ini
         /// specification from a file or memory.
         /// </summary>
         /// <returns>The configuration specification read and parsed from the given reader.</returns>
-        /// <param name="reader">The reader with a specification in YAML format.</param>
+        /// <param name="origin">The specification's origin. Will be forwarded into the logger.</param>
+        /// <param name="reader">The object to read YAML specification from.</param>
         /// <exception cref="Ini.Exceptions.MalformedSchemaException">If the schema is malformed.</exception>
-        public ConfigSpec LoadFromText(TextReader reader)
+        public ConfigSpec LoadFromText(string origin, TextReader reader)
         {
-            throw new NotImplementedException();
+            // prepare the YAML deserializer with custom typer resolving
+            var deserializer = new Deserializer();
+            deserializer.TypeResolvers.Insert(0, new SchemaTypeResolver());
+
+            // and try to deserialize
+            try
+            {
+                specReaderEventLogger.NewSpec(origin);
+                return deserializer.Deserialize<ConfigSpec>(reader);
+            }
+            catch (Exception e)
+            {
+                specReaderEventLogger.SpecMalformed(e.ToString());
+                throw new MalformedSchemaException("Could not deserialize the schema.", e);
+            }
         }
 
         /// <summary>
@@ -93,13 +121,14 @@ namespace Ini
         /// specification from a file or memory.
         /// </summary>
         /// <returns>True if the configuration is parsed successfully.</returns>
+        /// <param name="origin">The specification's origin. Will be forwarded into the logger.</param>
         /// <param name="reader">The reader with a specification in YAML format.</param>
         /// <param name="spec">The configuration specification read and parsed from the given reader.</param>
-        public bool TryLoadFromText(TextReader reader, out ConfigSpec spec)
+        public bool TryLoadFromText(string origin, TextReader reader, out ConfigSpec spec)
         {
             try
             {
-                spec = LoadFromText(reader);
+                spec = LoadFromText(origin, reader);
                 return true;
             }
             catch(Exception)
