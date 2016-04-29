@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections.ObjectModel;
+using Ini.Configuration.Base;
 
 namespace Ini.Util
 {
@@ -36,5 +37,21 @@ namespace Ini.Util
                 }
 			}
 		}
+
+        /// <summary>
+        /// Converts the collection of elements into an array of correctly typed values.
+        /// </summary>
+        /// <returns>The array.</returns>
+        /// <param name="list">The source collection.</param>
+        /// <typeparam name="OutputType">The correct type.</typeparam>
+        public static OutputType[] ToValueArray<OutputType, TSource>(this IList<TSource> list) where TSource : IElement
+        {
+            List<OutputType> result = new List<OutputType>();
+            foreach(IElement elem in list)
+            {
+                result.AddRange(elem.GetValues<OutputType>());
+            }
+            return result.ToArray();
+        }
 	}
 }

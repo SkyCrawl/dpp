@@ -8,7 +8,7 @@ using Ini.Specification;
 using Ini.Util;
 using Ini.Validation;
 using Ini.Exceptions;
-using Ini.Configuration.Elements;
+using Ini.Configuration.Base;
 
 namespace Ini.Configuration
 {
@@ -213,7 +213,7 @@ namespace Ini.Configuration
         public ObservableCollection<IElement> GetElements(string sectionIdentifier, string optionIdentifier)
         {
             Option option = GetOption(sectionIdentifier, optionIdentifier);
-            return option != null ? option.Elements : null;
+            return option != null ? option.Values : null;
         }
 
         /// <summary>
@@ -238,7 +238,7 @@ namespace Ini.Configuration
         /// <param name="optionIdentifier">Target option identifier.</param>
         /// <param name="elementIndex">Target element index.</param>
         /// <exception cref="InvalidCastException">If the specified type was not correct.</exception>
-        public T GetElement<T>(string sectionIdentifier, string optionIdentifier, int elementIndex) where T : IElement
+        public T GetElement<T>(string sectionIdentifier, string optionIdentifier, int elementIndex) where T : IValue
         {
             return (T) GetElement(sectionIdentifier, optionIdentifier, elementIndex);
         }

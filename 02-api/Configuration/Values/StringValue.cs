@@ -4,28 +4,22 @@ using Ini.EventLoggers;
 using Ini.Specification;
 using Ini.Util;
 using Ini.Validation;
+using Ini.Configuration.Base;
 
-namespace Ini.Configuration.Elements
+namespace Ini.Configuration.Values
 {
     /// <summary>
-    /// Element of type <see cref="ulong"/>.
+    /// Element of type <see cref="string"/>.
     /// </summary>
-    public class UnsignedElement : Element<ulong>
+    public class StringValue : ValueBase<string>
     {
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UnsignedElement"/> class.
-        /// </summary>
-        public UnsignedElement()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UnsignedElement"/> class
+        /// Initializes a new instance of the <see cref="StringValue"/> class
         /// with an initial value.
         /// </summary>
-        public UnsignedElement(ulong value) : base(value)
+        public StringValue(string value) : base(value)
         {
         }
 

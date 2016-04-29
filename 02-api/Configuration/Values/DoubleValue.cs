@@ -4,28 +4,22 @@ using Ini.EventLoggers;
 using Ini.Specification;
 using Ini.Util;
 using Ini.Validation;
+using Ini.Configuration.Base;
 
-namespace Ini.Configuration.Elements
+namespace Ini.Configuration.Values
 {
     /// <summary>
-    /// Element of type <see cref="long"/>.
+    /// Element of type <see cref="double"/>.
     /// </summary>
-    public class SignedElement : Element<long>
+    public class DoubleElement : ValueBase<double>
     {
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SignedElement"/> class.
-        /// </summary>
-        public SignedElement()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SignedElement"/> class
+        /// Initializes a new instance of the <see cref="DoubleElement"/> class
         /// with an initial value.
         /// </summary>
-        public SignedElement(long value) : base(value)
+        public DoubleElement(double value) : base(value)
         {
         }
 

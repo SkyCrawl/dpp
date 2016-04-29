@@ -5,13 +5,13 @@ using Ini.Specification;
 using Ini.Util;
 using Ini.Validation;
 
-namespace Ini.Configuration.Elements
+namespace Ini.Configuration.Base
 {
     /// <summary>
     /// Base parametrized class for elements.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class Element<T> : IElement
+    public abstract class ValueBase<T> : IValue
     {
         #region Properties
 
@@ -43,25 +43,18 @@ namespace Ini.Configuration.Elements
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Ini.Configuration.Elements.Element{T}"/> class.
-        /// </summary>
-        public Element()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Ini.Configuration.Elements.Element{T}"/> class
+        /// Initializes a new instance of the <see cref="Ini.Configuration.Base.ValueBase{T}"/> class
         /// with an initial value.
         /// </summary>
         /// <param name="value">The initial value.</param>
-        public Element(T value)
+        public ValueBase(T value)
         {
             this.Value = value;
         }
 
         #endregion
 
-        #region IElement Members
+        #region Public methods
 
         /// <summary>
         /// The element's value, cast to the output type. Casting
@@ -73,6 +66,15 @@ namespace Ini.Configuration.Elements
         public OutputType GetValue<OutputType>()
         {
             return (OutputType) ValueObject;
+        }
+
+        /// <summary>
+        /// Converts the inner value into a correctly typed array.
+        /// </summary>
+        /// <returns>The value, ecapsulated in an array.</returns>
+        public OutputType[] GetValues<OutputType>()
+        {
+            return new OutputType[] { GetValue<OutputType>() };
         }
 
         /// <summary>

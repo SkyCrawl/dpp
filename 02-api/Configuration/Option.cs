@@ -5,23 +5,23 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using Ini.Specification;
-using Ini.Configuration.Elements;
 using Ini.EventLoggers;
 using Ini.Util;
 using Ini.Exceptions;
 using Ini.Validation;
+using Ini.Configuration.Base;
 
 namespace Ini.Configuration
 {
     /// <summary>
     /// Class representing option as a whole.
     /// </summary>
-    public class Option : ConfigBlockBase, IEnumerable<IElement>
+    public class Option : ConfigBlockBase, IElement, IEnumerable<IElement>
     {
         #region Properties
 
         /// <summary>
-        /// Readonly type that must be shared by values of all <see cref="Elements"/>.
+        /// Readonly type that must be shared by values of all <see cref="Values"/>.
         /// Should you wish to change the type, it's better to create a whole new
         /// <see cref="Option"/>, perhaps using the same identifier.
         /// </summary>
@@ -33,13 +33,12 @@ namespace Ini.Configuration
         public string TrailingCommentary { get; set; }
 
         /// <summary>
-        /// This option's value, consisting of subclasses of <see cref="Element{T}"/>.
-        /// Consumers are given direct access to the collection but they might break some
-        /// invariants so the collection is observed internally. When an invalid operation
-        /// is performed, an exception is thrown.
-        /// <seealso cref="OnElementsChanged"/>
+        /// This option's values. Consumers are given direct access to the collection but they might break some
+        /// invariants so the collection is observed internally. When an invalid operation is performed,
+        /// an exception is thrown.
+        /// <seealso cref="OnValuesChanged"/>
         /// </summary>
-        public ObservableCollection<IElement> Elements { get; private set; }
+        public ObservableCollection<IElement> Values { get; private set; }
 
         #endregion
 
@@ -52,8 +51,8 @@ namespace Ini.Configuration
         {
             this.ValueType = elementType;
             this.TrailingCommentary = commentary;
-            this.Elements = new ObservableCollection<IElement>();
-            this.Elements.CollectionChanged += OnElementsChanged;
+            this.Values = new ObservableCollection<IElement>();
+            this.Values.CollectionChanged += OnValuesChanged;
         }
 
         #endregion
@@ -69,7 +68,7 @@ namespace Ini.Configuration
         {
             try
             {
-                return Elements[elementIndex];
+                return Values[elementIndex];
             }
             catch(IndexOutOfRangeException)
             {
@@ -98,18 +97,27 @@ namespace Ini.Configuration
         /// <returns></returns>
         public T GetSingleValue<T>()
         {
-            return Elements.Single().GetValue<T>();
+            IElement elem = Values.Single();
+            if(elem is IValue)
+            {
+                return (elem as IValue).GetValue<T>();
+            }
+            else
+            {
+                // TODO: links and comments
+                throw new InvalidOperationException();
+            }
         }
 
         /// <summary>
-        /// Gets an array of correctly typed elements.
+        /// Converts this option's elements into an array of correctly typed values.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">T value type. Should be identical to <see cref="ValueType"/>.</typeparam>
         /// <exception cref="System.InvalidCastException">The specified type was incorrect.</exception>
-        /// <returns></returns>
+        /// <returns>The array.</returns>
         public T[] GetValues<T>()
         {
-            return Elements.Select(item => item.GetValue<T>()).ToArray();
+            return Values.ToValueArray<T, IElement>();
         }
 
         #endregion
@@ -123,7 +131,7 @@ namespace Ini.Configuration
         /// <param name="optionSpec"></param>
         /// <param name="eventLog"></param>
         /// <returns></returns>
-        public bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, ISpecValidatorEventLogger eventLog = null)
+        public bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger eventLog = null)
         {
             throw new NotImplementedException();
         }
@@ -133,14 +141,14 @@ namespace Ini.Configuration
         #region Protected interface
 
         /// <summary>
-        /// Observer for <see cref="Elements"/> that keeps the integrity of the
+        /// Observer for <see cref="Values"/> that keeps the integrity of the
         /// collection's items. At the moment, there is only one invariant: every item's
         /// type has to be equal to <see cref="ValueType"/>.
         /// </summary>
         /// <param name="sender">Sender.</param>
         /// <param name="e">Arguments.</param>
         /// <exception cref="Ini.Exceptions.InvariantBrokenException">An invariant was broken.</exception>
-        protected void OnElementsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        protected void OnValuesChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
             {
@@ -152,11 +160,11 @@ namespace Ini.Configuration
                     bool elementWithBadTypeFound = false;
                     for(int i = e.NewStartingIndex; i < e.NewItems.Count; i++)
                     {
-                        IElement element = (IElement) e.NewItems[i];
+                        IValue element = (IValue) e.NewItems[i];
                         if(!element.ValueType.Equals(ValueType))
                         {
                             elementWithBadTypeFound = true;
-                            Elements.Remove(element);
+                            Values.Remove(element);
                         }
                     }
                     if(elementWithBadTypeFound)
@@ -186,7 +194,7 @@ namespace Ini.Configuration
         /// <returns>The enumerator.</returns>
         IEnumerator<IElement> IEnumerable<IElement>.GetEnumerator()
         {
-            return Elements.GetEnumerator();
+            return Values.GetEnumerator();
         }
 
         /// <summary>
@@ -195,7 +203,7 @@ namespace Ini.Configuration
         /// <returns>The enumerator.</returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return Elements.GetEnumerator();
+            return Values.GetEnumerator();
         }
 
         #endregion

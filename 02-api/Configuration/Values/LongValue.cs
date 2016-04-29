@@ -4,28 +4,22 @@ using Ini.EventLoggers;
 using Ini.Specification;
 using Ini.Util;
 using Ini.Validation;
+using Ini.Configuration.Base;
 
-namespace Ini.Configuration.Elements
+namespace Ini.Configuration.Values
 {
     /// <summary>
-    /// Element of type <see cref="bool"/>.
+    /// Element of type <see cref="long"/>.
     /// </summary>
-    public class BooleanElement : Element<bool>
+    public class LongValue : ValueBase<long>
     {
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BooleanElement"/> class.
-        /// </summary>
-        public BooleanElement()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BooleanElement"/> class
+        /// Initializes a new instance of the <see cref="LongValue"/> class
         /// with an initial value.
         /// </summary>
-        public BooleanElement(bool value) : base(value)
+        public LongValue(long value) : base(value)
         {
         }
 

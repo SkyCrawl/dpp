@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ini
+namespace Ini.EventLoggers
 {
 	/// <summary>
 	/// Interface providing information about validating configurations.

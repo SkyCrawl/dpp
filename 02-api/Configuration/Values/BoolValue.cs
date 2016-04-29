@@ -4,28 +4,22 @@ using Ini.EventLoggers;
 using Ini.Specification;
 using Ini.Util;
 using Ini.Validation;
+using Ini.Configuration.Base;
 
-namespace Ini.Configuration.Elements
+namespace Ini.Configuration.Values
 {
     /// <summary>
-    /// Element of type <see cref="double"/>.
+    /// Element of type <see cref="bool"/>.
     /// </summary>
-    public class DoubleElement : Element<double>
+    public class BoolValue : ValueBase<bool>
     {
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DoubleElement"/> class.
-        /// </summary>
-        public DoubleElement()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DoubleElement"/> class
+        /// Initializes a new instance of the <see cref="BoolValue"/> class
         /// with an initial value.
         /// </summary>
-        public DoubleElement(double value) : base(value)
+        public BoolValue(bool value) : base(value)
         {
         }
 

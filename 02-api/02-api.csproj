@@ -53,18 +53,9 @@
     <Compile Include="Configuration\Config.cs" />
     <Compile Include="Configuration\Option.cs" />
     <Compile Include="Configuration\Section.cs" />
-    <Compile Include="Configuration\Elements\BooleanElement.cs" />
-    <Compile Include="Configuration\Elements\Element.cs" />
-    <Compile Include="Configuration\Elements\EnumElement.cs" />
-    <Compile Include="Configuration\Elements\SignedElement.cs" />
-    <Compile Include="Configuration\Elements\StringElement.cs" />
-    <Compile Include="Configuration\Elements\UnsignedElement.cs" />
-    <Compile Include="Configuration\Elements\IElement.cs" />
-    <Compile Include="Configuration\ConfigBlockBase.cs" />
     <Compile Include="Configuration\Commentary.cs" />
     <Compile Include="Util\ConfigBlockSortOrder.cs" />
     <Compile Include="Exceptions\InvariantBrokenException.cs" />
-    <Compile Include="Configuration\Elements\DoubleElement.cs" />
     <Compile Include="Util\ConfigBlockDictionary.cs" />
     <Compile Include="ConfigWriterOptions.cs" />
     <Compile Include="Util\Guid\IGuid.cs" />
@@ -105,6 +96,18 @@
     <Compile Include="EventLoggers\ISchemaReaderEventLogger.cs" />
     <Compile Include="EventLoggers\ISpecValidatorEventLogger.cs" />
     <Compile Include="Util\LinkResolving\LinkBase.cs" />
+    <Compile Include="Configuration\Base\ConfigBlockBase.cs" />
+    <Compile Include="Configuration\Base\IValue.cs" />
+    <Compile Include="Configuration\Base\IElement.cs" />
+    <Compile Include="Configuration\Values\DoubleValue.cs" />
+    <Compile Include="Configuration\Values\EnumValue.cs" />
+    <Compile Include="Configuration\Values\StringValue.cs" />
+    <Compile Include="Configuration\Values\LongValue.cs" />
+    <Compile Include="Configuration\Values\ULongValue.cs" />
+    <Compile Include="Configuration\Values\BoolValue.cs" />
+    <Compile Include="Configuration\Base\ValueBase.cs" />
+    <Compile Include="Configuration\Links\InclusionLink.cs" />
+    <Compile Include="Configuration\Base\ILink.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -124,6 +127,8 @@
     <Folder Include="Util\Guid\" />
     <Folder Include="Validation\" />
     <Folder Include="Util\LinkResolving\" />
+    <Folder Include="Configuration\Base\" />
+    <Folder Include="Configuration\Links\" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>

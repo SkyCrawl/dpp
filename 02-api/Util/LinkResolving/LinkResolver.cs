@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Ini.Configuration;
 using Ini.Exceptions;
-using Ini.Configuration.Elements;
 using Ini.EventLoggers;
+using Ini.Configuration.Base;
 
 namespace Ini.Util.LinkResolving
 {
@@ -43,7 +43,7 @@ namespace Ini.Util.LinkResolving
 		/// <param name="refElement">The reference element to replace when the link is resolved.</param>
 		/// <param name="origin">Link origin.</param>
 		/// <param name="target">Link target.</param>
-        public void AddLink(IElement refElement, LinkOrigin origin, LinkTarget target)
+        public void AddLink(IValue refElement, LinkOrigin origin, LinkTarget target)
 		{
 			// first some precondition checks
 			if(!origin.IsKeySourceValid())
@@ -104,7 +104,7 @@ namespace Ini.Util.LinkResolving
 					foreach(LinkNode link in currentBucket.Links)
 					{
 						Option targetOption = config.GetOption(link.Target.Section, link.Target.Option);
-						originOption.Elements.Replace(link.RefElement, targetOption.Elements);
+						originOption.Values.Replace(link.RefElement, targetOption.Values);
 					}
 
 					// mark the bucket as resolved

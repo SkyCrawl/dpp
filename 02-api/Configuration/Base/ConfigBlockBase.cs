@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Ini.Configuration
+namespace Ini.Configuration.Base
 {
     /// <summary>
     /// Base class with common properties and interface for blocks
