@@ -3,7 +3,7 @@
 namespace Ini.Util.LinkResolving
 {
 	/// <summary>
-	/// Basic data structure for every link or link bucket.
+    /// Represents a configuration location and defines its index (key).
 	/// </summary>
 	public abstract class LinkBase
 	{
@@ -31,7 +31,7 @@ namespace Ini.Util.LinkResolving
 		}
 
 		/// <summary>
-		/// Convert the current object into an appropriate key, indexing links.
+		/// Convert the current object into an appropriate link-indexing key.
 		/// </summary>
 		/// <returns>The key.</returns>
 		public int ToKey()

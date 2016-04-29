@@ -91,7 +91,6 @@
     <Compile Include="Util\LinkResolving\LinkTarget.cs" />
     <Compile Include="Util\LinkResolving\LinkOrigin.cs" />
     <Compile Include="Util\LinkResolving\LinkBucket.cs" />
-    <Compile Include="Util\LinkResolving\LinkBase.cs" />
     <Compile Include="Exceptions\LinkCycleException.cs" />
     <Compile Include="Util\LinkResolving\LinkResolver.cs" />
     <Compile Include="Util\Extensions.cs" />
@@ -105,6 +104,7 @@
     <Compile Include="EventLoggers\IConfigWriterEventLogger.cs" />
     <Compile Include="EventLoggers\ISchemaReaderEventLogger.cs" />
     <Compile Include="EventLoggers\ISpecValidatorEventLogger.cs" />
+    <Compile Include="Util\LinkResolving\LinkBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,6 +1,4 @@
 ﻿using System;
-using Ini.Util.Guid;
-using System.Collections.Generic;
 using Ini.Configuration.Elements;
 
 namespace Ini.Util.LinkResolving
@@ -23,7 +21,10 @@ namespace Ini.Util.LinkResolving
 		public LinkTarget Target { get; private set; }
 
 		/// <summary>
-		/// The link's reference element to replace with the resolved elements.
+		/// The link's reference element. Eventually, it will be replaced with the resolved elements.
+        /// If we were to do this using bare indexes, we would have to insert the resolved elements
+        /// to <see cref="Ini.Configuration.Option.Elements"/> in reverse order so as to keep the
+        /// integrity of other indexes. As such, this way is a bit simpler.
 		/// </summary>
 		/// <value>The reference element.</value>
         public IElement RefElement { get; private set; }

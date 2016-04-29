@@ -14,29 +14,26 @@ namespace Ini.Util
 		/// Replaces the specified element in the specified list with the specified elements.
 		/// </summary>
 		/// <param name="list">The list.</param>
-		/// <param name="element">The element.</param>
+        /// <param name="item">The item to replace.</param>
 		/// <param name="replacement">The replacement elements.</param>
 		/// <typeparam name="TSource">Pretty much anything.</typeparam>
-		public static void Replace<TSource>(this Collection<TSource> list, TSource element, IEnumerable<TSource> replacement)
+		public static void Replace<TSource>(this IList<TSource> list, TSource item, IEnumerable<TSource> replacement)
 		{
-			int index = list.IndexOf(element);
+			int index = list.IndexOf(item);
 			if(index == -1)
 			{
 				throw new ArgumentException("Can not replace because the element was not found in the collection.");
 			}
 			else
 			{
-				// construct the replacement list
-				List<TSource> result = new List<TSource>(list.Take(index));
-				result.AddRange(replacement);
-				result.AddRange(list.Skip(index + 1));
+                // remove the source element
+                list.RemoveAt(index);
 
-				// and then replace the original list
-				list.Clear();
-				foreach(TSource newElement in result)
-				{
-					list.Add(newElement);
-				}
+                // and then insert replacement while preserving order
+                foreach(TSource newItem in replacement.Reverse())
+                {
+                    list.Insert(index, newItem);
+                }
 			}
 		}
 	}

@@ -3,7 +3,11 @@
 namespace Ini.Util.LinkResolving
 {
 	/// <summary>
-	/// The complete configuration location where the link points to.
+	/// The complete configuration location where the link points to. Should it be
+    /// ever needed, this is the place to define dependency on specific values of
+    /// an option. But then, <see cref="LinkBucket.IsReadyToBeResolved"/> needs to
+    /// be updated to respect such lightweight dependency and resolving has to be
+    /// done with individual links, not buckets.
 	/// </summary>
 	public class LinkTarget : LinkBase
 	{

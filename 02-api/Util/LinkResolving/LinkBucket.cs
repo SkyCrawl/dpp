@@ -5,7 +5,10 @@ using System.Linq;
 namespace Ini.Util.LinkResolving
 {
 	/// <summary>
-	/// Buckets used to index links (<see cref="LinkNode"/>) in <see cref="LinkResolver"/>.
+	/// As denoted by inheritance, each bucket corresponds to a particular option within
+    /// a particular section. It indexes links (<see cref="LinkNode"/>) defined within
+    /// that option. Before each link can be resolved, however, its target option (bucket)
+    /// has to be resolved first. Option, mind you, not individual option value.
 	/// </summary>
 	public class LinkBucket : LinkBase
 	{
@@ -40,9 +43,11 @@ namespace Ini.Util.LinkResolving
 		}
 
 		/// <summary>
-		/// Determines whether this bucket is independent.
+		/// Determines whether this bucket is ready to be resolved. In other words,
+        /// either the bucket is independent or all the buckets it depends on are
+        /// resolved.
 		/// </summary>
-		/// <returns><c>true</c> if this bucket is independent; otherwise, <c>false</c>.</returns>
+		/// <returns><c>true</c> if this bucket is ready to be resolved; otherwise, <c>false</c>.</returns>
 		public bool IsReadyToBeResolved(LinkResolver resolver)
 		{
 			return (DependsOnBuckets.Count == 0) || DependsOnBuckets.All(bucket => resolver.IsBucketResolved(bucket));

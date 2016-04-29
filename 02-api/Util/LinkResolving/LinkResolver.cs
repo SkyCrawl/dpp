@@ -11,7 +11,7 @@ namespace Ini.Util.LinkResolving
 	/// <summary>
 	/// Dependency "graph" implementation for configuration links.
 	/// The general contract is to add links as long as needed, and then
-	/// process them.
+	/// resolve them.
 	/// </summary>
 	public class LinkResolver
 	{
@@ -34,23 +34,25 @@ namespace Ini.Util.LinkResolving
 			this.unresolvedBuckets = new Dictionary<int, LinkBucket>();
 		}
 
+        #region Public interface
+
 		/// <summary>
 		/// Adds a link with the specified origin and target into the graph
 		/// and updates dependencies.
 		/// </summary>
-		/// <param name="refElement">Reference element.</param>
-		/// <param name="origin">Origin.</param>
-		/// <param name="target">Target.</param>
+		/// <param name="refElement">The reference element to replace when the link is resolved.</param>
+		/// <param name="origin">Link origin.</param>
+		/// <param name="target">Link target.</param>
         public void AddLink(IElement refElement, LinkOrigin origin, LinkTarget target)
 		{
 			// first some precondition checks
 			if(!origin.IsKeySourceValid())
 			{
-				throw new ArgumentException("Could not determine the link's origin key because the source data (section or option) is invalid.");
+				throw new ArgumentException("Could not determine the link's origin key because the source data (section or option name) is invalid.");
 			}
 			if(!target.IsKeySourceValid())
 			{
-				throw new ArgumentException("Could not determine the link's target key because the source data (section or option) is invalid.");
+                throw new ArgumentException("Could not determine the link's target key because the source data (section or option name) is invalid.");
 			}
 
 			// index the link's origin bucket
@@ -67,14 +69,14 @@ namespace Ini.Util.LinkResolving
 				unresolvedBuckets[targetKey] = new LinkBucket(target.Section, target.Option);
 			}
 
-			// update the dependency graph
+            // index the link
 			LinkBucket originBucket = unresolvedBuckets[originKey];
-			LinkBucket targetBucket = unresolvedBuckets[targetKey];
+            originBucket.Links.Add(new LinkNode(refElement, origin, target));
+
+            // and update the dependency graph
+            LinkBucket targetBucket = unresolvedBuckets[targetKey];
 			originBucket.DependsOnBuckets.Add(targetBucket);
 			targetBucket.Dependants.Add(originBucket);
-
-			// and index the link
-			unresolvedBuckets[originKey].Links.Add(new LinkNode(refElement, origin, target));
 		}
 
 		/// <summary>
@@ -82,35 +84,40 @@ namespace Ini.Util.LinkResolving
 		/// </summary>
 		/// <param name="config">The source configuration.</param>
 		/// <param name="configEventLog">A related event log.</param>
+        /// <exception cref="Ini.Exceptions.LinkCycleException">If there is a dependency cycle.</exception>
 		public void ResolveLinks(Config config, IConfigReaderEventLogger configEventLog)
 		{
 			while(unresolvedBuckets.Count > 0)
 			{
 				// branch depending on whether we encountered a cycle
-				LinkBucket currentBucket = FindFirstResolvableBucket();
+				LinkBucket currentBucket = FindABucketToResolve();
 				if(currentBucket == null)
 				{
 					throw new LinkCycleException();
 				}
 				else
 				{
-					// get the current option (specified by 'nextIndependentBucket')
-					Option currentOption = config.GetOption(currentBucket.Section, currentBucket.Option);
+					// get the option referenced by the currently processed bucket
+                    Option originOption = config.GetOption(currentBucket.Section, currentBucket.Option);
 
-					// resolve the current option's links
+                    // resolve the currently processed bucket's links
 					foreach(LinkNode link in currentBucket.Links)
 					{
 						Option targetOption = config.GetOption(link.Target.Section, link.Target.Option);
-						currentOption.Elements.Replace(link.RefElement, targetOption.Elements);
+						originOption.Elements.Replace(link.RefElement, targetOption.Elements);
 					}
 
 					// mark the bucket as resolved
-					int currentBucketKey = currentBucket.ToKey();
+                    int currentBucketKey = currentBucket.ToKey();
 					unresolvedBuckets.Remove(currentBucketKey);
 					resolvedBuckets.Add(currentBucketKey, currentBucket);
 				}
 			}
 		}
+
+        #endregion
+
+        #region Internal interface
 
 		/// <summary>
 		/// Determines whether the specified bucket has been resolved.
@@ -123,19 +130,14 @@ namespace Ini.Util.LinkResolving
 		}
 
 		/// <summary>
-		/// Finds the first resolvable bucket.
+		/// Finds the first bucket that can be resolved.
 		/// </summary>
-		/// <returns>The first resolvable bucket.</returns>
-		protected LinkBucket FindFirstResolvableBucket()
+		/// <returns>The first resolvable bucket, or null.</returns>
+		protected LinkBucket FindABucketToResolve()
 		{
-			foreach(LinkBucket bucket in unresolvedBuckets.Values)
-			{
-				if(bucket.IsReadyToBeResolved(this))
-				{
-					return bucket;
-				}
-			}
-			return null;
+            return unresolvedBuckets.Values.FirstOrDefault(bucket => bucket.IsReadyToBeResolved(this));
 		}
+
+        #endregion
 	}
 }
