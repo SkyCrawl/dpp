@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Ini.Configuration;
 using Ini.Exceptions;
 using Ini.Configuration.Values;
+using Ini.Configuration.Base;
 
 namespace ApiTest
 {
@@ -26,13 +28,7 @@ namespace ApiTest
 		[Test, ExpectedException(typeof(InvariantBrokenException))]
 		public void TestInternalObserver()
 		{
-			option.Values.Add(new StringValue("The internal observer should throw an exception because we're trying to add an element of a different type."));
-		}
-
-		[Test, ExpectedException(typeof(InvalidOperationException))]
-		public void TestSingleElementConversionOnEmptyOption()
-		{
-			option.GetSingleValue<bool>();
+			option.Elements.Add(new StringValue("The internal observer should throw an exception because we're trying to add a value of a different type."));
 		}
 
 		[Test]
@@ -40,8 +36,8 @@ namespace ApiTest
 		[TestCase(TestName = "TestSingleElementConversion (failure)", ExpectedException = typeof(InvalidOperationException))]
 		public void TestSingleElementConversion()
 		{
-			option.Values.Add(new BoolValue(true));
-			option.GetSingleValue<bool>();
+			option.Elements.Add(new BoolValue(true));
+			option.GetObjectValues().Single<IValue>();
 		}
 	}
 }

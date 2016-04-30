@@ -13,13 +13,7 @@ namespace Ini.Configuration.Base
     public interface IValue : IElement
     {
         /// <summary>
-        /// The element's value as an object. Must be of type <see cref="ValueType"/>.
-        /// </summary>
-        object ValueObject { get; }
-
-        /// <summary>
-        /// The element's value, cast to the output type. Casting
-        /// exceptions are not caught.
+        /// The element's value, cast to the output type.
         /// </summary>
         OutputType GetValue<OutputType>();
     }

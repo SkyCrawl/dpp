@@ -16,14 +16,6 @@ namespace Ini.Configuration.Base
         Type ValueType { get; }
 
         /// <summary>
-        /// Converts this element into an array of correctly typed elementary values.
-        /// </summary>
-        /// <typeparam name="OutputType">The correct type; should be identical to <see cref="ValueType"/>.</typeparam>
-        /// <exception cref="System.InvalidCastException">The specified type was incorrect.</exception>
-        /// <returns>The array.</returns>
-        OutputType[] GetValues<OutputType>();
-
-        /// <summary>
         /// Determines whether the element conforms to the given option specification.
         /// </summary>
         /// <param name="optionSpec">The option specification.</param>

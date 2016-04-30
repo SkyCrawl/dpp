@@ -11,7 +11,7 @@ namespace Ini.Util
 	/// </summary>
 	public static class Extensions
 	{
-		/// <summary>
+        /// <summary>
 		/// Replaces the specified element in the specified list with the specified elements.
 		/// </summary>
 		/// <param name="list">The list.</param>
@@ -39,17 +39,18 @@ namespace Ini.Util
 		}
 
         /// <summary>
-        /// Converts the collection of elements into an array of correctly typed values.
+        /// Converts this option's elements into an array of correctly typed elementary values.
         /// </summary>
         /// <returns>The array.</returns>
-        /// <param name="list">The source collection.</param>
+        /// <param name="list">The source list.</param>
         /// <typeparam name="OutputType">The correct type.</typeparam>
-        public static OutputType[] ToValueArray<OutputType, TSource>(this IList<TSource> list) where TSource : IElement
+        /// <exception cref="System.InvalidCastException">The specified type was incorrect.</exception>
+        public static OutputType[] GetValues<OutputType>(this IEnumerable<IValue> list)
         {
             List<OutputType> result = new List<OutputType>();
-            foreach(IElement elem in list)
+            foreach(IValue value in list)
             {
-                result.AddRange(elem.GetValues<OutputType>());
+                result.Add(value.GetValue<OutputType>());
             }
             return result.ToArray();
         }

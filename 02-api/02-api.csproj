@@ -106,8 +106,10 @@
     <Compile Include="Configuration\Values\ULongValue.cs" />
     <Compile Include="Configuration\Values\BoolValue.cs" />
     <Compile Include="Configuration\Base\ValueBase.cs" />
-    <Compile Include="Configuration\Links\InclusionLink.cs" />
     <Compile Include="Configuration\Base\ILink.cs" />
+    <Compile Include="Configuration\Values\Links\InclusionLink.cs" />
+    <Compile Include="Util\ObservableList.cs" />
+    <Compile Include="Configuration\Values\ValueStub.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -128,7 +130,7 @@
     <Folder Include="Validation\" />
     <Folder Include="Util\LinkResolving\" />
     <Folder Include="Configuration\Base\" />
-    <Folder Include="Configuration\Links\" />
+    <Folder Include="Configuration\Values\Links\" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>

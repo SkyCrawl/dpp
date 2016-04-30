@@ -40,17 +40,16 @@ namespace Ini.Util.LinkResolving
 		/// Adds a link with the specified origin and target into the graph
 		/// and updates dependencies.
 		/// </summary>
-		/// <param name="refElement">The reference element to replace when the link is resolved.</param>
 		/// <param name="origin">Link origin.</param>
-		/// <param name="target">Link target.</param>
-        public void AddLink(IValue refElement, LinkOrigin origin, LinkTarget target)
+        /// <param name="linkElement">The link's configuration element.</param>
+        public void AddLink(LinkOrigin origin, ILink linkElement)
 		{
 			// first some precondition checks
 			if(!origin.IsKeySourceValid())
 			{
 				throw new ArgumentException("Could not determine the link's origin key because the source data (section or option name) is invalid.");
 			}
-			if(!target.IsKeySourceValid())
+            if(!linkElement.Target.IsKeySourceValid())
 			{
                 throw new ArgumentException("Could not determine the link's target key because the source data (section or option name) is invalid.");
 			}
@@ -63,15 +62,15 @@ namespace Ini.Util.LinkResolving
 			}
 
 			// index the link's target bucket
-			int targetKey = target.ToKey();
+            int targetKey = linkElement.Target.ToKey();
 			if(!unresolvedBuckets.ContainsKey(targetKey))
 			{
-				unresolvedBuckets[targetKey] = new LinkBucket(target.Section, target.Option);
+                unresolvedBuckets[targetKey] = new LinkBucket(linkElement.Target.Section, linkElement.Target.Option);
 			}
 
             // index the link
 			LinkBucket originBucket = unresolvedBuckets[originKey];
-            originBucket.Links.Add(new LinkNode(refElement, origin, target));
+            originBucket.Links.Add(new LinkNode(linkElement, origin));
 
             // and update the dependency graph
             LinkBucket targetBucket = unresolvedBuckets[targetKey];
@@ -97,14 +96,10 @@ namespace Ini.Util.LinkResolving
 				}
 				else
 				{
-					// get the option referenced by the currently processed bucket
-                    Option originOption = config.GetOption(currentBucket.Section, currentBucket.Option);
-
                     // resolve the currently processed bucket's links
 					foreach(LinkNode link in currentBucket.Links)
 					{
-						Option targetOption = config.GetOption(link.Target.Section, link.Target.Option);
-						originOption.Values.Replace(link.RefElement, targetOption.Values);
+                        link.LinkElement.Resolve(config, configEventLog);
 					}
 
 					// mark the bucket as resolved

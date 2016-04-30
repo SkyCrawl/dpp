@@ -10,6 +10,7 @@ using Ini.Util;
 using Ini.Exceptions;
 using Ini.Validation;
 using Ini.Configuration.Base;
+using Ini.Configuration.Values;
 
 namespace Ini.Configuration
 {
@@ -38,7 +39,7 @@ namespace Ini.Configuration
         /// an exception is thrown.
         /// <seealso cref="OnValuesChanged"/>
         /// </summary>
-        public ObservableCollection<IElement> Values { get; private set; }
+        public ObservableCollection<IElement> Elements { get; private set; }
 
         #endregion
 
@@ -51,8 +52,8 @@ namespace Ini.Configuration
         {
             this.ValueType = elementType;
             this.TrailingCommentary = commentary;
-            this.Values = new ObservableCollection<IElement>();
-            this.Values.CollectionChanged += OnValuesChanged;
+            this.Elements = new ObservableCollection<IElement>();
+            this.Elements.CollectionChanged += OnValuesChanged;
         }
 
         #endregion
@@ -60,15 +61,15 @@ namespace Ini.Configuration
         #region Public methods
 
         /// <summary>
-        /// Gets the specified element.
+        /// Gets the element at the specified index.
         /// </summary>
-        /// <returns>The element, or null if not found.</returns>
-        /// <param name="elementIndex">Target element index.</param>
+        /// <returns>The element, or null if index is out of range.</returns>
+        /// <param name="elementIndex">The index.</param>
         public IElement GetElement(int elementIndex)
         {
             try
             {
-                return Values[elementIndex];
+                return Elements[elementIndex];
             }
             catch(IndexOutOfRangeException)
             {
@@ -77,10 +78,10 @@ namespace Ini.Configuration
         }
 
         /// <summary>
-        /// Gets the specified element, correctly typed.
+        /// Gets the element at the specified index, correctly typed.
         /// </summary>
-        /// <returns>The element, or null if not found.</returns>
-        /// <param name="elementIndex">Target element index.</param>
+        /// <returns>The element, or null if index is out of range.</returns>
+        /// <param name="elementIndex">The index.</param>
         /// <exception cref="InvalidCastException">If the specified type was not correct.</exception>
         public T GetElement<T>(int elementIndex) where T : IElement
         {
@@ -88,36 +89,72 @@ namespace Ini.Configuration
         }
 
         /// <summary>
-        /// Gets the value of a single, correctly typed element. If the specified type
-        /// is not correct, throws an exception.
+        /// Gets the value at the specified index, correctly typed.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <exception cref="System.InvalidOperationException">Either no elements or too many.</exception>
-        /// <exception cref="System.InvalidCastException">The specified type was incorrect.</exception>
-        /// <returns></returns>
-        public T GetSingleValue<T>()
+        /// <returns>The value.</returns>
+        /// <param name="elementIndex">Target element index.</param>
+        /// <exception cref="InvalidCastException">The specified type was incorrect.</exception>
+        /// <exception cref="IndexOutOfRangeException">If the index is out of range, surprisingly.</exception>
+        /// <exception cref="InvalidOperationException">Target element is a link and it contains zero or multiple
+        /// values, or it was an instance of <see cref="ValueStub"/>, or it was an unknown subtype of 
+        /// <see cref="IElement"/>.</exception>
+        public OutputType GetValue<OutputType>(int elementIndex)
         {
-            IElement elem = Values.Single();
-            if(elem is IValue)
+            IElement elem = GetElement(elementIndex);
+            if(elem == null)
             {
-                return (elem as IValue).GetValue<T>();
+                throw new IndexOutOfRangeException();
+            }
+            else if(elem is IValue)
+            {
+                return (elem as IValue).GetValue<OutputType>();
+            }
+            else if(elem is ILink)
+            {
+                return (elem as ILink).Values.Single().GetValue<OutputType>();
             }
             else
             {
-                // TODO: links and comments
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("Unhandled value type encountered: " + elem.GetType().ToString());
             }
         }
 
         /// <summary>
-        /// Converts this option's elements into an array of correctly typed values.
+        /// Converts this option's elements into a collection of value (<see cref="IValue"/>) objects.
         /// </summary>
-        /// <typeparam name="T">T value type. Should be identical to <see cref="ValueType"/>.</typeparam>
-        /// <exception cref="System.InvalidCastException">The specified type was incorrect.</exception>
-        /// <returns>The array.</returns>
-        public T[] GetValues<T>()
+        /// <exception cref="ArgumentException">An element's type is not handled in this method.</exception>
+        /// <returns>The collection.</returns>
+        public IList<IValue> GetObjectValues()
         {
-            return Values.ToValueArray<T, IElement>();
+            List<IValue> result = new List<IValue>();
+            foreach(IElement elem in Elements)
+            {
+                if(elem is IValue)
+                {
+                    result.Add(elem as IValue);
+                }
+                else if(elem is ILink)
+                {
+                    result.AddRange((elem as ILink).Values);
+                }
+                else // simply a general element
+                {
+                    throw new ArgumentException("Unhandled value type encountered: " + elem.GetType().ToString());
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Converts this option's elements into an array of elementary values.
+        /// </summary>
+        /// <returns>The array.</returns>
+        /// <typeparam name="OutputType">The correct type.</typeparam>
+        /// <exception cref="ArgumentException">An element's type is not handled in the underlying method.</exception>
+        /// <exception cref="System.InvalidCastException">The specified type was incorrect.</exception>
+        public OutputType[] GetValues<OutputType>()
+        {
+            return GetObjectValues().GetValues<OutputType>();
         }
 
         #endregion
@@ -154,26 +191,19 @@ namespace Ini.Configuration
             {
                 case NotifyCollectionChangedAction.Add:
                 case NotifyCollectionChangedAction.Replace:
-                case NotifyCollectionChangedAction.Reset:
                     // check the invariants and throw an exception if required
-                    // TODO: reset might behave differently
-                    bool elementWithBadTypeFound = false;
-                    for(int i = e.NewStartingIndex; i < e.NewItems.Count; i++)
+                    foreach(IElement elem in e.NewItems)
                     {
-                        IValue element = (IValue) e.NewItems[i];
-                        if(!element.ValueType.Equals(ValueType))
+                        if(!elem.ValueType.IsSubclassOf(ValueType))
                         {
-                            elementWithBadTypeFound = true;
-                            Values.Remove(element);
+                            throw new InvariantBrokenException(string.Format(
+                                "Only elements with value type of '{0}' are allowed.",
+                                ValueType.FullName));
                         }
                     }
-                    if(elementWithBadTypeFound)
-                    {
-                        throw new InvariantBrokenException(string.Format(
-                            "The collection of elements must only consist of elements with value type: {0}.",
-                            ValueType.FullName));
-                    }
                     break;
+
+                case NotifyCollectionChangedAction.Reset:
                 case NotifyCollectionChangedAction.Move:
                 case NotifyCollectionChangedAction.Remove:
                     // one or more items were moved or removed - that doesn't break any invariant
@@ -194,7 +224,7 @@ namespace Ini.Configuration
         /// <returns>The enumerator.</returns>
         IEnumerator<IElement> IEnumerable<IElement>.GetEnumerator()
         {
-            return Values.GetEnumerator();
+            return Elements.GetEnumerator();
         }
 
         /// <summary>
@@ -203,7 +233,7 @@ namespace Ini.Configuration
         /// <returns>The enumerator.</returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return Values.GetEnumerator();
+            return Elements.GetEnumerator();
         }
 
         #endregion

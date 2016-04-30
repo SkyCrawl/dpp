@@ -10,33 +10,21 @@ namespace Ini.Configuration.Base
     /// <summary>
     /// Base parametrized class for elements.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public abstract class ValueBase<T> : IValue
+    /// <typeparam name="TValue"></typeparam>
+    public abstract class ValueBase<TValue> : IValue
     {
         #region Properties
 
         /// <summary>
         /// The element's value.
         /// </summary>
-        public T Value { get; set; }
+        public TValue Value { get; set; }
 
         /// <summary>
-        /// The type of the element's value. It is bound to the class's
-        /// parametrized type and thus can not be changed. Corresponds
-        /// with the containing option's <see cref="Option.ValueType"/>.
+        /// The type of the element's value. Must correspond
+        /// to the parent option's read-only <see cref="Option.ValueType"/>.
         /// </summary>
-        public Type ValueType
-        {
-            get { return typeof(T); }
-        }
-
-        /// <summary>
-        /// The element's <see cref="Value"/> as an object.
-        /// </summary>
-        public object ValueObject
-        {
-            get { return Value; }
-        }
+        public Type ValueType { get { return typeof(TValue); } }
 
         #endregion
 
@@ -47,7 +35,7 @@ namespace Ini.Configuration.Base
         /// with an initial value.
         /// </summary>
         /// <param name="value">The initial value.</param>
-        public ValueBase(T value)
+        public ValueBase(TValue value)
         {
             this.Value = value;
         }
@@ -57,24 +45,14 @@ namespace Ini.Configuration.Base
         #region Public methods
 
         /// <summary>
-        /// The element's value, cast to the output type. Casting
-        /// exceptions are not caught.
+        /// The element's value, correctly typed.
         /// </summary>
-        /// <typeparam name="OutputType"></typeparam>
+        /// <typeparam name="OutputType">The correct type.</typeparam>
         /// <exception cref="System.InvalidCastException">The specified type was incorrect.</exception>
         /// <returns></returns>
         public OutputType GetValue<OutputType>()
         {
-            return (OutputType) ValueObject;
-        }
-
-        /// <summary>
-        /// Converts the inner value into a correctly typed array.
-        /// </summary>
-        /// <returns>The value, ecapsulated in an array.</returns>
-        public OutputType[] GetValues<OutputType>()
-        {
-            return new OutputType[] { GetValue<OutputType>() };
+            return (OutputType) (Value as object);
         }
 
         /// <summary>

@@ -16,9 +16,9 @@ namespace Ini.Configuration.Values
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StringValue"/> class
-        /// with an initial value.
+        /// Initializes a new instance of the <see cref="Ini.Configuration.Values.StringValue"/> class.
         /// </summary>
+        /// <param name="value">Initial value.</param>
         public StringValue(string value) : base(value)
         {
         }

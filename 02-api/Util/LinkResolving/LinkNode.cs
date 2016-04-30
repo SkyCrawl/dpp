@@ -21,25 +21,22 @@ namespace Ini.Util.LinkResolving
 		public LinkTarget Target { get; private set; }
 
 		/// <summary>
-		/// The link's reference element. Eventually, it will be replaced with the resolved elements.
-        /// If we were to do this using bare indexes, we would have to insert the resolved elements
-        /// to <see cref="Ini.Configuration.Option.Values"/> in reverse order so as to keep the
-        /// integrity of other indexes. As such, this way is a bit simpler.
+        /// The link's configuration element. When the link is resolved,
+        /// <see cref="LinkResolver"/> will update the element accordingly.
 		/// </summary>
 		/// <value>The reference element.</value>
-        public IValue RefElement { get; private set; }
+        public ILink LinkElement { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Ini.Util.LinkResolving.LinkNode"/> class.
 		/// </summary>
-		/// <param name="refElement">Reference element.</param>
-		/// <param name="origin">Origin.</param>
-		/// <param name="target">Target.</param>
-        public LinkNode(IValue refElement, LinkOrigin origin, LinkTarget target)
+        /// <param name="linkElement">The link's configuration element.</param>
+		/// <param name="origin">The link's origin.</param>
+        public LinkNode(ILink linkElement, LinkOrigin origin)
 		{
-			this.RefElement = refElement;
 			this.Origin = origin;
-			this.Target = target;
+            this.Target = linkElement.Target;
+            this.LinkElement = linkElement;
 		}
 	}
 }

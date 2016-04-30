@@ -47,7 +47,7 @@ namespace Ini.Util
 		/// <param name="value">Value.</param>
 		public void Add(TKey identifier, TValue value)
 		{
-            CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, identifier));
+            CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, value));
 			dictionary.Add(identifier, value);
 		}
 
@@ -70,7 +70,7 @@ namespace Ini.Util
 			bool contains = dictionary.Contains(identifier);
 			if(contains)
 			{
-                CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, identifier));
+                CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, dictionary[identifier]));
 				dictionary.Remove(identifier);
 			}
 			return contains;
@@ -109,9 +109,8 @@ namespace Ini.Util
 			{
                 CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(
                     ContainsKey(identifier) ? NotifyCollectionChangedAction.Replace : NotifyCollectionChangedAction.Add,
-                    identifier));
+                    value));
 				dictionary[identifier] = value;
-
 			}
 		}
 	
