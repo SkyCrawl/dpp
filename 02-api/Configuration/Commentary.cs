@@ -29,9 +29,9 @@ namespace Ini.Configuration
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Commentary"/> class.
 		/// </summary>
-		public Commentary() : base(identifierGenerator.Next())
+        public Commentary(IEnumerable<string> lines) : base(identifierGenerator.Next())
 		{
-			this.Lines = new List<string>();
+			this.Lines = new List<string>(lines);
 		}
 
 		#endregion

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Ini.EventLoggers;
 using Ini.Configuration;
@@ -8,26 +10,27 @@ using Ini.Util;
 using Ini.Validation;
 using Ini.Exceptions;
 using Ini.Configuration.Values;
+using Ini.Util.LinkResolving;
 
 namespace Ini
 {
     /// <summary>
-    /// The class that parses the configuration from text.
+    /// A one-time-use class to parse a configuration from text.
     /// </summary>
     public class ConfigParser
     {
         #region Constants
 
+        const string INNER_OPTION_SEPARATOR = "=";
+        const string COMMENTARY_STARTER = ";";
+        const string ESCAPE_SEQUENCE = "\\";
+
         const string IDENTIFIER_START_CHAR_REGEX = "[a-zA-Z.:$]";
-        const string IDENTIFIER_SUFFIX_CHAR_REGEX = "[a-zA-Z0-9_~\\-.:$ ]";
+        const string IDENTIFIER_SUFFIX_CHAR_REGEX = "[a-zA-Z0-9_~\\-.:$\\ ]";
         const string IDENTIFIER_REGEX = IDENTIFIER_START_CHAR_REGEX + IDENTIFIER_SUFFIX_CHAR_REGEX + "*";
 
-        const string OPTION_IDENTIFIER_REGEX = "^" + IDENTIFIER_REGEX + "$";
-        const string SECTION_IDENTIFIER_REGEX = "^\\[" + IDENTIFIER_REGEX + "\\]$";
-
-        const char INNER_OPTION_SEPARATOR = '=';
-        const char COMMENTARY_STARTER = ';';
-        const string ESCAPE_SEQUENCE = "\\";
+        const string LINE_REGEX_OPTION = "^(" + IDENTIFIER_REGEX + ")" + INNER_OPTION_SEPARATOR + "(.*)$";
+        const string LINE_REGEX_SECTION = "^\\[" + IDENTIFIER_REGEX + "\\]$";
 
         /// <summary>
         /// Use the first capture group to match the filtered string token. Meaning of the regex:
@@ -43,23 +46,204 @@ namespace Ini
 
         #endregion
 
-        #region Properties
+        #region Special types
 
         /// <summary>
-        /// The configuration being parsed. It's purpose is to preserve what's parsed
-        /// when an exception occurs.
+        /// Basic information about a line of input.
         /// </summary>
-        protected Config config;
+        protected class LineInfo
+        {
+            /// <summary>
+            /// The line itself, with the trailing commentary removed and then trimmed.
+            /// </summary>
+            /// <value>The line.</value>
+            public string Line { get; private set; }
+
+            /// <summary>
+            /// The trailing commentary extracted from <see cref="Line"/>.
+            /// </summary>
+            /// <value>The trailing commentary.</value>
+            public string TrailingCommentary { get; private set; }
+
+            /// <summary>
+            /// Determines whether <see cref="Line"/> represents a section header.
+            /// </summary>
+            /// <value><c>true</c> if line is a section header; otherwise, <c>false</c>.</value>
+            public bool IsSection { get; private set; }
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="LineInfo"/> class.
+            /// </summary>
+            /// <param name="line">The currently processed line of input.</param>
+            public LineInfo(string line)
+            {
+                string trailingCommentary;
+                this.Line = TrimWhitespaces(ExtractTrailingCommentary(line, out trailingCommentary));
+                this.TrailingCommentary = trailingCommentary;
+                this.IsSection = Matches(Line, LineContent.SECTION_HEADER);
+            }
+        }
+
+        /// <summary>
+        /// Basic information about a line of input.
+        /// </summary>
+        protected class ParserContext : IEnumerable<LineInfo>
+        {
+            /// <summary>
+            /// Current parsing mode.
+            /// </summary>
+            public ParserMode Mode { get; set; }
+
+            /// <summary>
+            /// Currently parsed section.
+            /// </summary>
+            public Section CurrentSection { get; set; }
+
+            /// <summary>
+            /// Number of the currently parsed line. Starts from 1.
+            /// </summary>
+            /// <value>The line number.</value>
+            public int LineNumber { get { return CurrentLinesIndex + 1; } }
+
+            /// <summary>
+            /// Lines to parse.
+            /// </summary>
+            protected List<LineInfo> Lines;
+
+            /// <summary>
+            /// Index of the currently processed line.
+            /// </summary>
+            protected int CurrentLinesIndex;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ParserContext"/> class.
+            /// </summary>
+            public ParserContext(List<LineInfo> lines)
+            {
+                this.Mode = ParserMode.DO_NOT_SKIP;
+                this.CurrentSection = null;
+                this.Lines = lines;
+                this.CurrentLinesIndex = 0;
+            }
+
+            #region IEnumerable implementation
+
+            /// <summary>
+            /// Gets the enumerator.
+            /// </summary>
+            /// <returns>The enumerator.</returns>
+            public IEnumerator<LineInfo> GetEnumerator()
+            {
+                while(CurrentLinesIndex < Lines.Count)
+                {
+                    switch(Mode)
+                    {
+                        case ParserMode.SKIP_UNTIL_NEXT_SECTION:
+                            if(Lines[CurrentLinesIndex].IsSection)
+                            {
+                                Mode = ParserMode.DO_NOT_SKIP;
+                                yield return Lines[CurrentLinesIndex];
+                            }
+                            break;
+
+                        case ParserMode.DO_NOT_SKIP:
+                            yield return Lines[CurrentLinesIndex];
+                            break;
+
+                        default:
+                            throw new ArgumentException("Unknown enum value: " + Mode.ToString());
+                    }
+                    CurrentLinesIndex++;
+                }
+                yield break;
+            }
+
+            #endregion
+
+            #region IEnumerable implementation
+
+            /// <summary>
+            /// Gets the enumerator.
+            /// </summary>
+            /// <returns>The enumerator.</returns>
+            System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+
+            #endregion
+        }
+
+        /// <summary>
+        /// The parsing mode when processing lines.
+        /// </summary>
+        protected enum ParserMode
+        {
+            /// <summary>
+            /// Skip all further lines, until you come up to a next section.
+            /// </summary>
+            SKIP_UNTIL_NEXT_SECTION,
+
+            /// <summary>
+            /// Don't skip any line and try to parse it.
+            /// </summary>
+            DO_NOT_SKIP
+        }
+
+        /// <summary>
+        /// All known lines of content.
+        /// </summary>
+        protected enum LineContent
+        {
+            /// <summary>
+            /// Section header line.
+            /// </summary>
+            SECTION_HEADER,
+
+            /// <summary>
+            /// Option line.
+            /// </summary>
+            OPTION
+        }
 
         #endregion
 
-        #region Private types
+        #region Properties
 
-        enum IdentifierType
-        {
-            OPTION,
-            SECTION
-        }
+        /// <summary>
+        /// The configuration being parsed.
+        /// </summary>
+        protected ConfigSpec specification;
+
+        /// <summary>
+        /// The configuration being parsed.
+        /// </summary>
+        protected Config config;
+
+        /// <summary>
+        /// Link resolver to use when parsing the configuration.
+        /// </summary>
+        protected LinkResolver linkResolver;
+
+        /// <summary>
+        /// Basic information about lines of input.
+        /// </summary>
+        protected List<LineInfo> lines;
+
+        /// <summary>
+        /// The validation mode to apply when parsing the configuration.
+        /// </summary>
+        protected ConfigValidationMode validationMode;
+
+        /// <summary>
+        /// Event logger to call when validating the specification.
+        /// </summary>
+        protected ISpecValidatorEventLogger specEventLog;
+
+        /// <summary>
+        /// Event logger to call when reading the configuration.
+        /// </summary>
+        protected IConfigReaderEventLogger configEventLog;
 
         #endregion
 
@@ -68,88 +252,48 @@ namespace Ini
         /// <summary>
         /// Initializes a new instance of the <see cref="Ini.ConfigParser"/> class.
         /// </summary>
-        /// <param name="spec">The specification to validate against when parsing the configuration.</param>
-        public ConfigParser(ConfigSpec spec)
+        /// <param name="specification">The specification to validate against when parsing the configuration.</param>
+        public ConfigParser(ConfigSpec specification)
         {
-            this.config = new Config(spec);
+            this.specification = specification;
+            this.config = new Config(specification);
+            this.linkResolver = new LinkResolver();
+            this.lines = new List<LineInfo>();
+            this.validationMode = ConfigValidationMode.Strict;
+            this.specEventLog = null;
+            this.configEventLog = null;
         }
 
         #endregion
 
-        #region Public Methods
+        #region Top parsing methods
 
         /// <summary>
         /// Parses the configuration from the text input.
         /// </summary>
-        /// <param name="reader">The reader with configuration file</param>
+        /// <param name="input">The reader with configuration file</param>
         /// <param name="configEventLog">The config reader event log.</param>
         /// <param name="specEventLog">The spec validator event log.</param>
-        /// <param name="mode">The validation mode.</param>
+        /// <param name="validationMode">The validation mode.</param>
         /// <exception cref="Ini.Exceptions.UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
         /// <exception cref="Ini.Exceptions.InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
         /// <exception cref="MalformedConfigException">If the configuration's format is malformed.</exception>
         /// <returns></returns>
-        public Config Parse(TextReader reader, IConfigReaderEventLogger configEventLog, ISpecValidatorEventLogger specEventLog, ConfigValidationMode mode)
+        public Config Parse(TextReader input, IConfigReaderEventLogger configEventLog, ISpecValidatorEventLogger specEventLog, ConfigValidationMode validationMode)
         {
-            // check preconditions
-            if(mode == ConfigValidationMode.Strict) // we need a valid specification
-            {
-                if(config.Spec == null) // and we have none
-                {
-                    configEventLog.SpecNotFound();
-                    throw new UndefinedSpecException();
-                }
-                if(!config.Spec.IsValid(specEventLog)) // we have one but it's not valid
-                {
-                    configEventLog.SpecNotValid();
+            // prepare fields (forward arguments)
+            this.configEventLog = configEventLog;
+            this.specEventLog = specEventLog;
+            this.validationMode = validationMode;
 
-                    // raise an exception or face undefined behaviour
-                    throw new InvalidSpecException();
-                }
-            }
+            // and continue
+            PreconditionsTrue();
+            PreprocessLines(input);
+            ParseLines();
+            linkResolver.ResolveLinks(config, configEventLog);
 
-            // either way, now we have a valid specification or don't need one
-            string line;
-            int lineIndex = 0;
-            while((line = reader.ReadLine()) != null)
-            {
-                // preparation
-                lineIndex++;
-                line = TrimWhitespaces(RemoveTrailingCommentary(line));
+            // TODO: interpret the option values in their correct contexts
 
-                // handle sections
-                if(IsIdentifierWellFormed(line, IdentifierType.SECTION))
-                {
-                    // string identifier = TrimWhitespaces(line.Substring(1, line.Length - 2));
-
-                }
-            }
-
-            // PSEUDOCODE:
-            /*
-             * 1. Read a line from 'reader', until there is none left.
-             * 2. 	- Increment 'lineIndex'.
-             * 3.	- Trim commentary and whitespaces from the line.
-             * 4. 	- If the result doesn't match a section declaration, try parsing it as an option declaration.
-             * 5. 		- If successful, invoke 'ParseOption(option, section, backlog)'.
-             * 6. 		- If not successful, report with 'backlog'.
-             * 7.	- If the result matches a section declaration:
-             * 8.		- Parse identifier from it and trim whitespaces.
-             * 9. 		- If a section with the same identifier is already registered, report with 'backlog'.
-             * 10.		- Otherwise:
-             * 11.			- section = new Section(identifier);
-             * 12.			- result.Add(section);
-             * 
-             * Meanwhile, catch exceptions and report with 'backlog'.
-             */
-
-			/*
-			 * After that, we need to mind links and divide the parsing process into phases:
-			 * 1) First parse every option and element as string.
-			 * 2) Look at the string values, find links and register them into a resolver instance.
-			 * 3) Once we have all sections and options parsed like that, resolve links on the resolver.
-			 * 4) And finally, we can interpret the option values in their correct contexts.
-			 */
             return config;
         }
 
@@ -178,32 +322,163 @@ namespace Ini
 
         #endregion
 
-        #region Helpers
+        #region Lower-level parsing methods
 
         /// <summary>
-        /// Checks that the given token is a valid identifier. Automatically handles leading/trailing whitespaces
-        /// and trailing commentary. All in conformance with the specification.
-        /// 
-        /// Note: for the sake of performance, it is better to pass an already preprocessed input. Typically, you'll
-        /// probably want to save it right afterwards.
+        /// Check preconditions for parsing.
         /// </summary>
-        /// <returns><c>true</c> If the given token is a well formed identifier, as per the current config policy,
-        /// otherwise <c>false</c>.</returns>
-        /// <param name="token">The token to check.</param>
-        /// <param name="identifierType"></param>
-        private static bool IsIdentifierWellFormed(string token, IdentifierType identifierType)
+        protected void PreconditionsTrue()
         {
-            // remove trailing commentary
-            // trim whitespaces
-            // and finally:
-            switch (identifierType)
+            if(validationMode == ConfigValidationMode.Strict) // we need a valid specification
             {
-                case IdentifierType.OPTION:
-                    return Regex.IsMatch(token, OPTION_IDENTIFIER_REGEX);
-                case IdentifierType.SECTION:
-                    return Regex.IsMatch(token, SECTION_IDENTIFIER_REGEX);
+                if(config.Spec == null) // and we have none
+                {
+                    configEventLog.NoSpecification();
+                    throw new UndefinedSpecException();
+                }
+                if(!config.Spec.IsValid(specEventLog)) // we have one but it's not valid
+                {
+                    configEventLog.SpecificationNotValid();
+
+                    // raise an exception or face undefined behaviour
+                    throw new InvalidSpecException();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Reads the specified input into <see cref="lines"/>.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        protected void PreprocessLines(TextReader input)
+        {
+            string line;
+            while((line = input.ReadLine()) != null)
+            {
+                lines.Add(new LineInfo(line));
+            }
+        }
+
+        /// <summary>
+        /// Parse the whole input into <see cref="config"/> while also filling up
+        /// <see cref="linkResolver"/>.
+        /// </summary>
+        protected void ParseLines()
+        {
+            // prepare
+            ParserContext context = new ParserContext(lines);
+            List<string> filler = new List<string>();
+
+            // let the parser choose the right lines to parse
+            foreach(LineInfo lineInfo in context) 
+            {
+                if(string.IsNullOrEmpty(lineInfo.Line))
+                {
+                    // comments or empty lines must be saved for later
+                    filler.Add(lineInfo.TrailingCommentary == null ? "" : lineInfo.TrailingCommentary);
+                }
+                else
+                {
+                    // first register the saved comments or empty lines, if needed
+                    if(filler.Count > 0)
+                    {
+                        config.Add(new Commentary(filler));
+                        filler.Clear();
+                    }
+
+                    // and then continue parsing
+                    if(lineInfo.IsSection)
+                    {
+                        ParseSectionHeader(context, lineInfo);
+                    }
+                    else if(Matches(lineInfo.Line, LineContent.OPTION))
+                    {
+                        ParseOption(context, lineInfo);
+                    }
+                    else
+                    {
+                        // report unknown syntax
+                        configEventLog.UnknownLineSyntax(context.LineNumber, lineInfo.Line);
+
+                        // and place an empty line instead
+                        config.Add(new Commentary(new string[] { "" }));
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Parse the current line as a section header.
+        /// </summary>
+        /// <param name="context">Parsing context.</param>
+        /// <param name="lineInfo">Information about the current line.</param>
+        protected void ParseSectionHeader(ParserContext context, LineInfo lineInfo)
+        {
+            string identifier = TrimWhitespaces(lineInfo.Line.Substring(1, lineInfo.Line.Length - 2));
+            if(config.Contains(identifier))
+            {
+                configEventLog.DuplicateSection(context.LineNumber, identifier);
+                context.Mode = ParserMode.SKIP_UNTIL_NEXT_SECTION;
+            }
+            else
+            {
+                Section newSection = new Section(identifier, lineInfo.TrailingCommentary);
+                config.Add(newSection);
+                context.CurrentSection = newSection;
+            }
+        }
+
+        /// <summary>
+        /// Parse the current line as an option.
+        /// </summary>
+        /// <param name="context">Parsing context.</param>
+        /// <param name="lineInfo">Information about the current line.</param>
+        protected void ParseOption(ParserContext context, LineInfo lineInfo)
+        {
+            Match match = Regex.Match(lineInfo.Line, LINE_REGEX_OPTION);
+            if(match.Success)
+            {
+                // parse the option
+                string identifier = match.Groups[1].Value;
+                string value = match.Groups[2].Value;
+
+                // check duplicates
+                if(context.CurrentSection.Contains(identifier))
+                {
+                    configEventLog.DuplicateOption(context.LineNumber, identifier);
+                }
+                else
+                {
+                    // TODO:
+                    // Type optionType = validationMode == ConfigValidationMode.Strict ? specification.
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("This method can not be called if the line doesn't match the regular expression for options.");
+            }
+        }
+
+        #endregion
+
+        #region Static helpers
+
+        /// <summary>
+        /// Determines whether the specified token matches the specified content.
+        /// </summary>
+        /// <returns><c>true</c> If the specified token matches the specified content, otherwise <c>false</c>.</returns>
+        /// <param name="token">The token to match.</param>
+        /// <param name="lineContent">What to match the token with.</param>
+        protected static bool Matches(string token, LineContent lineContent)
+        {
+            switch (lineContent)
+            {
+                case LineContent.OPTION:
+                    return Regex.IsMatch(token, LINE_REGEX_OPTION);
+                case LineContent.SECTION_HEADER:
+                    return Regex.IsMatch(token, LINE_REGEX_SECTION);
                 default:
-                    throw new ArgumentException(); // TODO: is there a better exception?
+                    throw new ArgumentException("Unknown enum value: " + lineContent.ToString());
             }
         }
 
@@ -214,7 +489,7 @@ namespace Ini
         /// </summary>
         /// <returns></returns>
         /// <param name="token">The token to trim whitespaces from.</param>
-        private static string TrimWhitespaces(string token)
+        protected static string TrimWhitespaces(string token)
         {
             return TrimLeadingWhitespaces(TrimTrailingWhitespaces(token));
         }
@@ -225,7 +500,7 @@ namespace Ini
         /// </summary>
         /// <returns></returns>
         /// <param name="token">The token to trim leading whitespaces from.</param>
-        private static string TrimLeadingWhitespaces(string token)
+        protected static string TrimLeadingWhitespaces(string token)
         {
             Match match = Regex.Match(token, FILTER_LEADING_WHITESPACES_REGEX);
             return match.Success ? match.Groups[1].Value : token;
@@ -237,21 +512,29 @@ namespace Ini
         /// </summary>
         /// <returns></returns>
         /// <param name="token">The token to trim trailing whitespaces from.</param>
-        private static string TrimTrailingWhitespaces(string token)
+        protected static string TrimTrailingWhitespaces(string token)
         {
             Match match = Regex.Match(token, FILTER_TRAILING_WHITESPACES_REGEX);
             return match.Success ? match.Groups[1].Value : token;
         }
 
         /// <summary>
-        /// Removes trailing commentary from a config token, as per the specification.
+        /// Extracts trailing commentary from the specified line into the specified output
+        /// parameter, and returns the line with the commentary removed.
         /// </summary>
-        /// <returns>The given token, with trailing commentary removed.</returns>
-        /// <param name="token">The token to remove trailing commentary from.</param>
-        private static string RemoveTrailingCommentary(string token)
+        protected static string ExtractTrailingCommentary(string line, out string commentary)
         {
-            int firstSemicolonIndex = token.IndexOf(COMMENTARY_STARTER);
-            return firstSemicolonIndex == -1 ? token : token.Substring(0, firstSemicolonIndex);
+            int commentaryStartIndex = line.IndexOf(COMMENTARY_STARTER);
+            if(commentaryStartIndex == -1)
+            {
+                commentary = null;
+                return line;
+            }
+            else
+            {
+                commentary = line.Substring(commentaryStartIndex, line.Length - commentaryStartIndex);
+                return line.Substring(0, commentaryStartIndex);
+            }
         }
 
         #endregion

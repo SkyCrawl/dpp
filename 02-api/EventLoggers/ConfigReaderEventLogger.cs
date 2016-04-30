@@ -36,7 +36,7 @@ namespace Ini.EventLoggers
         /// <summary>
         /// Strict validation mode was applied and no associated specification was specified.
         /// </summary>
-        public void SpecNotFound()
+        public void NoSpecification()
         {
             throw new NotImplementedException();
         }
@@ -44,7 +44,27 @@ namespace Ini.EventLoggers
         /// <summary>
         /// Strict validation mode was applied and the associated specification is not valid.
         /// </summary>
-        public void SpecNotValid()
+        public void SpecificationNotValid()
+        {
+            throw new NotImplementedException();
+        }
+            
+        /// <summary>
+        /// The parser didn't know how to parse the specified line.
+        /// </summary>
+        /// <param name="lineIndex">Line number.</param>
+        /// <param name="line">The line.</param>
+        public void UnknownLineSyntax(int lineIndex, string line)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// A duplicate option has been found.
+        /// </summary>
+        /// <param name="lineIndex">Line number.</param>
+        /// <param name="identifier">The duplicate option identifier.</param>
+        public void DuplicateOption(int lineIndex, string identifier)
         {
             throw new NotImplementedException();
         }
