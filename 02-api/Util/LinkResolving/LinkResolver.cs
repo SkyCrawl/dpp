@@ -37,42 +37,40 @@ namespace Ini.Util.LinkResolving
         #region Public interface
 
 		/// <summary>
-		/// Adds a link with the specified origin and target into the graph
-		/// and updates dependencies.
+		/// Adds the specified link node into the "graph" and updates dependencies.
 		/// </summary>
-		/// <param name="origin">Link origin.</param>
-        /// <param name="linkElement">The link's configuration element.</param>
-        public void AddLink(LinkOrigin origin, ILink linkElement)
+        /// <param name="node">The node.</param>
+        public void AddLink(LinkNode node)
 		{
-			// first some precondition checks
-			if(!origin.IsKeySourceValid())
+			// just in case checks
+            if(!node.Origin.IsKeySourceValid())
 			{
 				throw new ArgumentException("Could not determine the link's origin key because the source data (section or option name) is invalid.");
 			}
-            if(!linkElement.Target.IsKeySourceValid())
+            if(!node.Target.IsKeySourceValid())
 			{
                 throw new ArgumentException("Could not determine the link's target key because the source data (section or option name) is invalid.");
 			}
 
 			// index the link's origin bucket
-			int originKey = origin.ToKey();
+            int originKey = node.Origin.ToKey();
 			if(!unresolvedBuckets.ContainsKey(originKey))
 			{
-				unresolvedBuckets[originKey] = new LinkBucket(origin.Section, origin.Option);
+                unresolvedBuckets[originKey] = new LinkBucket(node.Origin.Section, node.Origin.Option);
 			}
 
 			// index the link's target bucket
-            int targetKey = linkElement.Target.ToKey();
+            int targetKey = node.Target.ToKey();
 			if(!unresolvedBuckets.ContainsKey(targetKey))
 			{
-                unresolvedBuckets[targetKey] = new LinkBucket(linkElement.Target.Section, linkElement.Target.Option);
+                unresolvedBuckets[targetKey] = new LinkBucket(node.Target.Section, node.Target.Option);
 			}
 
             // index the link
 			LinkBucket originBucket = unresolvedBuckets[originKey];
-            originBucket.Links.Add(new LinkNode(linkElement, origin));
+            originBucket.Links.Add(node);
 
-            // and update the dependency graph
+            // update the dependency graph
             LinkBucket targetBucket = unresolvedBuckets[targetKey];
 			originBucket.DependsOnBuckets.Add(targetBucket);
 			targetBucket.Dependants.Add(originBucket);

@@ -190,7 +190,7 @@ namespace Ini.Configuration
         }
 
         /// <summary>
-        /// Gets the option with the specified identifier.
+        /// Gets the specified option.
         /// </summary>
         /// <returns>The option, or null if not found.</returns>
         /// <param name="sectionIdentifier">Target section identifier.</param>

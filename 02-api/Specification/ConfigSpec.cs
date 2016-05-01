@@ -49,7 +49,33 @@ namespace Ini.Specification
 
         #endregion
 
-        #region Public Methods
+        #region Public methods
+
+        /// <summary>
+        /// Gets the specified section specification.
+        /// </summary>
+        /// <returns>The section specification, or null if not found.</returns>
+        /// <param name="identifier">Target section identifier.</param>
+        public SectionSpec GetSection(string identifier)
+        {
+            return Sections.Find(section => section.Identifier == identifier);
+        }
+
+        /// <summary>
+        /// Gets the specified option specification.
+        /// </summary>
+        /// <returns>The option specification, or null if not found.</returns>
+        /// <param name="sectionIdentifier">Target section identifier.</param>
+        /// <param name="optionIdentifier">Target option identifier.</param>
+        public OptionSpec GetOption(string sectionIdentifier, string optionIdentifier)
+        {
+            SectionSpec section = GetSection(sectionIdentifier);
+            return section != null ? section.GetOption(optionIdentifier) : null;
+        }
+
+        #endregion
+
+        #region Validation
 
         /// <summary>
         /// Determines whether the current content of the specification is valid.

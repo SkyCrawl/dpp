@@ -39,16 +39,16 @@ namespace Ini.Util
 		}
 
         /// <summary>
-        /// Converts this option's elements into an array of correctly typed elementary values.
+        /// Converts this enumerable of object values into an array of correctly typed elementary values.
         /// </summary>
         /// <returns>The array.</returns>
-        /// <param name="list">The source list.</param>
-        /// <typeparam name="OutputType">The correct type.</typeparam>
+        /// <param name="enumerable">The source enumerable.</param>
+        /// <typeparam name="OutputType">The correct elementary type.</typeparam>
         /// <exception cref="System.InvalidCastException">The specified type was incorrect.</exception>
-        public static OutputType[] GetValues<OutputType>(this IEnumerable<IValue> list)
+        public static OutputType[] GetValues<OutputType>(this IEnumerable<IValue> enumerable)
         {
             List<OutputType> result = new List<OutputType>();
-            foreach(IValue value in list)
+            foreach(IValue value in enumerable)
             {
                 result.Add(value.GetValue<OutputType>());
             }

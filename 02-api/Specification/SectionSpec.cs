@@ -36,6 +36,16 @@ namespace Ini.Specification
         #region Public Methods
 
         /// <summary>
+        /// Gets the specified option specification.
+        /// </summary>
+        /// <returns>The option specification, or null if not found.</returns>
+        /// <param name="identifier">Target option identifier.</param>
+        public OptionSpec GetOption(string identifier)
+        {
+            return Options.Find(option => option.Identifier == identifier);
+        }
+
+        /// <summary>
         /// Creates a new section with default option elements.
         /// </summary>
         /// <returns></returns>
@@ -46,7 +56,7 @@ namespace Ini.Specification
 
         #endregion
 
-        #region Overrides
+        #region Validation
 
         /// <summary>
         /// Verifies the integrity of the configuration section definition.

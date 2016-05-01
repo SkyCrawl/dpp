@@ -23,7 +23,13 @@ namespace Ini.Specification
         #region Public Methods
 
         /// <summary>
-        /// Creates a new section with empty mandatory option values and default optional option values.
+        /// Gets the type of this option's values.
+        /// </summary>
+        /// <returns>This option's value type.</returns>
+        public abstract Type GetValueType();
+
+        /// <summary>
+        /// Creates a new option from this option specification.
         /// </summary>
         /// <returns></returns>
         public abstract Option CreateOptionStub();
@@ -59,6 +65,15 @@ namespace Ini.Specification
         #endregion
 
         #region Overrides
+
+        /// <summary>
+        /// Gets the type of this option's values.
+        /// </summary>
+        /// <returns>This option's value type.</returns>
+        public override Type GetValueType()
+        {
+            return typeof(T);
+        }
 
         /// <summary>
         /// Creates a new section with empty mandatory option values and default optional option values.

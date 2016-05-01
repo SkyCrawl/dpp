@@ -11,6 +11,7 @@ using Ini.Validation;
 using Ini.Exceptions;
 using Ini.Configuration.Values;
 using Ini.Util.LinkResolving;
+using Ini.Configuration.Values.Links;
 
 namespace Ini
 {
@@ -21,28 +22,63 @@ namespace Ini
     {
         #region Constants
 
-        const string INNER_OPTION_SEPARATOR = "=";
-        const string COMMENTARY_STARTER = ";";
         const string ESCAPE_SEQUENCE = "\\";
 
-        const string IDENTIFIER_START_CHAR_REGEX = "[a-zA-Z.:$]";
-        const string IDENTIFIER_SUFFIX_CHAR_REGEX = "[a-zA-Z0-9_~\\-.:$\\ ]";
+        const string IDENTIFIER_START_CHAR_REGEX = "[a-zA-Z.$:]";
+        const string IDENTIFIER_SUFFIX_CHAR_REGEX = "[a-zA-Z0-9_~\\-.:$ " + ESCAPE_SEQUENCE + "]";
         const string IDENTIFIER_REGEX = IDENTIFIER_START_CHAR_REGEX + IDENTIFIER_SUFFIX_CHAR_REGEX + "*";
 
-        const string LINE_REGEX_OPTION = "^(" + IDENTIFIER_REGEX + ")" + INNER_OPTION_SEPARATOR + "(.*)$";
+        const string LINE_REGEX_OPTION = "^(" + IDENTIFIER_REGEX + ")" + "(=:?)" + "(.*)$";
         const string LINE_REGEX_SECTION = "^\\[" + IDENTIFIER_REGEX + "\\]$";
 
-        /// <summary>
-        /// Use the first capture group to match the filtered string token. Meaning of the regex:
-        /// leading whitespaces are ignored, up until the first non-whitespace character.
-        /// </summary>
-        const string FILTER_LEADING_WHITESPACES_REGEX = "^\\s*(.*?)$";
+        #endregion
+
+        #region Properties
 
         /// <summary>
-        /// Use the first capture group to match the filtered string token. Meaning of the regex:
-        /// trailing whitespaces are ignored, up until the last one prefixed with <see cref="ESCAPE_SEQUENCE"/>.
+        /// The configuration being parsed.
         /// </summary>
-        const string FILTER_TRAILING_WHITESPACES_REGEX = "^(.*?(?:" + ESCAPE_SEQUENCE + "\\s)?)\\s*$";
+        protected ConfigSpec specification;
+
+        /// <summary>
+        /// The configuration being parsed.
+        /// </summary>
+        protected Config config;
+
+        /// <summary>
+        /// Link resolver to use when parsing the configuration.
+        /// </summary>
+        protected LinkResolver linkResolver;
+
+        /// <summary>
+        /// Preprocessed lines of input.
+        /// </summary>
+        protected List<LineInfo> lines;
+
+        /// <summary>
+        /// A wrapper for several state variables relevant for parsing methods.
+        /// </summary>
+        protected ParserContext context;
+
+        /// <summary>
+        /// Collection of links with unknown targets at the time of their parsing.
+        /// </summary>
+        protected List<LinkNode> uncertainLinks;
+
+        /// <summary>
+        /// The validation mode to apply when parsing the configuration.
+        /// </summary>
+        protected ConfigValidationMode validationMode;
+
+        /// <summary>
+        /// Event logger to call when validating the specification.
+        /// </summary>
+        protected ISpecValidatorEventLogger specEventLog;
+
+        /// <summary>
+        /// Event logger to call when reading the configuration.
+        /// </summary>
+        protected IConfigReaderEventLogger configEventLog;
 
         #endregion
 
@@ -78,7 +114,7 @@ namespace Ini
             public LineInfo(string line)
             {
                 string trailingCommentary;
-                this.Line = TrimWhitespaces(ExtractTrailingCommentary(line, out trailingCommentary));
+                this.Line = TrimWhitespaces(RemoveTrailingCommentary(line, out trailingCommentary));
                 this.TrailingCommentary = trailingCommentary;
                 this.IsSection = Matches(Line, LineContent.SECTION_HEADER);
             }
@@ -106,7 +142,7 @@ namespace Ini
             public int LineNumber { get { return CurrentLinesIndex + 1; } }
 
             /// <summary>
-            /// Lines to parse.
+            /// Preprocessed lines to parse.
             /// </summary>
             protected List<LineInfo> Lines;
 
@@ -208,45 +244,6 @@ namespace Ini
 
         #endregion
 
-        #region Properties
-
-        /// <summary>
-        /// The configuration being parsed.
-        /// </summary>
-        protected ConfigSpec specification;
-
-        /// <summary>
-        /// The configuration being parsed.
-        /// </summary>
-        protected Config config;
-
-        /// <summary>
-        /// Link resolver to use when parsing the configuration.
-        /// </summary>
-        protected LinkResolver linkResolver;
-
-        /// <summary>
-        /// Basic information about lines of input.
-        /// </summary>
-        protected List<LineInfo> lines;
-
-        /// <summary>
-        /// The validation mode to apply when parsing the configuration.
-        /// </summary>
-        protected ConfigValidationMode validationMode;
-
-        /// <summary>
-        /// Event logger to call when validating the specification.
-        /// </summary>
-        protected ISpecValidatorEventLogger specEventLog;
-
-        /// <summary>
-        /// Event logger to call when reading the configuration.
-        /// </summary>
-        protected IConfigReaderEventLogger configEventLog;
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
@@ -259,6 +256,8 @@ namespace Ini
             this.config = new Config(specification);
             this.linkResolver = new LinkResolver();
             this.lines = new List<LineInfo>();
+            this.context = null;
+            this.uncertainLinks = new List<LinkNode>();
             this.validationMode = ConfigValidationMode.Strict;
             this.specEventLog = null;
             this.configEventLog = null;
@@ -286,10 +285,14 @@ namespace Ini
             this.specEventLog = specEventLog;
             this.validationMode = validationMode;
 
-            // and continue
+            // parse
             PreconditionsTrue();
             PreprocessLines(input);
             ParseLines();
+
+            // finish up
+            // TODO: uncertain links
+
             linkResolver.ResolveLinks(config, configEventLog);
 
             // TODO: interpret the option values in their correct contexts
@@ -357,6 +360,7 @@ namespace Ini
             {
                 lines.Add(new LineInfo(line));
             }
+            context = new ParserContext(lines);
         }
 
         /// <summary>
@@ -365,8 +369,6 @@ namespace Ini
         /// </summary>
         protected void ParseLines()
         {
-            // prepare
-            ParserContext context = new ParserContext(lines);
             List<string> filler = new List<string>();
 
             // let the parser choose the right lines to parse
@@ -382,7 +384,17 @@ namespace Ini
                     // first register the saved comments or empty lines, if needed
                     if(filler.Count > 0)
                     {
-                        config.Add(new Commentary(filler));
+                        // must save into the appropriate context
+                        if(context.CurrentSection != null)
+                        {
+                            context.CurrentSection.Add(new Commentary(filler));
+                        }
+                        else
+                        {
+                            config.Add(new Commentary(filler));
+                        }
+
+                        // filler has been saved, so clear
                         filler.Clear();
                     }
 
@@ -415,9 +427,17 @@ namespace Ini
         protected void ParseSectionHeader(ParserContext context, LineInfo lineInfo)
         {
             string identifier = TrimWhitespaces(lineInfo.Line.Substring(1, lineInfo.Line.Length - 2));
+            SectionSpec sectionSpec = specification.GetSection(identifier);
             if(config.Contains(identifier))
             {
+                // report error and skip until next section
                 configEventLog.DuplicateSection(context.LineNumber, identifier);
+                context.Mode = ParserMode.SKIP_UNTIL_NEXT_SECTION;
+            }
+            else if((validationMode == ConfigValidationMode.Strict) && (sectionSpec == null))
+            {
+                // report error and skip until next section
+                configEventLog.NoSectionSpecification(context.LineNumber, identifier);
                 context.Mode = ParserMode.SKIP_UNTIL_NEXT_SECTION;
             }
             else
@@ -439,18 +459,55 @@ namespace Ini
             if(match.Success)
             {
                 // parse the option
-                string identifier = match.Groups[1].Value;
-                string value = match.Groups[2].Value;
+                string identifier = TrimTrailingWhitespaces(match.Groups[1].Value); // the specification tells us to do so
+                string separator = match.Groups[2].Value;
+                string value = match.Groups[3].Value; // must not explicitly trim leading whitespaces of a value
 
                 // check duplicates
                 if(context.CurrentSection.Contains(identifier))
                 {
-                    configEventLog.DuplicateOption(context.LineNumber, identifier);
+                    configEventLog.DuplicateOption(context.LineNumber, context.CurrentSection.Identifier, identifier);
                 }
                 else
                 {
-                    // TODO:
-                    // Type optionType = validationMode == ConfigValidationMode.Strict ? specification.
+                    // check against the specification and determine option type
+                    Type optionType = typeof(string); // the one and only type for relaxed mode
+                    if(validationMode == ConfigValidationMode.Strict)
+                    {
+                        OptionSpec optionSpec = specification.GetOption(context.CurrentSection.Identifier, identifier);
+                        if(optionSpec == null)
+                        {
+                            // report error and skip further parsing (return)
+                            configEventLog.NoOptionSpecification(
+                                context.LineNumber,
+                                context.CurrentSection.Identifier,
+                                identifier);
+                            return;
+                        }
+                        else
+                        {
+                            optionType = optionSpec.GetValueType();
+                        }
+                    }
+
+                    // now we can create and register a new option, and parse the value
+                    Option newOption = new Option(identifier, optionType, lineInfo.TrailingCommentary);
+                    context.CurrentSection.Add(newOption);
+
+                    // determine the record separator to use
+                    string recordSeparator = separator.Contains(':') ? ":" : ",";
+
+                    // iterate through all occurrences of the record separator (if unescaped)
+                    int recordStartIndex = 0;
+                    foreach(Match recordMatch in Regex.Matches(value, UnescapedTokenRegex(recordSeparator)))
+                    {
+                        // no need to check success or failure, simply parse
+                        ParseOptionRecord(context, lineInfo, newOption, value.Substring(recordStartIndex, recordMatch.Index));
+                        recordStartIndex = recordMatch.Index;
+                    }
+
+                    // and don't forget to parse the remaining record (or default)
+                    ParseOptionRecord(context, lineInfo, newOption, value.Substring(recordStartIndex, value.Length - recordStartIndex));
                 }
             }
             else
@@ -459,9 +516,84 @@ namespace Ini
             }
         }
 
+        /// <summary>
+        /// Parse the given option value, identify links and create/register value stubs.
+        /// </summary>
+        /// <param name="context">Parsing context.</param>
+        /// <param name="lineInfo">Information about the current line.</param>
+        /// <param name="option">The option being parsed.</param>
+        /// <param name="value">The captured option value.</param>
+        protected void ParseOptionRecord(ParserContext context, LineInfo lineInfo, Option option, string value)
+        {
+            // check whether we have a link
+            Match match = Regex.Match(TrimWhitespaces(value), UnescapedTokenRegex("^\\${([^}]+)}$"));
+            if(match.Success)
+            {
+                // use the first capture group to fetch the link's content
+                string[] splitted = match.Groups[1].Value.Split('#');
+                if(splitted.Length == 2)
+                {
+                    // one '#' to denote section and option identifier... yay!
+                    string targetSectionId = TrimWhitespaces(splitted[0]);
+                    string targetOptionId = TrimWhitespaces(splitted[1]);
+
+                    // create the link
+                    LinkOrigin linkOrigin = new LinkOrigin(context.CurrentSection.Identifier, option.Identifier);
+                    LinkTarget linkTarget = new LinkTarget(targetSectionId, targetOptionId);
+                    InclusionLink link = new InclusionLink(option.ValueType, linkTarget);
+                    LinkNode node = new LinkNode(link, linkOrigin);
+
+                    // register it
+                    option.Elements.Add(link);
+                    linkResolver.AddLink(node);
+
+                    // and determine whether the target is known yet
+                    if(config.GetOption(targetSectionId, targetOptionId) == null)
+                    {
+                        // when the parsing is finished, we will check again
+                        uncertainLinks.Add(node);
+                    }
+                }
+                else if(splitted.Length > 2) // too many target components
+                {
+                    // report the problem and don't interpret the link as a string value
+                    configEventLog.ConfusingLinkTarget(
+                        context.LineNumber,
+                        context.CurrentSection.Identifier,
+                        option.Identifier,
+                        value);
+                }
+                else // not enough target components
+                {
+                    // report the problem and don't interpret the link as a string value
+                    configEventLog.IncompleteLinkTarget(
+                        context.LineNumber,
+                        context.CurrentSection.Identifier,
+                        option.Identifier,
+                        value);
+                }
+            }
+            else
+            {
+                // we have a general string value, let's register it right away and move on...
+                option.Elements.Add(new ValueStub(option.ValueType, value));
+            }
+        }
+
         #endregion
 
         #region Static helpers
+
+        /// <summary>
+        /// Builds a regular expression that matches the specified token as long as it
+        /// is not preceded by an escape sequence (<see cref="ESCAPE_SEQUENCE"/>.
+        /// </summary>
+        /// <returns>The regular expression.</returns>
+        /// <param name="token">The token.</param>
+        protected static string UnescapedTokenRegex(string token)
+        {
+            return "(?<!" + ESCAPE_SEQUENCE + ")" + token;
+        }
 
         /// <summary>
         /// Determines whether the specified token matches the specified content.
@@ -502,7 +634,10 @@ namespace Ini
         /// <param name="token">The token to trim leading whitespaces from.</param>
         protected static string TrimLeadingWhitespaces(string token)
         {
-            Match match = Regex.Match(token, FILTER_LEADING_WHITESPACES_REGEX);
+            // use the first capture group to match the filtered string token
+            // meaning: leading whitespaces are ignored, up until the first non-whitespace character
+
+            Match match = Regex.Match(token, "^\\s*(.*?)$");
             return match.Success ? match.Groups[1].Value : token;
         }
 
@@ -514,7 +649,10 @@ namespace Ini
         /// <param name="token">The token to trim trailing whitespaces from.</param>
         protected static string TrimTrailingWhitespaces(string token)
         {
-            Match match = Regex.Match(token, FILTER_TRAILING_WHITESPACES_REGEX);
+            // use the first capture group to match the filtered string token
+            // meaning: trailing whitespaces are ignored, up until the last one that is escaped
+
+            Match match = Regex.Match(token, "^(.*?(?:" + ESCAPE_SEQUENCE + "\\s)?)\\s*$");
             return match.Success ? match.Groups[1].Value : token;
         }
 
@@ -522,18 +660,19 @@ namespace Ini
         /// Extracts trailing commentary from the specified line into the specified output
         /// parameter, and returns the line with the commentary removed.
         /// </summary>
-        protected static string ExtractTrailingCommentary(string line, out string commentary)
+        protected static string RemoveTrailingCommentary(string line, out string commentary)
         {
-            int commentaryStartIndex = line.IndexOf(COMMENTARY_STARTER);
-            if(commentaryStartIndex == -1)
+            // match the first semicolon that is not preceded by an escape sequence
+            Match match = Regex.Match(line, UnescapedTokenRegex(";"));
+            if(match.Success)
             {
-                commentary = null;
-                return line;
+                commentary = line.Substring(match.Index, line.Length - match.Index);
+                return line.Substring(0, match.Index);
             }
             else
             {
-                commentary = line.Substring(commentaryStartIndex, line.Length - commentaryStartIndex);
-                return line.Substring(0, commentaryStartIndex);
+                commentary = null;
+                return line;
             }
         }
 

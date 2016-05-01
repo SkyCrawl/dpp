@@ -52,9 +52,19 @@ namespace Ini.EventLoggers
         /// <summary>
         /// The parser didn't know how to parse the specified line.
         /// </summary>
-        /// <param name="lineIndex">Line number.</param>
+        /// <param name="lineNumber">1-based line number of the error.</param>
         /// <param name="line">The line.</param>
-        public void UnknownLineSyntax(int lineIndex, string line)
+        public void UnknownLineSyntax(int lineNumber, string line)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// A duplicate section has been found.
+        /// </summary>
+        /// <param name="lineNumber">1-based line number of the duplicate.</param>
+        /// <param name="identifier">The duplicate section identifier.</param>
+        public void DuplicateSection(int lineNumber, string identifier)
         {
             throw new NotImplementedException();
         }
@@ -62,19 +72,72 @@ namespace Ini.EventLoggers
         /// <summary>
         /// A duplicate option has been found.
         /// </summary>
-        /// <param name="lineIndex">Line number.</param>
-        /// <param name="identifier">The duplicate option identifier.</param>
-        public void DuplicateOption(int lineIndex, string identifier)
+        /// <param name="lineNumber">1-based line number of the duplicate.</param>
+        /// <param name="section">The option's containing section's identifier.</param>
+        /// <param name="option">The duplicate option identifier.</param>
+        public void DuplicateOption(int lineNumber, string section, string option)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// A general parsing/format error has occurred.
+        /// Strict validation mode was applied but the received specification does not contain
+        /// a definition for the specified section.
         /// </summary>
-        /// <param name="lineIndex">Line number where the error occurred.</param>
-        /// <param name="message">Message of the error.</param>
-        public void ConfigMalformed(int lineIndex, string message)
+        /// <param name="lineNumber">1-based line number of the missing section.</param>
+        /// <param name="identifier">The missing section identifier.</param>
+        public void NoSectionSpecification(int lineNumber, string identifier)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Strict validation mode was applied but the received specification does not contain
+        /// a definition for the specified option.
+        /// </summary>
+        /// <param name="lineNumber">1-based line number of the missing option.</param>
+        /// <param name="section">The option's containing section's identifier.</param>
+        /// <param name="option">The missing option identifier.</param>
+        public void NoOptionSpecification(int lineNumber, string section, string option)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Could not determine target section and option because at least
+        /// one of them was not specified.
+        /// </summary>
+        /// <param name="lineNumber">1-based line number of the problem.</param>
+        /// <param name="section">The option's containing section's identifier.</param>
+        /// <param name="option">The option's identifier.</param>
+        /// <param name="link">The incomplete link.</param>
+        public void IncompleteLinkTarget(int lineNumber, string section, string option, string link)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Could not determine target section and option because too many
+        /// target components were specified.
+        /// </summary>
+        /// <param name="lineNumber">1-based line number of the problem.</param>
+        /// <param name="section">The option's containing section's identifier.</param>
+        /// <param name="option">The option's identifier.</param>
+        /// <param name="link">The confusing link.</param>
+        public void ConfusingLinkTarget(int lineNumber, string section, string option, string link)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// The specified link's target has not been foundCould not determine target section and option because too many
+        /// target components were specified.
+        /// </summary>
+        /// <param name="lineNumber">1-based line number of the problem.</param>
+        /// <param name="section">The option's containing section's identifier.</param>
+        /// <param name="option">The option's identifier.</param>
+        /// <param name="link">The confusing link.</param>
+        public void InvalidLinkTarget(int lineNumber, string section, string option, string link)
         {
             throw new NotImplementedException();
         }
