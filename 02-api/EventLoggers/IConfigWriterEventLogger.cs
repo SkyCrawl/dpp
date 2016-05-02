@@ -14,12 +14,12 @@ namespace Ini.EventLoggers
         /// The configuration's schema is not valid. The operation's
         /// outcome depends on the currently used <see cref="ConfigWriterOptions"/>.
         /// </summary>
-        void SpecNotValid();
+        void SpecificationNotValid();
 
         /// <summary>
         /// The configuration is not valid. The operation's outcome depends
         /// on the currently used <see cref="ConfigWriterOptions"/>.
         /// </summary>
-        void ConfigNotValid();
+        void ConfigurationNotValid();
     }
 }

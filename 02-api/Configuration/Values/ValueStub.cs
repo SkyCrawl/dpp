@@ -45,12 +45,14 @@ namespace Ini.Configuration.Values
         public string Value { get; private set; }
 
         /// <summary>
-        /// Type of the value interpreted form this stub.
-        /// <seealso cref="SetDataType"/>
+        /// Type of the value interpreted form this stub. Must be a subclass of <see cref="ValueBase{T}"/>
+        /// where the parameter "T" is <see cref="ValueType"/>. This property ensures custom transformations of
+        /// individual values, in the interest of extensibility. For custom transformations for all stubs alike, see
+        /// <see cref="DefaultDataTypes"/>.
         /// <seealso cref="InterpretSelf"/>
         /// </summary>
         /// <value>Type of the value interpreted form this stub.</value>
-        protected Type DataType;
+        public Type DataType { get; set; }
 
         #endregion
 
@@ -85,35 +87,16 @@ namespace Ini.Configuration.Values
         }
 
         /// <summary>
-        /// Sets the type of the value interpreted form this stub. Must be a subclass of <see cref="ValueBase{T}"/>
-        /// where the parameter "T" is <see cref="ValueType"/>. This method ensures custom transformations of
-        /// individual values, in the interest of extensibility. For custom transformations for all values alike, see
-        /// <see cref="DefaultDataTypes"/>.
-        /// <seealso cref="InterpretSelf"/>
-        /// </summary>
-        /// <param name="type">The interpreted value type.</param>
-        /// <exception cref="ArgumentException">If the specified type is incorrect.</exception>
-        public void SetDataType(Type type)
-        {
-            if(type.IsSubclassOf(typeof(ValueBase<ValueType>)))
-            {
-                this.DataType = type;
-            }
-            else
-            {
-                throw new ArgumentException(string.Format("The type '{0}' doesn't inherit from '{1}'.", type.FullName, typeof(IValue).FullName));
-            } 
-        }
-
-        /// <summary>
         /// Converts this stub into an interpreted value object. Simply put, this method
-        /// takes the type set via <see cref="SetDataType"/>, creates a new instance from
-        /// it and feeds it <see cref="Value"/>. If a data type has not been set, a default
-        /// is taken from <see cref="DefaultDataTypes"/>. If a default is not available, an
-        /// exception is thrown.
+        /// takes <see cref="DataType"/>, creates a new instance from it and feeds it
+        /// <see cref="Value"/>. If the data type has not been specified, a default
+        /// one is taken from <see cref="DefaultDataTypes"/>. If a default data type
+        /// is not available, an exception is thrown.
         /// </summary>
         /// <returns>The interpreted value object.</returns>
-        /// <exception cref="InvalidOperationException">If the data type can not be determined.</exception>
+        /// <exception cref="InvalidOperationException">If the data type can not be determined
+        /// or doesn't inherit from <see cref="ValueBase{T}"/> where "T" inherits from
+        /// <see cref="ValueType"/>.</exception>
         public IValue InterpretSelf()
         {
             // prepare the data type
@@ -125,7 +108,14 @@ namespace Ini.Configuration.Values
             // check if still not defined
             if(DataType != null)
             {
-                return (Activator.CreateInstance(DataType) as ValueBase<ValueType>).FromString<ValueBase<ValueType>>(Value);
+                if(DataType.IsSubclassOf(typeof(ValueBase<ValueType>)))
+                {
+                    return (Activator.CreateInstance(DataType) as ValueBase<ValueType>).FromString<ValueBase<ValueType>>(Value);
+                }
+                else
+                {
+                    throw new InvalidOperationException(string.Format("The type '{0}' doesn't inherit from '{1}'.", DataType.FullName, typeof(ValueBase<ValueType>).FullName));
+                }
             }
             else
             {
@@ -143,7 +133,8 @@ namespace Ini.Configuration.Values
         /// <returns></returns>
         public bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger eventLog = null)
         {
-            return true;
+            // stubs are not supposed to be in the structure when validating
+            return false;
         }
 
         #endregion

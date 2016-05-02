@@ -88,8 +88,6 @@ namespace Ini.EventLoggers
         /// <param name="link">The confusing link.</param>
         void ConfusingLinkTarget(int lineNumber, string section, string option, string link);
 
-        // TODO:
-
         /// <summary>
         /// The specified link's target has not been found.
         /// </summary>

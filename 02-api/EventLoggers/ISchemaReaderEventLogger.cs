@@ -16,12 +16,12 @@ namespace Ini.EventLoggers
         /// probably want to distinguish the previous output from the new.
         /// </summary>
         /// <param name="schemaOrigin">Origin of the newly parsed schema.</param>
-        void NewSpec(string schemaOrigin);
+        void NewSpecification(string schemaOrigin);
 
         /// <summary>
         /// A general parsing/format error has occurred.
         /// </summary>
         /// <param name="message"></param>
-        void SpecMalformed(string message);
+        void SpecificationMalformed(string message);
     }
 }

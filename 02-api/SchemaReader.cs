@@ -106,12 +106,12 @@ namespace Ini
             // and try to deserialize
             try
             {
-                specReaderEventLogger.NewSpec(origin);
+                specReaderEventLogger.NewSpecification(origin);
                 return deserializer.Deserialize<ConfigSpec>(reader);
             }
             catch (Exception e)
             {
-                specReaderEventLogger.SpecMalformed(e.ToString());
+                specReaderEventLogger.SpecificationMalformed(e.ToString());
                 throw new MalformedSchemaException("Could not deserialize the schema.", e);
             }
         }

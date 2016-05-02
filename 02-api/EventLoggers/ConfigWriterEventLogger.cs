@@ -22,7 +22,7 @@ namespace Ini.EventLoggers
         /// <summary>
         /// Specs the not valid.
         /// </summary>
-        public void SpecNotValid()
+        public void SpecificationNotValid()
         {
             throw new NotImplementedException();
         }
@@ -30,7 +30,7 @@ namespace Ini.EventLoggers
         /// <summary>
         /// Configs the not valid.
         /// </summary>
-        public void ConfigNotValid()
+        public void ConfigurationNotValid()
         {
             throw new NotImplementedException();
         }

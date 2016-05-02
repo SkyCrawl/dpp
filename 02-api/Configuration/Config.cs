@@ -327,7 +327,7 @@ namespace Ini.Configuration
             }
             else if(!Spec.IsValid(specEventLog))
             {
-                configEventLog.SpecNotValid();
+                configEventLog.SpecificationNotValid();
                 throw new InvalidSpecException();
             }
             else

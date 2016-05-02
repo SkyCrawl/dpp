@@ -96,7 +96,7 @@ namespace Ini
             options = options ?? ConfigWriterOptions.Default;
             if(options.ValidateConfig && !configuration.IsValid(options.ValidationMode, configWriterEventLogger, specValidatorEventLogger))
             {
-                configWriterEventLogger.ConfigNotValid();
+                configWriterEventLogger.ConfigurationNotValid();
                 throw new InvalidConfigException();
             }
             else

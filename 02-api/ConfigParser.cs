@@ -286,6 +286,12 @@ namespace Ini
             this.specEventLog = specEventLog;
             this.validationMode = validationMode;
 
+            // report before parsing
+            configEventLog.NewConfig(
+                config.Origin,
+                config.Spec != null ? config.Spec.Origin : null,
+                validationMode);
+
             // parse
             PreconditionsTrue();
             PreprocessLines(input);
