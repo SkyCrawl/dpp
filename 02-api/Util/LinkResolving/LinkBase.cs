@@ -48,7 +48,7 @@ namespace Ini.Util.LinkResolving
 		/// </summary>
 		/// <returns>true</returns>
 		/// <c>false</c>
-		public bool IsKeySourceValid()
+		public bool IsValidKeySource()
 		{
 			return !string.IsNullOrEmpty(Section) && !string.IsNullOrEmpty(Option);
 		}

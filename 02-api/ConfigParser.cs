@@ -12,6 +12,7 @@ using Ini.Exceptions;
 using Ini.Configuration.Values;
 using Ini.Util.LinkResolving;
 using Ini.Configuration.Values.Links;
+using Ini.Configuration.Base;
 
 namespace Ini
 {
@@ -63,7 +64,7 @@ namespace Ini
         /// <summary>
         /// Collection of links with unknown targets at the time of their parsing.
         /// </summary>
-        protected List<LinkNode> uncertainLinks;
+        protected Dictionary<LinkNode, Action> uncertainLinks;
 
         /// <summary>
         /// The validation mode to apply when parsing the configuration.
@@ -257,7 +258,7 @@ namespace Ini
             this.linkResolver = new LinkResolver();
             this.lines = new List<LineInfo>();
             this.context = null;
-            this.uncertainLinks = new List<LinkNode>();
+            this.uncertainLinks = new Dictionary<LinkNode, Action>();
             this.validationMode = ConfigValidationMode.Strict;
             this.specEventLog = null;
             this.configEventLog = null;
@@ -274,8 +275,8 @@ namespace Ini
         /// <param name="configEventLog">The config reader event log.</param>
         /// <param name="specEventLog">The spec validator event log.</param>
         /// <param name="validationMode">The validation mode.</param>
-        /// <exception cref="Ini.Exceptions.UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
-        /// <exception cref="Ini.Exceptions.InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
+        /// <exception cref="UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
+        /// <exception cref="InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
         /// <exception cref="MalformedConfigException">If the configuration's format is malformed.</exception>
         /// <returns></returns>
         public Config Parse(TextReader input, IConfigReaderEventLogger configEventLog, ISpecValidatorEventLogger specEventLog, ConfigValidationMode validationMode)
@@ -290,13 +291,58 @@ namespace Ini
             PreprocessLines(input);
             ParseLines();
 
-            // finish up
-            // TODO: uncertain links
+            // now that the configuration is fully parsed, check uncertain links again
+            foreach(KeyValuePair<LinkNode, Action> entry in uncertainLinks)
+            {
+                // if the link's target still hasn't been defined...
+                if(config.GetOption(entry.Key.Target.Section, entry.Key.Target.Option) == null)
+                {
+                    // report
+                    entry.Value.Invoke();
 
+                    // remove such link from the configuration and dependency graph
+                    Option option = config.GetOption(entry.Key.Origin.Section, entry.Key.Origin.Option);
+                    option.Elements.Remove(entry.Key.LinkElement);
+                    linkResolver.RemoveLink(entry.Key);
+
+                    // empty option value is explicitly allowed, so there's no real need to remove the option
+                }
+            }
+
+            // once we have made sure the configuration contains only the valid stuff, resolve all links
             linkResolver.ResolveLinks(config, configEventLog);
 
-            // TODO: interpret the option values in their correct contexts
+            // interpret option values in their correct contexts
+            foreach(Section section in config.GetAllSections())
+            {
+                foreach(Option option in section.GetAllOptions())
+                {
+                    // interpret the values
+                    List<IElement> interpreted = new List<IElement>();
+                    foreach(IElement elem in option)
+                    {
+                        if(elem is IValue)
+                        {
+                            interpreted.Add((elem as ValueStub).InterpretSelf());
+                        }
+                        else if(elem is ILink)
+                        {
+                            (elem as ILink).InterpretSelf();
+                            interpreted.Add(elem);
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("Unknown value type: " + elem.GetType().ToString());
+                        }
+                    }
 
+                    // and replace them for the stubs
+                    option.Elements.Clear();
+                    option.Elements.AddRange(interpreted);
+                }
+            }
+
+            // and finally, return
             return config;
         }
 
@@ -428,7 +474,12 @@ namespace Ini
         {
             string identifier = TrimWhitespaces(lineInfo.Line.Substring(1, lineInfo.Line.Length - 2));
             SectionSpec sectionSpec = specification.GetSection(identifier);
-            if(config.Contains(identifier))
+            if(string.IsNullOrEmpty(identifier))
+            {
+                throw new InvalidOperationException("Library specification states that identifiers must not be empty. " +
+                    "Have you edited the respective regular expressions that demand it?");
+            }
+            else if(config.Contains(identifier))
             {
                 // report error and skip until next section
                 configEventLog.DuplicateSection(context.LineNumber, identifier);
@@ -463,8 +514,13 @@ namespace Ini
                 string separator = match.Groups[2].Value;
                 string value = match.Groups[3].Value; // must not explicitly trim leading whitespaces of a value
 
-                // check duplicates
-                if(context.CurrentSection.Contains(identifier))
+                // check preconditions
+                if(string.IsNullOrEmpty(identifier))
+                {
+                    throw new InvalidOperationException("Library specification states that identifiers must not be empty. " +
+                        "Have you edited the respective regular expressions that demand it?");
+                }
+                else if(context.CurrentSection.Contains(identifier))
                 {
                     configEventLog.DuplicateOption(context.LineNumber, context.CurrentSection.Identifier, identifier);
                 }
@@ -543,15 +599,36 @@ namespace Ini
                     InclusionLink link = new InclusionLink(option.ValueType, linkTarget);
                     LinkNode node = new LinkNode(link, linkOrigin);
 
-                    // register it
-                    option.Elements.Add(link);
-                    linkResolver.AddLink(node);
-
-                    // and determine whether the target is known yet
-                    if(config.GetOption(targetSectionId, targetOptionId) == null)
+                    // check preconditions
+                    if(!linkOrigin.IsValidKeySource())
                     {
-                        // when the parsing is finished, we will check again
-                        uncertainLinks.Add(node);
+                        throw new InvalidOperationException("Library specification states that identifiers must not be empty. " +
+                            "Have you edited the respective regular expressions that demand it?");
+                    }
+                    else if(!linkTarget.IsValidKeySource())
+                    {
+                        configEventLog.InvalidLinkTarget(
+                            context.LineNumber,
+                            context.CurrentSection.Identifier,
+                            option.Identifier,
+                            value);
+                    }
+                    else
+                    {
+                        // register the link
+                        option.Elements.Add(link);
+                        linkResolver.AddLink(node);
+
+                        // and determine whether the link's target is known yet
+                        if(config.GetOption(targetSectionId, targetOptionId) == null)
+                        {
+                            // when the parsing is finished, we will check again
+                            uncertainLinks.Add(node, () => configEventLog.InvalidLinkTarget(
+                                context.LineNumber,
+                                context.CurrentSection.Identifier,
+                                option.Identifier,
+                                value));
+                        }
                     }
                 }
                 else if(splitted.Length > 2) // too many target components

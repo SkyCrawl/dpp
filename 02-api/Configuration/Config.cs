@@ -190,6 +190,22 @@ namespace Ini.Configuration
         }
 
         /// <summary>
+        /// Gets all instances of <see cref="Section"/> within the configuration.
+        /// </summary>
+        /// <returns>All sections.</returns>
+        public IEnumerable<Section> GetAllSections()
+        {
+            foreach(ConfigBlockBase item in Items.Values)
+            {
+                if(item is Section)
+                {
+                    yield return item as Section;
+                }
+            }
+            yield break;
+        }
+
+        /// <summary>
         /// Gets the specified option.
         /// </summary>
         /// <returns>The option, or null if not found.</returns>
@@ -207,7 +223,7 @@ namespace Ini.Configuration
         /// <returns>The collection of elements, or null if not found.</returns>
         /// <param name="sectionIdentifier">Target section identifier.</param>
         /// <param name="optionIdentifier">Target option identifier.</param>
-        public ObservableCollection<IElement> GetElements(string sectionIdentifier, string optionIdentifier)
+        public ObservableList<IElement> GetElements(string sectionIdentifier, string optionIdentifier)
         {
             Section section = GetSection(sectionIdentifier);
             return section != null ? section.GetElements(optionIdentifier) : null;

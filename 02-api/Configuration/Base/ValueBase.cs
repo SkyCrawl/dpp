@@ -4,6 +4,7 @@ using Ini.EventLoggers;
 using Ini.Specification;
 using Ini.Util;
 using Ini.Validation;
+using Ini.Configuration.Values;
 
 namespace Ini.Configuration.Base
 {
@@ -54,6 +55,14 @@ namespace Ini.Configuration.Base
         {
             return (OutputType) (Value as object);
         }
+
+        /// <summary>
+        /// Creates an instance of self from the given string value.
+        /// </summary>
+        /// <returns>The new instance.</returns>
+        /// <param name="value">The string.</param>
+        /// <typeparam name="TResult">The type of self.</typeparam>
+        public abstract TResult FromString<TResult>(string value) where TResult : ValueBase<TValue>;
 
         /// <summary>
         /// Determines whether the element conforms to the given option specification.

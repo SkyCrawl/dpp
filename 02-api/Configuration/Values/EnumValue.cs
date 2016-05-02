@@ -46,6 +46,17 @@ namespace Ini.Configuration.Values
             }
         }
 
+        /// <summary>
+        /// Creates an instance of self from the given string value.
+        /// </summary>
+        /// <returns>The new instance.</returns>
+        /// <param name="value">The string.</param>
+        /// <typeparam name="EnumValue">The type of self.</typeparam>
+        public override EnumValue FromString<EnumValue>(string value)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region Validation

@@ -130,8 +130,7 @@ namespace Ini.EventLoggers
         }
 
         /// <summary>
-        /// The specified link's target has not been foundCould not determine target section and option because too many
-        /// target components were specified.
+        /// The specified link's target has not been found.
         /// </summary>
         /// <param name="lineNumber">1-based line number of the problem.</param>
         /// <param name="section">The option's containing section's identifier.</param>

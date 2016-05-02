@@ -39,7 +39,7 @@ namespace Ini.Configuration
         /// an exception is thrown.
         /// <seealso cref="OnValuesChanged"/>
         /// </summary>
-        public ObservableCollection<IElement> Elements { get; private set; }
+        public ObservableList<IElement> Elements { get; private set; }
 
         #endregion
 
@@ -52,8 +52,7 @@ namespace Ini.Configuration
         {
             this.ValueType = elementType;
             this.TrailingCommentary = commentary;
-            this.Elements = new ObservableCollection<IElement>();
-            this.Elements.CollectionChanged += OnValuesChanged;
+            this.Elements = new ObservableList<IElement>(OnValuesChanged);
         }
 
         #endregion

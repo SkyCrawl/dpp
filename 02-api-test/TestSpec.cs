@@ -4,7 +4,7 @@ using System.IO;
 using NUnit.Framework;
 using Ini;
 using Ini.Specification;
-using Ini.Specification.Elements;
+using Ini.Specification.Values;
 
 namespace apitest
 {

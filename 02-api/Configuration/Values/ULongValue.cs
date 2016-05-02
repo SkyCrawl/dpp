@@ -25,6 +25,21 @@ namespace Ini.Configuration.Values
 
         #endregion
 
+        #region Public methods
+
+        /// <summary>
+        /// Creates an instance of self from the given string value.
+        /// </summary>
+        /// <returns>The new instance.</returns>
+        /// <param name="value">The string.</param>
+        /// <typeparam name="ULongValue">The type of self.</typeparam>
+        public override ULongValue FromString<ULongValue>(string value)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
         #region Validation
 
         /// <summary>

@@ -34,5 +34,10 @@ namespace Ini.Configuration.Base
         /// <param name="config">The parent configuration.</param>
         /// <param name="configEventLogger">Logger to use if something goes wrong.</param>
         void Resolve(Config config, IConfigReaderEventLogger configEventLogger);
+
+        /// <summary>
+        /// Interprets <see cref="Values"/>, according to <see cref="ValueType"/>.
+        /// </summary>
+        void InterpretSelf();
     }
 }

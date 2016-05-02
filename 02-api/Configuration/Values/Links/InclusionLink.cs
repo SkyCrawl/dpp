@@ -15,7 +15,7 @@ using Ini.Exceptions;
 namespace Ini.Configuration.Values.Links
 {
     /// <summary>
-    /// Inclusion link.
+    /// Class representing an inclusion link that can be added to an <see cref="Option"/>.
     /// </summary>
     public class InclusionLink : ILink
     {
@@ -88,6 +88,16 @@ namespace Ini.Configuration.Values.Links
                 }
                 this.IsResolved = true;
             }
+        }
+
+        /// <summary>
+        /// Interprets <see cref="Values"/>, according to <see cref="ValueType"/>.
+        /// </summary>
+        public void InterpretSelf()
+        {
+            IEnumerable<IValue> interpreted = Values.Select<IValue, IValue>(value => (value as ValueStub).InterpretSelf());
+            Values.Clear();
+            Values.AddRange(interpreted);
         }
 
         /// <summary>

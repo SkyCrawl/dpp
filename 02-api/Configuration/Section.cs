@@ -57,9 +57,9 @@ namespace Ini.Configuration
         #region Public methods managing content
 
         /// <summary>
-        /// Adds the specified content to the section.
+        /// Adds the specified item to the section.
         /// </summary>
-        /// <exception cref="ArgumentException">Content with the same identifier has already been added.</exception>
+        /// <exception cref="ArgumentException">Item with the same identifier has already been added.</exception>
         /// <param name="item">The item to add.</param>
         public void Add(ConfigBlockBase item)
         {
@@ -71,39 +71,39 @@ namespace Ini.Configuration
         }
 
         /// <summary>
-        /// Determines whether the section contains content with the specified identifier.
+        /// Determines whether the section contains an item with the specified identifier.
         /// </summary>
-        /// <param name="identifier">Identifier.</param>
+        /// <param name="identifier">The identifier.</param>
         public bool Contains(string identifier)
         {
             return this.Items.ContainsKey(identifier);
         }
 
         /// <summary>
-        /// Gets the content associated to the specified identifier.
+        /// Gets the item associated to the specified identifier.
         /// </summary>
         /// <exception cref="System.Collections.Generic.KeyNotFoundException">Identifier not found.</exception>
-        /// <param name="identifier">Identifier.</param>
+        /// <param name="identifier">The identifier.</param>
         public ConfigBlockBase GetContent(string identifier)
         {
             return this.Items[identifier];
         }
 
         /// <summary>
-        /// Outputs content with the specified identifier and returns true if found.
+        /// Outputs item with the specified identifier and returns true if found.
         /// </summary>
         /// <returns><c>true</c>, if value was found, <c>false</c> otherwise.</returns>
-        /// <param name="identifier">Identifier.</param>
-        /// <param name="content">Content.</param>
-        public bool TryGetContent(string identifier, out ConfigBlockBase content)
+        /// <param name="identifier">The identifier.</param>
+        /// <param name="item">The item.</param>
+        public bool TryGetContent(string identifier, out ConfigBlockBase item)
         {
-            return this.Items.TryGetValue(identifier, out content);
+            return this.Items.TryGetValue(identifier, out item);
         }
 
         /// <summary>
-        /// Removes Adds the specified option.
+        /// Removes item with the specified identifier.
         /// </summary>
-        /// <param name="identifier">Identifier.</param>
+        /// <param name="identifier">The identifier.</param>
         public bool Remove(string identifier)
         {
             ConfigBlockBase value;
@@ -136,7 +136,7 @@ namespace Ini.Configuration
         #region Public methods querying content
 
         /// <summary>
-        /// Gets the option with the specified identifier.
+        /// Gets option with the specified identifier.
         /// </summary>
         /// <returns>The option, or null if not found.</returns>
         /// <param name="optionIdentifier">Target option identifier.</param>
@@ -154,11 +154,27 @@ namespace Ini.Configuration
         }
 
         /// <summary>
+        /// Gets all instances of <see cref="Option"/> within the section.
+        /// </summary>
+        /// <returns>All sections.</returns>
+        public IEnumerable<Option> GetAllOptions()
+        {
+            foreach(ConfigBlockBase item in Items.Values)
+            {
+                if(item is Option)
+                {
+                    yield return item as Option;
+                }
+            }
+            yield break;
+        }
+
+        /// <summary>
         /// Gets the specified option's collection of elements.
         /// </summary>
         /// <returns>The collection of elements, or null if not found.</returns>
         /// <param name="optionIdentifier">Target option identifier.</param>
-        public ObservableCollection<IElement> GetElements(string optionIdentifier)
+        public ObservableList<IElement> GetElements(string optionIdentifier)
         {
             Option option = GetOption(optionIdentifier);
             return option != null ? option.Elements : null;

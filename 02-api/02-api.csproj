@@ -68,12 +68,6 @@
     <Compile Include="Specification\OptionSpec.cs" />
     <Compile Include="Specification\SectionSpec.cs" />
     <Compile Include="Specification\ConfigSpec.cs" />
-    <Compile Include="Specification\Elements\BooleanOptionSpec.cs" />
-    <Compile Include="Specification\Elements\EnumOptionSpec.cs" />
-    <Compile Include="Specification\Elements\FloatOptionSpec.cs" />
-    <Compile Include="Specification\Elements\SignedOptionSpec.cs" />
-    <Compile Include="Specification\Elements\StringOptionSpec.cs" />
-    <Compile Include="Specification\Elements\UnsignedOptionSpec.cs" />
     <Compile Include="SchemaTypeResolver.cs" />
     <Compile Include="SchemaReader.cs" />
     <Compile Include="Exceptions\MalformedConfigException.cs" />
@@ -110,6 +104,12 @@
     <Compile Include="Configuration\Values\Links\InclusionLink.cs" />
     <Compile Include="Util\ObservableList.cs" />
     <Compile Include="Configuration\Values\ValueStub.cs" />
+    <Compile Include="Specification\Values\BooleanOptionSpec.cs" />
+    <Compile Include="Specification\Values\EnumOptionSpec.cs" />
+    <Compile Include="Specification\Values\FloatOptionSpec.cs" />
+    <Compile Include="Specification\Values\SignedOptionSpec.cs" />
+    <Compile Include="Specification\Values\StringOptionSpec.cs" />
+    <Compile Include="Specification\Values\UnsignedOptionSpec.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

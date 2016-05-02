@@ -11,16 +11,31 @@ namespace Ini.Configuration.Values
     /// <summary>
     /// Element of type <see cref="double"/>.
     /// </summary>
-    public class DoubleElement : ValueBase<double>
+    public class DoubleValue : ValueBase<double>
     {
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DoubleElement"/> class
+        /// Initializes a new instance of the <see cref="DoubleValue"/> class
         /// with an initial value.
         /// </summary>
-        public DoubleElement(double value) : base(value)
+        public DoubleValue(double value) : base(value)
         {
+        }
+
+        #endregion
+
+        #region Public methods
+
+        /// <summary>
+        /// Creates an instance of self from the given string value.
+        /// </summary>
+        /// <returns>The new instance.</returns>
+        /// <param name="value">The string.</param>
+        /// <typeparam name="DoubleValue">The type of self.</typeparam>
+        public override DoubleValue FromString<DoubleValue>(string value)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

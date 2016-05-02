@@ -16,16 +16,18 @@ namespace Ini.Util.LinkResolving
 		/// All links (<see cref="LinkNode"/>) indexed by this bucket.
 		/// </summary>
 		/// <value>The links.</value>
-		public List<LinkNode> Links { get; private set; }
+        public List<LinkNode> Links { get; private set; }
 
 		/// <summary>
 		/// All buckets (<see cref="LinkBucket"/>) this bucket depends on.
+        /// Note: Make sure NOT to make a set out of this collection.
 		/// </summary>
 		/// <value>The dependencies.</value>
 		public List<LinkBucket> DependsOnBuckets { get; private set; }
 
 		/// <summary>
 		/// All buckets (<see cref="LinkBucket"/>) dependent on this bucket.
+        /// Note: Make sure NOT to make a set out of this collection.
 		/// </summary>
 		/// <value>The dependants.</value>
 		public List<LinkBucket> Dependants { get; private set; }

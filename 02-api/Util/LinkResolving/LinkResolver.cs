@@ -37,21 +37,12 @@ namespace Ini.Util.LinkResolving
         #region Public interface
 
 		/// <summary>
-		/// Adds the specified link node into the "graph" and updates dependencies.
+		/// Adds the specified node into the "graph" and updates dependencies.
+        /// The origin and target are assumed to be valid.
 		/// </summary>
         /// <param name="node">The node.</param>
         public void AddLink(LinkNode node)
 		{
-			// just in case checks
-            if(!node.Origin.IsKeySourceValid())
-			{
-				throw new ArgumentException("Could not determine the link's origin key because the source data (section or option name) is invalid.");
-			}
-            if(!node.Target.IsKeySourceValid())
-			{
-                throw new ArgumentException("Could not determine the link's target key because the source data (section or option name) is invalid.");
-			}
-
 			// index the link's origin bucket
             int originKey = node.Origin.ToKey();
 			if(!unresolvedBuckets.ContainsKey(originKey))
@@ -68,13 +59,46 @@ namespace Ini.Util.LinkResolving
 
             // index the link
 			LinkBucket originBucket = unresolvedBuckets[originKey];
+            if(originBucket.Links.Contains(node))
+            {
+                throw new ArgumentException("This node has already been added.");
+            }
             originBucket.Links.Add(node);
 
-            // update the dependency graph
+            // update dependency graph
             LinkBucket targetBucket = unresolvedBuckets[targetKey];
 			originBucket.DependsOnBuckets.Add(targetBucket);
 			targetBucket.Dependants.Add(originBucket);
 		}
+
+        /// <summary>
+        /// Removes the specified node from the "graph" and updates dependencies.
+        /// The origin and target are assumed to be valid.
+        /// </summary>
+        /// <param name="node">The node.</param>
+        public void RemoveLink(LinkNode node)
+        {
+            // compute and check the keys
+            int originKey = node.Origin.ToKey();
+            int targetKey = node.Target.ToKey();
+            if(unresolvedBuckets.ContainsKey(originKey) && unresolvedBuckets.ContainsKey(targetKey))
+            {
+                // get the buckets
+                LinkBucket originBucket = unresolvedBuckets[originKey];
+                LinkBucket targetBucket = unresolvedBuckets[targetKey];
+
+                // remove the link
+                originBucket.Links.Remove(node);
+                originBucket.DependsOnBuckets.Remove(targetBucket);
+                targetBucket.Dependants.Remove(originBucket);
+
+                // the below method doesn't mind empty buckets so no need to remove them
+            }
+            else
+            {
+                throw new ArgumentException("Can not remove a link that has not been added to the resolver.");
+            }
+        }
 
 		/// <summary>
 		/// Resolves all links or throws an exception.
