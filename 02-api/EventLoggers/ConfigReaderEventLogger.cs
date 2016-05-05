@@ -11,17 +11,6 @@ namespace Ini.EventLoggers
     /// </summary>
     public class ConfigReaderEventLogger : ConfigValidatorEventLogger, IConfigReaderEventLogger
     {
-
-        #region Properties
-
-        ///// <summary>
-        ///// The output stream to write event logs to.
-        ///// </summary>
-        //protected TextWriter writer;
-
-        #endregion
-
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigReaderEventLogger"/> class.
         /// </summary>
