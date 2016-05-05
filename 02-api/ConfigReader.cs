@@ -21,6 +21,11 @@ namespace Ini
         #region Fields
 
         /// <summary>
+        /// The parser to use.
+        /// </summary>
+        protected IConfigParser parser;
+
+        /// <summary>
         /// The specification validator event logger.
         /// </summary>
         protected ISpecValidatorEventLogger specEventLogger;
@@ -36,24 +41,28 @@ namespace Ini
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Ini.ConfigReader"/> class, with
-        /// user-defined logger output.
+        /// user-defined parser and logger output.
         /// </summary>
+        /// <param name="parser">The parser to use.</param>
         /// <param name="specEventOutput">Specification validator event logger output.</param>
         /// <param name="configEventOutput">Configuration reader event logger output.</param>
-        public ConfigReader(TextWriter specEventOutput = null, TextWriter configEventOutput = null)
+        public ConfigReader(IConfigParser parser = null, TextWriter specEventOutput = null, TextWriter configEventOutput = null)
         {
-            this.specEventLogger = new SchemaValidatorEventLogger(specEventOutput ?? Console.Out);
-            this.configEventLogger = new ConfigReaderEventLogger(configEventOutput ?? Console.Out);
+            this.parser = parser ?? new ConfigParser();
+            this.specEventLogger = new SchemaValidatorEventLogger(specEventOutput);
+            this.configEventLogger = new ConfigReaderEventLogger(configEventOutput);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Ini.ConfigReader"/> class, with
-        /// user-defined loggers.
+        /// user-defined parser and loggers.
         /// </summary>
+        /// <param name="parser">The parser to use.</param>
         /// <param name="specEventLogger">Specification validator event logger.</param>
         /// <param name="configEventLogger">Configuration reader event logger.</param>
-        public ConfigReader(ISpecValidatorEventLogger specEventLogger, IConfigReaderEventLogger configEventLogger)
+        public ConfigReader(IConfigParser parser, ISpecValidatorEventLogger specEventLogger, IConfigReaderEventLogger configEventLogger)
         {
+            this.parser = parser ?? new ConfigParser();
             this.specEventLogger = specEventLogger ?? new SchemaValidatorEventLogger(Console.Out);
             this.configEventLogger = configEventLogger ?? new ConfigReaderEventLogger(Console.Out);
         }
@@ -124,8 +133,8 @@ namespace Ini
         /// <exception cref="Ini.Exceptions.MalformedConfigException">If the configuration's format is malformed.</exception>
         public Config LoadFromText(string origin, TextReader reader, ConfigSpec spec, ConfigValidationMode mode = ConfigValidationMode.Strict)
         {
-            ConfigParser parser = new ConfigParser(spec);
-            return parser.Parse(reader, configEventLogger, specEventLogger, mode);
+            parser.Prepare(spec, configEventLogger, specEventLogger);
+            return parser.Parse(reader, mode);
         }
 
         /// <summary>
@@ -140,8 +149,17 @@ namespace Ini
         /// <param name="mode">The validation mode.</param>
         public bool TryLoadFromText(string origin, TextReader reader, out Config configuration, ConfigSpec spec, ConfigValidationMode mode = ConfigValidationMode.Strict)
         {
-            ConfigParser parser = new ConfigParser(spec);
-            return parser.TryParse(reader, out configuration, configEventLogger, specEventLogger, mode);
+            parser.Prepare(spec, configEventLogger, specEventLogger);
+            try
+            {
+                configuration = parser.Parse(reader, mode);
+                return true;
+            }
+            catch (Exception)
+            {
+                configuration = null;
+                return false;
+            }
         }
 
         #endregion

@@ -111,6 +111,7 @@
     <Compile Include="Specification\Values\SignedOptionSpec.cs" />
     <Compile Include="Specification\Values\StringOptionSpec.cs" />
     <Compile Include="Specification\Values\UnsignedOptionSpec.cs" />
+    <Compile Include="IConfigParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

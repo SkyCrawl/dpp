@@ -19,7 +19,7 @@ namespace Ini
     /// <summary>
     /// A one-time-use class to parse a configuration from text.
     /// </summary>
-    public class ConfigParser
+    public class ConfigParser : IConfigParser
     {
         #region Constants
 
@@ -29,7 +29,7 @@ namespace Ini
         const string IDENTIFIER_SUFFIX_CHAR_REGEX = "[a-zA-Z0-9_~\\-.:$ " + ESCAPE_SEQUENCE + "]";
         const string IDENTIFIER_REGEX = IDENTIFIER_START_CHAR_REGEX + IDENTIFIER_SUFFIX_CHAR_REGEX + "*";
 
-        const string LINE_REGEX_OPTION = "^(" + IDENTIFIER_REGEX + ")" + "(=:?)" + "(.*)$";
+        const string LINE_REGEX_OPTION = "^(" + IDENTIFIER_REGEX + ")" + "(=(?::=)?)" + "(.*)$";
         const string LINE_REGEX_SECTION = "^\\[" + IDENTIFIER_REGEX + "\\]$";
 
         #endregion
@@ -245,45 +245,36 @@ namespace Ini
 
         #endregion
 
-        #region Constructor
+        #region IConfigParser implementation
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Ini.ConfigParser"/> class.
+        /// Passes essential objects for the next parsing task.
         /// </summary>
-        /// <param name="specification">The specification to validate against when parsing the configuration.</param>
-        public ConfigParser(ConfigSpec specification)
+        /// <param name="specification">The result configuration's specification.</param>
+        /// <param name="configEventLog">Configuration reading event logger.</param>
+        /// <param name="specEventLog">Specification validation event logger.</param>
+        public void Prepare(ConfigSpec specification, IConfigReaderEventLogger configEventLog, ISpecValidatorEventLogger specEventLog)
         {
+            // reset the parser
+            Reset();
+
+            // prepare fields (forward arguments)
             this.specification = specification;
-            this.config = new Config(specification);
-            this.linkResolver = new LinkResolver();
-            this.lines = new List<LineInfo>();
-            this.context = null;
-            this.uncertainLinks = new Dictionary<LinkNode, Action>();
-            this.validationMode = ConfigValidationMode.Strict;
-            this.specEventLog = null;
-            this.configEventLog = null;
+            this.configEventLog = configEventLog;
+            this.specEventLog = specEventLog;
         }
 
-        #endregion
-
-        #region Top parsing methods
-
         /// <summary>
-        /// Parses the configuration from the text input.
+        /// Perform the next parsing task.
         /// </summary>
-        /// <param name="input">The reader with configuration file</param>
-        /// <param name="configEventLog">The config reader event log.</param>
-        /// <param name="specEventLog">The spec validator event log.</param>
-        /// <param name="validationMode">The validation mode.</param>
+        /// <param name="input">The input for parsing.</param>
+        /// <param name="validationMode">The validation mode to use.</param>
         /// <exception cref="UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
         /// <exception cref="InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
         /// <exception cref="MalformedConfigException">If the configuration's format is malformed.</exception>
-        /// <returns></returns>
-        public Config Parse(TextReader input, IConfigReaderEventLogger configEventLog, ISpecValidatorEventLogger specEventLog, ConfigValidationMode validationMode)
+        public Config Parse(TextReader input, ConfigValidationMode validationMode)
         {
             // prepare fields (forward arguments)
-            this.configEventLog = configEventLog;
-            this.specEventLog = specEventLog;
             this.validationMode = validationMode;
 
             // report before parsing
@@ -352,27 +343,24 @@ namespace Ini
             return config;
         }
 
+        #endregion
+
+        #region Resetting the parser
+
         /// <summary>
-        /// Parses the configuration from the text input.
+        /// Reset this instance.
         /// </summary>
-        /// <param name="reader">The reader with configuration file</param>
-        /// <param name="config">The parsed configuration file.</param>
-        /// <param name="configEventLog">The config reader event log.</param>
-        /// <param name="specEventLog">The spec validator event log.</param>
-        /// <param name="mode">The validation mode.</param>
-        /// <returns>True if the configuration is parsed successfully.</returns>
-        public bool TryParse(TextReader reader, out Config config, IConfigReaderEventLogger configEventLog, ISpecValidatorEventLogger specEventLog, ConfigValidationMode mode)
+        protected void Reset()
         {
-            try
-            {
-                config = Parse(reader, configEventLog, specEventLog, mode);
-                return true;
-            }
-            catch (Exception)
-            {
-                config = this.config; // return what was parsed before an exception was thrown
-                return false;
-            }
+            this.specification = null;
+            this.config = null;
+            this.linkResolver = new LinkResolver();
+            this.lines = new List<LineInfo>();
+            this.context = null;
+            this.uncertainLinks = new Dictionary<LinkNode, Action>();
+            this.validationMode = ConfigValidationMode.Strict;
+            this.specEventLog = null;
+            this.configEventLog = null;
         }
 
         #endregion
@@ -402,7 +390,7 @@ namespace Ini
         }
 
         /// <summary>
-        /// Reads the specified input into <see cref="lines"/>.
+        /// Reads the specified input into <see cref="lines"/> and creates <see cref="context"/>.
         /// </summary>
         /// <param name="input">The input.</param>
         protected void PreprocessLines(TextReader input)
@@ -423,7 +411,7 @@ namespace Ini
         {
             List<string> filler = new List<string>();
 
-            // let the parser choose the right lines to parse
+            // let the context choose the right lines to parse
             foreach(LineInfo lineInfo in context) 
             {
                 if(string.IsNullOrEmpty(lineInfo.Line))
@@ -587,7 +575,7 @@ namespace Ini
         /// <param name="value">The captured option value.</param>
         protected void ParseOptionRecord(ParserContext context, LineInfo lineInfo, Option option, string value)
         {
-            // check whether we have a link
+            // check the link syntax (content must not be empty thanks to identifiers that must not be empty as well)
             Match match = Regex.Match(TrimWhitespaces(value), UnescapedTokenRegex("^\\${([^}]+)}$"));
             if(match.Success)
             {
@@ -639,7 +627,7 @@ namespace Ini
                 }
                 else if(splitted.Length > 2) // too many target components
                 {
-                    // report the problem and don't interpret the link as a string value
+                    // report the problem and don't try to interpret the link
                     configEventLog.ConfusingLinkTarget(
                         context.LineNumber,
                         context.CurrentSection.Identifier,
@@ -648,7 +636,7 @@ namespace Ini
                 }
                 else // not enough target components
                 {
-                    // report the problem and don't interpret the link as a string value
+                    // report the problem and don't try to interpret the link
                     configEventLog.IncompleteLinkTarget(
                         context.LineNumber,
                         context.CurrentSection.Identifier,
@@ -656,11 +644,26 @@ namespace Ini
                         value);
                 }
             }
-            else
+            else // we have a general string value
             {
-                // we have a general string value, let's register it right away and move on...
-                option.Elements.Add(new ValueStub(option.ValueType, value));
+                ValueStub newStub = new ValueStub(option.ValueType, value);
+
+                // register it and notify derrived classes
+                option.Elements.Add(newStub);
+                OnValueStubRegistered(newStub);
             }
+        }
+
+        #endregion
+
+        #region Special callbacks
+
+        /// <summary>
+        /// A callback when a value stub is created. Override to execute custom alterations.
+        /// </summary>
+        /// <param name="stub">Stub.</param>
+        protected virtual void OnValueStubRegistered(ValueStub stub)
+        {
         }
 
         #endregion
@@ -669,7 +672,7 @@ namespace Ini
 
         /// <summary>
         /// Builds a regular expression that matches the specified token as long as it
-        /// is not preceded by an escape sequence (<see cref="ESCAPE_SEQUENCE"/>.
+        /// is not preceded by an escape sequence (<see cref="ESCAPE_SEQUENCE"/>).
         /// </summary>
         /// <returns>The regular expression.</returns>
         /// <param name="token">The token.</param>
