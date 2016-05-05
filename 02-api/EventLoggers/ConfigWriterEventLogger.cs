@@ -9,12 +9,22 @@ namespace Ini.EventLoggers
     /// </summary>
     public class ConfigWriterEventLogger : ConfigValidatorEventLogger, IConfigWriterEventLogger
     {
+        #region Properties
+
+        /// <summary>
+        /// The output stream to write event logs to.
+        /// </summary>
+        protected TextWriter writer;
+
+        #endregion
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigWriterEventLogger"/> class.
         /// </summary>
         /// <param name="writer">The output stream to write event logs to.</param>
         public ConfigWriterEventLogger(TextWriter writer) : base(writer)
         {
+            this.writer = writer;
         }
 
         #region IConfigWriterBacklog implementation
@@ -24,7 +34,7 @@ namespace Ini.EventLoggers
         /// </summary>
         public void SpecificationNotValid()
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine("The supplied specification is invalid!");
         }
 
         /// <summary>
@@ -32,7 +42,7 @@ namespace Ini.EventLoggers
         /// </summary>
         public void ConfigurationNotValid()
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine("The supplied configuration is invalid!");
         }
 
         #endregion
