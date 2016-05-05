@@ -11,12 +11,24 @@ namespace Ini.EventLoggers
     /// </summary>
     public class ConfigReaderEventLogger : ConfigValidatorEventLogger, IConfigReaderEventLogger
     {
+
+        #region Properties
+
+        /// <summary>
+        /// The output stream to write event logs to.
+        /// </summary>
+        protected TextWriter writer;
+
+        #endregion
+
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigReaderEventLogger"/> class.
         /// </summary>
         /// <param name="writer">The output stream to write event logs to.</param>
         public ConfigReaderEventLogger(TextWriter writer) : base(writer)
         {
+            this.writer = writer;
         }
 
         #region IParsingBacklog Members
@@ -30,23 +42,44 @@ namespace Ini.EventLoggers
         /// <param name="mode">Validation mode applied to the configuration and schema.</param>
         public void NewConfig(string configOrigin, string schemaOrigin = null, ConfigValidationMode mode = ConfigValidationMode.Strict)
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine("Initializing configuration parsing...");
+            this.writer.WriteLine("Configuration read from " + configOrigin);
+
+            if(schemaOrigin != null)
+            {
+                this.writer.WriteLine("Configuration verified against " + schemaOrigin);
+                this.writer.Write("Validation mode is ");
+                               
+                if(mode == ConfigValidationMode.Strict)
+                {
+                    this.writer.WriteLine("strict");
+                }
+                else
+                {
+                    this.writer.WriteLine("relaxed");
+                }
+            }
+            else
+            {
+                NoSpecification();
+            }
         }
 
         /// <summary>
-        /// Strict validation mode was applied and no associated specification was specified.
+        /// No associated specification was specified.
         /// </summary>
         public void NoSpecification()
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine("No schema has been supplied for verifying configuration.");
         }
 
         /// <summary>
-        /// Strict validation mode was applied and the associated specification is not valid.
+        /// Specification associated with the configuration is not valid.
         /// </summary>
         public void SpecificationNotValid()
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine("Specification associated with the configuration is not valid.");
+
         }
             
         /// <summary>
@@ -56,7 +89,8 @@ namespace Ini.EventLoggers
         /// <param name="line">The line.</param>
         public void UnknownLineSyntax(int lineNumber, string line)
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine("Unknown syntax at line: " + lineNumber);
+            this.writer.WriteLine(line);
         }
 
         /// <summary>
@@ -66,7 +100,7 @@ namespace Ini.EventLoggers
         /// <param name="identifier">The duplicate section identifier.</param>
         public void DuplicateSection(int lineNumber, string identifier)
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine("Duplicate section " + identifier + " found at line: " + lineNumber);
         }
 
         /// <summary>
@@ -77,7 +111,7 @@ namespace Ini.EventLoggers
         /// <param name="option">The duplicate option identifier.</param>
         public void DuplicateOption(int lineNumber, string section, string option)
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine("Duplicate option " + option + " in section " + section + " found at line: " + lineNumber);
         }
 
         /// <summary>
@@ -88,7 +122,8 @@ namespace Ini.EventLoggers
         /// <param name="identifier">The missing section identifier.</param>
         public void NoSectionSpecification(int lineNumber, string identifier)
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine("Specification associated with the configuration does not contain a definition for section: " + identifier + " found at line: " + lineNumber);
+
         }
 
         /// <summary>
@@ -100,7 +135,7 @@ namespace Ini.EventLoggers
         /// <param name="option">The missing option identifier.</param>
         public void NoOptionSpecification(int lineNumber, string section, string option)
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine("Specification associated with the configuration does not contain a definition for option: " + option + "in section " + section + " found at line: " + lineNumber);
         }
 
         /// <summary>
@@ -113,7 +148,8 @@ namespace Ini.EventLoggers
         /// <param name="link">The incomplete link.</param>
         public void IncompleteLinkTarget(int lineNumber, string section, string option, string link)
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine("Could not determine target of option " + option + " in section " + section);
+            this.writer.WriteLine("The specified link " + link + " at line: " + lineNumber + " is incomplete");
         }
 
         /// <summary>
@@ -126,7 +162,9 @@ namespace Ini.EventLoggers
         /// <param name="link">The confusing link.</param>
         public void ConfusingLinkTarget(int lineNumber, string section, string option, string link)
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine("Could not determine target of option " + option + " in section " + section);
+            this.writer.WriteLine("The specified link " + link + " at line: " + lineNumber + " contains too many components");
+
         }
 
         /// <summary>
@@ -138,7 +176,9 @@ namespace Ini.EventLoggers
         /// <param name="link">The confusing link.</param>
         public void InvalidLinkTarget(int lineNumber, string section, string option, string link)
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine("Could not determine target of option " + option + " in section " + section);
+            this.writer.WriteLine("The link " + link + " at line: " + lineNumber + " does not specify an existing target");
+
         }
 
         #endregion
