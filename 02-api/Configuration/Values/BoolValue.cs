@@ -16,6 +16,11 @@ namespace Ini.Configuration.Values
         #region Constructor
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="BoolValue"/> class.
+        /// </summary>
+        internal BoolValue() { }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BoolValue"/> class
         /// with an initial value.
         /// </summary>
@@ -30,10 +35,8 @@ namespace Ini.Configuration.Values
         /// <summary>
         /// Creates an instance of self from the given string value.
         /// </summary>
-        /// <returns>The new instance.</returns>
         /// <param name="value">The string.</param>
-        /// <typeparam name="BoolValue">The type of self.</typeparam>
-        public override BoolValue FromString<BoolValue>(string value)
+        public override void FillFromString(string value)
         {
             throw new NotImplementedException();
         }

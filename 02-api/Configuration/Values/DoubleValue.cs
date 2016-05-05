@@ -16,6 +16,11 @@ namespace Ini.Configuration.Values
         #region Constructor
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="DoubleValue"/> class.
+        /// </summary>
+        internal DoubleValue() { }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="DoubleValue"/> class
         /// with an initial value.
         /// </summary>
@@ -30,10 +35,8 @@ namespace Ini.Configuration.Values
         /// <summary>
         /// Creates an instance of self from the given string value.
         /// </summary>
-        /// <returns>The new instance.</returns>
         /// <param name="value">The string.</param>
-        /// <typeparam name="DoubleValue">The type of self.</typeparam>
-        public override DoubleValue FromString<DoubleValue>(string value)
+        public override void FillFromString(string value)
         {
             throw new NotImplementedException();
         }

@@ -32,6 +32,11 @@ namespace Ini.Configuration.Base
         #region Constructor
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Ini.Configuration.Base.ValueBase{T}"/> class.
+        /// </summary>
+        protected ValueBase() { }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Ini.Configuration.Base.ValueBase{T}"/> class
         /// with an initial value.
         /// </summary>
@@ -59,10 +64,8 @@ namespace Ini.Configuration.Base
         /// <summary>
         /// Creates an instance of self from the given string value.
         /// </summary>
-        /// <returns>The new instance.</returns>
         /// <param name="value">The string.</param>
-        /// <typeparam name="TResult">The type of self.</typeparam>
-        public abstract TResult FromString<TResult>(string value) where TResult : ValueBase<TValue>;
+        public abstract void FillFromString(string value);
 
         /// <summary>
         /// Determines whether the element conforms to the given option specification.

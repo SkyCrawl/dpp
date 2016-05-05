@@ -4,6 +4,7 @@ using Ini.Specification;
 using Ini.Validation;
 using Ini.EventLoggers;
 using System.Collections.Generic;
+using Ini.Util;
 
 namespace Ini.Configuration.Values
 {
@@ -17,20 +18,6 @@ namespace Ini.Configuration.Values
     public class ValueStub : IValue
     {
         #region Properties
-
-        /// <summary>
-        /// Mapping of elementary value types (e.g. bool) to corresponding default data types
-        /// (e.g. BoolValue). Feel free to tinker with these mappings or add your own.
-        /// </summary>
-        public static Dictionary<Type, Type> DefaultDataTypes = new Dictionary<Type, Type>()
-        {
-            { typeof(bool), typeof(BoolValue)},
-            { typeof(double), typeof(DoubleValue)},
-            { typeof(Enum), typeof(EnumValue)},
-            { typeof(long), typeof(LongValue)},
-            { typeof(string), typeof(StringValue)},
-            { typeof(ulong), typeof(ULongValue)},
-        };
 
         /// <summary>
         /// The parent option's value type. Otherwise, it would refuse this instance.
@@ -48,7 +35,7 @@ namespace Ini.Configuration.Values
         /// Type of the value interpreted form this stub. Must be a subclass of <see cref="ValueBase{T}"/>
         /// where the parameter "T" is <see cref="ValueType"/>. This property ensures custom transformations of
         /// individual values, in the interest of extensibility. For custom transformations for all stubs alike, see
-        /// <see cref="DefaultDataTypes"/>.
+        /// <see cref="ValueFactory.DefaultDataTypes"/>.
         /// <seealso cref="InterpretSelf"/>
         /// </summary>
         /// <value>Type of the value interpreted form this stub.</value>
@@ -90,7 +77,7 @@ namespace Ini.Configuration.Values
         /// Converts this stub into an interpreted value object. Simply put, this method
         /// takes <see cref="DataType"/>, creates a new instance from it and feeds it
         /// <see cref="Value"/>. If the data type has not been specified, a default
-        /// one is taken from <see cref="DefaultDataTypes"/>. If a default data type
+        /// one is taken from <see cref="ValueFactory.DefaultDataTypes"/>. If a default data type
         /// is not available, an exception is thrown.
         /// </summary>
         /// <returns>The interpreted value object.</returns>
@@ -99,29 +86,7 @@ namespace Ini.Configuration.Values
         /// <see cref="ValueType"/>.</exception>
         public IValue InterpretSelf()
         {
-            // prepare the data type
-            if((DataType == null) && DefaultDataTypes.ContainsKey(ValueType))
-            {
-                DataType = DefaultDataTypes[ValueType];
-            }
-
-            // check if still not defined
-            if(DataType != null)
-            {
-                if(DataType.IsSubclassOf(typeof(ValueBase<ValueType>)))
-                {
-                    return (Activator.CreateInstance(DataType) as ValueBase<ValueType>).FromString<ValueBase<ValueType>>(Value);
-                }
-                else
-                {
-                    throw new InvalidOperationException(string.Format("The type '{0}' doesn't inherit from '{1}'.", DataType.FullName, typeof(ValueBase<ValueType>).FullName));
-                }
-            }
-            else
-            {
-                throw new InvalidOperationException(string.Format("Could not determine the interpreted value's data type. " +
-                    "Have you added a default data type for '{0}'?", ValueType.FullName));
-            }
+            return ValueFactory.GetValue(DataType, ValueType, Value);
         }
 
         /// <summary>

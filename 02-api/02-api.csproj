@@ -60,6 +60,7 @@
     <Compile Include="ConfigWriterOptions.cs" />
     <Compile Include="Util\Guid\IGuid.cs" />
     <Compile Include="Util\Guid\SystemGuidGenerator.cs" />
+    <Compile Include="Util\ValueFactory.cs" />
     <Compile Include="Validation\ConfigValidationMode.cs" />
     <Compile Include="Exceptions\InvalidSpecException.cs" />
     <Compile Include="Exceptions\InvalidConfigException.cs" />
@@ -124,14 +125,7 @@
   </Target>
   -->
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="Util\" />
-    <Folder Include="Util\Guid\" />
-    <Folder Include="Validation\" />
-    <Folder Include="Util\LinkResolving\" />
-    <Folder Include="Configuration\Base\" />
-    <Folder Include="Configuration\Values\Links\" />
-  </ItemGroup>
+  <ItemGroup />
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>

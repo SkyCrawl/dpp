@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Ini.Configuration.Base;
 
 namespace Ini.EventLoggers
 {
@@ -34,6 +35,17 @@ namespace Ini.EventLoggers
         public void ConfigurationNotValid()
         {
             this.writer.WriteLine("The supplied configuration is invalid!");
+        }
+
+        /// <summary>
+        /// One of the links in the configuration was inconsistent with it's origin option.
+        /// </summary>
+        /// <param name="section">The link section</param>
+        /// <param name="option">The link option</param>
+        /// <param name="link">The link instance</param>
+        public void LinkInconsistent(string section, string option, ILink link)
+        {
+            this.writer.WriteLine("The link pointing on section {0} and option {1} is inconsistent.", section, option);
         }
 
         #endregion

@@ -16,6 +16,11 @@ namespace Ini.Configuration.Values
         #region Constructor
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="StringValue"/> class.
+        /// </summary>
+        internal StringValue() { }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Ini.Configuration.Values.StringValue"/> class.
         /// </summary>
         /// <param name="value">Initial value.</param>
@@ -30,10 +35,8 @@ namespace Ini.Configuration.Values
         /// <summary>
         /// Creates an instance of self from the given string value.
         /// </summary>
-        /// <returns>The new instance.</returns>
         /// <param name="value">The string.</param>
-        /// <typeparam name="StringValue">The type of self.</typeparam>
-        public override StringValue FromString<StringValue>(string value)
+        public override void FillFromString(string value)
         {
             throw new NotImplementedException();
         }
