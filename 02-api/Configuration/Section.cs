@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Ini.EventLoggers;
 using Ini.Specification;
 using Ini.Util;
@@ -10,6 +11,7 @@ using System.Collections.Specialized;
 using Ini.Exceptions;
 using Ini.Configuration.Base;
 using Ini.Configuration.Values;
+using System.IO;
 
 namespace Ini.Configuration
 {
@@ -302,6 +304,60 @@ namespace Ini.Configuration
 
                 default:
                     throw new ArgumentException("Unknown enum value: " + e.Action.ToString());
+            }
+        }
+
+        #endregion
+
+        #region ConfigBlockBase Members
+
+        /// <summary>
+        /// Writes the section into the output.
+        /// </summary>
+        /// <param name="writer">The writer to write to.</param>
+        /// <param name="options">The output options.</param>
+        /// <param name="sectionSpecification">The specification of section with the configuration block.</param>
+        protected internal override void WriteTo(TextWriter writer, ConfigWriterOptions options, SectionSpec sectionSpecification)
+        {
+            writer.Write("[{0}]", Identifier);
+            ConfigWriter.WriteComment(writer, TrailingCommentary);
+
+            var items = GetOrderedItems(options.OptionSortOrder, sectionSpecification);
+
+            foreach(var item in items)
+            {
+                item.WriteTo(writer, options, sectionSpecification);
+            }
+        }
+
+        IEnumerable<ConfigBlockBase> GetOrderedItems(ConfigBlockSortOrder sortOrder, SectionSpec spec)
+        {
+            switch (sortOrder)
+            {
+                case ConfigBlockSortOrder.Ascending:
+                    return Items.OrderBy(item => item.Key).Select(item => item.Value);
+                case ConfigBlockSortOrder.Descending:
+                    return Items.OrderByDescending(item => item.Key).Select(item => item.Value);
+                case ConfigBlockSortOrder.Insertion:
+                    return Items.Select(item => item.Value);
+                case ConfigBlockSortOrder.Schema:
+                default:
+                    var result = new List<ConfigBlockBase>();
+                    var itemsToWrite = new Dictionary<string, ConfigBlockBase>(Items);
+
+                    foreach (var optionSpec in spec.Options)
+                    {
+                        ConfigBlockBase option;
+                        if (itemsToWrite.TryGetValue(optionSpec.Identifier, out option))
+                        {
+                            itemsToWrite.Remove(optionSpec.Identifier);
+                            result.Add(option);
+                        }
+                    }
+
+                    result.AddRange(itemsToWrite.Values);
+
+                    return result;
             }
         }
 

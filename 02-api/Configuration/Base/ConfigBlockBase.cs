@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Ini.Specification;
+using System;
+using System.IO;
 
 namespace Ini.Configuration.Base
 {
@@ -27,6 +29,18 @@ namespace Ini.Configuration.Base
         {
             this.Identifier = identifier;
         }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Writes the configuration block into the output.
+        /// </summary>
+        /// <param name="writer">The writer to write to.</param>
+        /// <param name="options">The output options.</param>
+        /// <param name="sectionSpecification">The specification of section with the configuration block.</param>
+        protected internal abstract void WriteTo(TextWriter writer, ConfigWriterOptions options, SectionSpec sectionSpecification);
 
         #endregion
     }

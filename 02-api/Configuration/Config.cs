@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 using Ini.EventLoggers;
 using Ini.Specification;
 using Ini.Util;
@@ -10,6 +11,7 @@ using Ini.Validation;
 using Ini.Exceptions;
 using Ini.Configuration.Base;
 using Ini.Configuration.Values;
+using System.IO;
 
 namespace Ini.Configuration
 {
@@ -372,6 +374,63 @@ namespace Ini.Configuration
                 default:
                     throw new ArgumentException("Unknown enum value: " + e.Action.ToString());
             }
+        }
+
+        #endregion
+
+        #region Writing configuration
+
+        internal void WriteTo(TextWriter writer, ConfigWriterOptions options)
+        {
+            var items = GetOrderedItems(options.SectionSortOrder);
+            var specDictionary = Spec != null ? Spec.Sections.ToDictionary(item => item.Identifier) : null;
+
+            foreach(var item in items)
+            {
+                item.WriteTo(writer, options, TryGetSectionSpec(item.Identifier, specDictionary));
+            }
+        }
+
+        IEnumerable<ConfigBlockBase> GetOrderedItems(ConfigBlockSortOrder sortOrder)
+        {
+            switch(sortOrder)
+            {
+                case ConfigBlockSortOrder.Ascending:
+                    return Items.OrderBy(item => item.Key).Select(item => item.Value);
+                case ConfigBlockSortOrder.Descending:
+                    return Items.OrderByDescending(item => item.Key).Select(item => item.Value);
+                case ConfigBlockSortOrder.Insertion:
+                    return Items.Select(item => item.Value);
+                case ConfigBlockSortOrder.Schema:
+                default:
+                    var result = new List<ConfigBlockBase>();
+                    var itemsToWrite = new Dictionary<string, ConfigBlockBase>(Items);
+
+                    foreach(var section in Spec.Sections)
+                    {
+                        ConfigBlockBase block;
+                        if (itemsToWrite.TryGetValue(section.Identifier, out block))
+                        {
+                            itemsToWrite.Remove(section.Identifier);
+                            result.Add(block);
+                        }
+                    }
+
+                    result.AddRange(itemsToWrite.Values);
+                    
+                    return result;
+            }
+        }
+
+        SectionSpec TryGetSectionSpec(string identifier, Dictionary<string, SectionSpec> specDictionary)
+        {
+            if (specDictionary == null)
+                return null;
+
+            SectionSpec result;
+            specDictionary.TryGetValue(identifier, out result);
+
+            return result;
         }
 
         #endregion

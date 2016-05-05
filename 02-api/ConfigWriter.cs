@@ -102,7 +102,24 @@ namespace Ini
             else
             {
                 // and only then proceed with the writing; TODO: don't forget about the sorting order
-                throw new NotImplementedException();
+                configuration.WriteTo(writer, options);
+            }
+        }
+
+        #endregion
+
+        #region Internal Methods
+
+        internal static void WriteComment(TextWriter writer, string comment)
+        {
+            if (string.IsNullOrWhiteSpace(comment))
+            {
+                writer.WriteLine();
+            }
+            else
+            {
+                writer.Write("; ");
+                writer.WriteLine(comment);
             }
         }
 

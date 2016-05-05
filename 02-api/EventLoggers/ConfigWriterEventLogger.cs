@@ -11,10 +11,10 @@ namespace Ini.EventLoggers
     {
         #region Properties
 
-        /// <summary>
-        /// The output stream to write event logs to.
-        /// </summary>
-        protected TextWriter writer;
+        ///// <summary>
+        ///// The output stream to write event logs to.
+        ///// </summary>
+        //protected TextWriter writer;
 
         #endregion
 

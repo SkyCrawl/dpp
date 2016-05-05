@@ -11,6 +11,7 @@ using Ini.Exceptions;
 using Ini.Validation;
 using Ini.Configuration.Base;
 using Ini.Configuration.Values;
+using System.IO;
 
 namespace Ini.Configuration
 {
@@ -214,6 +215,24 @@ namespace Ini.Configuration
         }
 
         #endregion
+
+        /// <summary>
+        /// Writes the option into the output.
+        /// </summary>
+        /// <param name="writer">The writer to write to.</param>
+        /// <param name="options">The output options.</param>
+        /// <param name="sectionSpecification">The specification of section with the configuration block.</param>
+        protected internal override void WriteTo(TextWriter writer, ConfigWriterOptions options, SectionSpec sectionSpecification)
+        {
+            writer.Write("{0} = ", Identifier);
+
+            foreach (var element in Elements)
+            {
+                // TODO
+            }
+
+            ConfigWriter.WriteComment(writer, TrailingCommentary);
+        }
 
         #region IEnumerable implementation
 

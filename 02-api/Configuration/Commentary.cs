@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Ini.Util.Guid;
 using Ini.Configuration.Base;
+using System.IO;
+using Ini.Specification;
 
 namespace Ini.Configuration
 {
@@ -56,6 +58,24 @@ namespace Ini.Configuration
 			return Lines.GetEnumerator();
 		}
 
-		#endregion
-	}
+        #endregion
+
+        #region ConfigBlockBase Members
+
+        /// <summary>
+        /// Writes the commentary into the output.
+        /// </summary>
+        /// <param name="writer">The writer to write to.</param>
+        /// <param name="options">The output options.</param>
+        /// <param name="sectionSpecification">The specification of section with the configuration block.</param>
+        protected internal override void WriteTo(TextWriter writer, ConfigWriterOptions options, SectionSpec sectionSpecification)
+        {
+            foreach(var line in Lines)
+            {
+                ConfigWriter.WriteComment(writer, line);
+            }
+        }
+
+        #endregion
+    }
 }
