@@ -15,8 +15,8 @@ namespace Ini.EventLoggers
         /// A new configuration parsing task has commenced.
         /// </summary>
         /// <param name="configOrigin">Origin of the newly parsed configuration.</param>
-        /// <param name="schemaOrigin">Origin of the newly parsed configuration's schema.</param>
-        /// <param name="mode">Validation mode applied to the configuration and schema.</param>
+        /// <param name="schemaOrigin">Origin of the newly parsed configuration's specification.</param>
+        /// <param name="mode">Validation mode applied to the parsing task.</param>
         void NewConfig(string configOrigin, string schemaOrigin = null, ConfigValidationMode mode = ConfigValidationMode.Strict);
 
         /// <summary>
@@ -69,8 +69,7 @@ namespace Ini.EventLoggers
         void UnknownLineSyntax(int lineNumber, string line);
 
         /// <summary>
-        /// Could not determine target section and option because at least
-        /// one of them was not specified.
+        /// Could not determine target section or option - at least one was not specified.
         /// </summary>
         /// <param name="lineNumber">1-based line number of the problem.</param>
         /// <param name="section">The option's containing section's identifier.</param>
