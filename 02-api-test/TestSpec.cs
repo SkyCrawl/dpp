@@ -6,7 +6,7 @@ using Ini;
 using Ini.Specification;
 using Ini.Specification.Values;
 
-namespace apitest
+namespace ApiTest
 {
     [TestFixture]
     public class TestSpec
