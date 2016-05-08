@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Ini.Util;
 using Ini.Validation;
 using Ini.Specification;
+using Ini.Configuration.Base;
 
 namespace Ini.EventLoggers
 {
@@ -94,6 +95,6 @@ namespace Ini.EventLoggers
         /// <param name="section">The option's containing section's identifier.</param>
         /// <param name="option">The option's identifier.</param>
         /// <param name="link">The confusing link.</param>
-        void InvalidLinkTarget(int lineNumber, string section, string option, string link);
+        void InvalidLinkTarget(int lineNumber, string section, string option, ILink link);
     }
 }

@@ -605,7 +605,7 @@ namespace Ini
                             context.LineNumber,
                             context.CurrentSection.Identifier,
                             option.Identifier,
-                            value);
+                            link);
                     }
                     else
                     {
@@ -621,7 +621,7 @@ namespace Ini
                                 context.LineNumber,
                                 context.CurrentSection.Identifier,
                                 option.Identifier,
-                                value));
+                                link));
                         }
                     }
                 }
