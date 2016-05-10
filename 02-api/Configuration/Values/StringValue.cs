@@ -38,7 +38,7 @@ namespace Ini.Configuration.Values
         /// <param name="value">The string.</param>
         public override void FillFromString(string value)
         {
-            throw new NotImplementedException();
+            this.Value = value;
         }
 
         #endregion
@@ -54,6 +54,7 @@ namespace Ini.Configuration.Values
         /// <returns></returns>
         public override bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger eventLog = null)
         {
+            // TODO: element typu string může obsahovat libovolné znaky s výjimkou ',', ':' a ';', kde je třeba je uvést znakem '\'
             throw new NotImplementedException();
         }
 

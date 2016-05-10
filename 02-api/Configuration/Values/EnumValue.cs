@@ -57,7 +57,7 @@ namespace Ini.Configuration.Values
         /// <param name="value">The string.</param>
         public override void FillFromString(string value)
         {
-            throw new NotImplementedException();
+            this.Value = value;
         }
 
         #endregion
@@ -73,6 +73,7 @@ namespace Ini.Configuration.Values
         /// <returns></returns>
         public override bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger eventLog = null)
         {
+            // TODO: element typu enum může nabývat hodnot z předem definované množiny řetězců
             throw new NotImplementedException();
         }
 

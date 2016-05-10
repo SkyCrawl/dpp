@@ -44,7 +44,7 @@ namespace Ini.Util
         /// <returns>The array.</returns>
         /// <param name="enumerable">The source enumerable.</param>
         /// <typeparam name="OutputType">The correct elementary type.</typeparam>
-        /// <exception cref="System.InvalidCastException">The specified type was incorrect.</exception>
+        /// <exception cref="InvalidCastException">The specified type was incorrect.</exception>
         public static OutputType[] GetValues<OutputType>(this IEnumerable<IValue> enumerable)
         {
             List<OutputType> result = new List<OutputType>();
@@ -53,6 +53,29 @@ namespace Ini.Util
                 result.Add(value.GetValue<OutputType>());
             }
             return result.ToArray();
+        }
+
+        /// <summary>
+        /// Converts this value into the actual number base represented.
+        /// </summary>
+        /// <returns>The number base.</returns>
+        /// <param name="numberBase">The source enum value.</param>
+        /// <exception cref="ArgumentException">The given value is not handled in this method.</exception>
+        public static int ToBase(this NumberBase numberBase)
+        {
+            switch(numberBase)
+            {
+                case NumberBase.BINARY:
+                    return 2;
+                case NumberBase.OCTAL:
+                    return 8;
+                case NumberBase.DECIMAL:
+                    return 10;
+                case NumberBase.HEXADECIMAL:
+                    return 16;
+                default:
+                    throw new ArgumentException("Unknown number base: " + numberBase.ToString());
+            }
         }
 	}
 }

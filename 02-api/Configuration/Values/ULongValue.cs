@@ -13,6 +13,17 @@ namespace Ini.Configuration.Values
     /// </summary>
     public class ULongValue : ValueBase<ulong>
     {
+        #region Properties
+
+        /// <summary>
+        /// The original number base when <see cref="FillFromString"/> method is used,
+        /// or the base for serialization. Default: decimal.
+        /// </summary>
+        /// <value>The base.</value>
+        public NumberBase Base { get; set; }
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -26,6 +37,7 @@ namespace Ini.Configuration.Values
         /// </summary>
         public ULongValue(ulong value) : base(value)
         {
+            this.Base = NumberBase.DECIMAL;
         }
 
         #endregion
@@ -38,7 +50,26 @@ namespace Ini.Configuration.Values
         /// <param name="value">The string.</param>
         public override void FillFromString(string value)
         {
-            throw new NotImplementedException();
+            // first determine the base
+            if(value.StartsWith("0x"))
+            {
+                this.Base = NumberBase.HEXADECIMAL;
+            }
+            else if(value.StartsWith("0b"))
+            {
+                this.Base = NumberBase.BINARY;
+            }
+            else if(value.StartsWith("0"))
+            {
+                this.Base = NumberBase.OCTAL;
+            }
+            else
+            {
+                this.Base = NumberBase.DECIMAL;
+            }
+
+            // and then parse
+            this.Value = Convert.ToUInt64(value, this.Base.ToBase());
         }
 
         #endregion

@@ -38,7 +38,7 @@ namespace Ini.Configuration.Values
         /// <param name="value">The string.</param>
         public override void FillFromString(string value)
         {
-            throw new NotImplementedException();
+            this.Value = Double.Parse(value);
         }
 
         #endregion

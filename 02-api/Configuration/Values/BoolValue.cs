@@ -13,6 +13,26 @@ namespace Ini.Configuration.Values
     /// </summary>
     public class BoolValue : ValueBase<bool>
     {
+        #region Properties
+
+        /// <summary>
+        /// The strings that represent "true" value.
+        /// </summary>
+        protected HashSet<string> trueStrings = new HashSet<string>()
+        {
+            "1", "t", "y", "on", "yes", "enabled"
+        };
+
+        /// <summary>
+        /// The strings that represent "false" value.
+        /// </summary>
+        protected HashSet<string> falseStrings = new HashSet<string>()
+        {
+            "0", "f", "n", "off", "no", "disabled"
+        };
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -36,9 +56,23 @@ namespace Ini.Configuration.Values
         /// Creates an instance of self from the given string value.
         /// </summary>
         /// <param name="value">The string.</param>
+        /// <exception cref="ArgumentException">If the given string value could not be interpreted.</exception>
         public override void FillFromString(string value)
         {
-            throw new NotImplementedException();
+            // the library doesn't care about casing, as long as the base string is matched
+            string lowercaseValue = value.ToLower();
+            if(trueStrings.Contains(lowercaseValue))
+            {
+                this.Value = true;
+            }
+            else if(falseStrings.Contains(lowercaseValue))
+            {
+                this.Value = false;
+            }
+            else
+            {
+                throw new ArgumentException("Unknown boolean representation: " + value);
+            }
         }
 
         #endregion
