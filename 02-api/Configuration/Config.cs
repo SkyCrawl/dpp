@@ -315,26 +315,52 @@ namespace Ini.Configuration
         /// <summary>
         /// Determines whether the configuration conforms to <see cref="Spec"/>.
         /// </summary>
-        /// <returns><c>true</c> if this instance validates against the specified mode and associated specification; otherwise, <c>false</c>.</returns>
-        /// <exception cref="UndefinedSpecException">If the specification is undefined.</exception>
-        /// <exception cref="InvalidSpecException">If the schema is invalid.</exception>
-        /// <param name="mode">Mode.</param>
-        /// <param name="configEventLog">Config event log.</param>
-        /// <param name="specEventLog">Specification event log.</param>
-        public bool IsValid(ConfigValidationMode mode, IConfigWriterEventLogger configEventLog, ISpecValidatorEventLogger specEventLog = null)
+        /// <returns><c>true</c> if this instance validates against the given mode and specification; otherwise, <c>false</c>.</returns>
+        /// <param name="mode">Validation mode to use.</param>
+        /// <param name="configLogger">Configuration validation event logger.</param>
+        /// <param name="specLogger">Specification validation event logger.</param>
+        public bool IsValid(ConfigValidationMode mode, IConfigValidatorEventLogger configLogger, ISpecValidatorEventLogger specLogger)
         {
+            // prepare event loggers
+            configLogger = configLogger ?? new ConfigValidatorEventLogger(Console.Out);
+            specLogger = specLogger ?? new SpecValidatorEventLogger(Console.Out);
+
+            // verify specification
             if(Spec == null)
             {
-                throw new UndefinedSpecException();
+                configLogger.NoSpecification();
+                return false;
             }
-            else if(!Spec.IsValid(specEventLog))
+            else if(!Spec.IsValid(specLogger))
             {
-                configEventLog.SpecificationNotValid();
-                throw new InvalidSpecException();
+                configLogger.SpecificationNotValid();
+                return false;
             }
             else
             {
-                throw new NotImplementedException();
+                // prepare the result validation state
+                bool configValid = true;
+
+                // validate the inner structure against the specification
+                foreach(Section section in Items.Values.Where(item => item is Section))
+                {
+                    SectionSpec sectionSpecification = Spec.GetSection(section.Identifier);
+                    if(sectionSpecification == null)
+                    {
+                        // okay, that's something we should know about
+                        configLogger.MissingSectionSpecification(section.Identifier);
+
+                        // and error status depends on the validation mode
+                        configValid = mode == ConfigValidationMode.Relaxed;
+                    }
+                    else if(!section.IsValid(sectionSpecification, mode, configLogger))
+                    {
+                        configValid = false;
+                    }
+                }
+
+                // and return
+                return configValid;
             }
         }
 

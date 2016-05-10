@@ -58,7 +58,7 @@ namespace Ini.Configuration
 
         #endregion
 
-        #region Public methods
+        #region Public methods querying content
 
         /// <summary>
         /// Gets the element at the specified index.
@@ -162,15 +162,28 @@ namespace Ini.Configuration
         #region Validation
 
         /// <summary>
-        /// Determines whether the option conforms to the specified option specification.
+        /// Determines whether the option conforms to the given option specification.
         /// </summary>
-        /// <param name="mode"></param>
-        /// <param name="optionSpec"></param>
-        /// <param name="eventLog"></param>
-        /// <returns></returns>
-        public bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger eventLog = null)
+        /// <returns><c>true</c> if this instance validates against the given mode and specification; otherwise, <c>false</c>.</returns>
+        /// <param name="optionSpec">The option specification.</param>
+        /// <param name="mode">Validation mode to use.</param>
+        /// <param name="configLogger">Configuration validation event logger.</param>
+        public bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger configLogger)
         {
-            throw new NotImplementedException();
+            // prepare the result validation state
+            bool optionValid = true;
+
+            // validate the inner structure against the specification
+            foreach(IElement element in Elements)
+            {
+                if(!element.IsValid(optionSpec, mode, configLogger))
+                {
+                    optionValid = false;
+                }
+            }
+
+            // and return
+            return optionValid;
         }
 
         #endregion

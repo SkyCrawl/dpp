@@ -260,13 +260,35 @@ namespace Ini.Configuration
         /// <summary>
         /// Determines whether the section conforms to the given section specification.
         /// </summary>
-        /// <param name="mode"></param>
-        /// <param name="sectionSpec"></param>
-        /// <param name="eventLog"></param>
-        /// <returns></returns>
-        public bool IsValid(SectionSpec sectionSpec, ConfigValidationMode mode, ISpecValidatorEventLogger eventLog = null)
+        /// <returns><c>true</c> if this instance validates against the given mode and specification; otherwise, <c>false</c>.</returns>
+        /// <param name="sectionSpec">The section specification.</param>
+        /// <param name="mode">Validation mode to use.</param>
+        /// <param name="configLogger">Configuration validation event logger.</param>
+        public bool IsValid(SectionSpec sectionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger configLogger)
         {
-            throw new NotImplementedException();
+            // prepare the result validation state
+            bool sectionValid = true;
+
+            // validate the inner structure against the specification
+            foreach(Option option in Items.Values.Where(item => item is Option))
+            {
+                OptionSpec optionSpecification = sectionSpec.GetOption(option.Identifier);
+                if(optionSpecification == null)
+                {
+                    // okay, that's something we should know about
+                    configLogger.MissingOptionSpecification(option.Identifier);
+
+                    // and error status depends on the validation mode
+                    sectionValid = mode == ConfigValidationMode.Relaxed;
+                }
+                else if(!option.IsValid(optionSpecification, mode, configLogger))
+                {
+                    sectionValid = false;
+                }
+            }
+
+            // and return
+            return sectionValid;
         }
 
         #endregion

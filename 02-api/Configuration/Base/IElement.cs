@@ -22,6 +22,6 @@ namespace Ini.Configuration.Base
         /// <param name="mode">The validation mode.</param>
         /// <param name="eventLog">The validation event log.</param>
         /// <returns></returns>
-        bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger eventLog = null);
+        bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger eventLog);
     }
 }

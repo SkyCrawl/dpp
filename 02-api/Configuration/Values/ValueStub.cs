@@ -12,7 +12,8 @@ namespace Ini.Configuration.Values
     /// Class representing a value of an option in early stage of configuration parsing.
     /// It is necessary due to <see cref="Ini.Configuration.Values.Links.InclusionLink"/>
     /// and once all the links are resolved, instances of this class will be replaced for
-    /// real data types that inherit from <see cref="ValueBase{T}"/>.
+    /// real data types that inherit from <see cref="ValueBase{T}"/>. As such, any attempt
+    /// to call <see cref="ValueStub.IsValid"/> results in an exception.
     /// <seealso cref="InterpretSelf"/>
     /// </summary>
     public class ValueStub : IValue
@@ -90,16 +91,17 @@ namespace Ini.Configuration.Values
         }
 
         /// <summary>
-        /// Determines whether the element conforms to the given option specification.
+        /// Do not use.
         /// </summary>
-        /// <param name="optionSpec">The option specification.</param>
-        /// <param name="mode">The validation mode.</param>
-        /// <param name="eventLog">The validation event log.</param>
-        /// <returns></returns>
-        public bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger eventLog = null)
+        /// <param name="optionSpec">Whatever.</param>
+        /// <param name="mode">Whatever.</param>
+        /// <param name="configLogger">Whatever.</param>
+        /// <returns>Nothing.</returns>
+        /// <exception cref="InvalidOperationException">Always.</exception>
+        [Obsolete("This method throws an exception as it was inherited and doesn't hold its meaning in this special class.")]
+        public bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger configLogger)
         {
-            // stubs are not supposed to be in the structure when validating
-            return false;
+            throw new InvalidOperationException();
         }
 
         #endregion

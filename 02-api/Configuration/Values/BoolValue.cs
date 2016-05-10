@@ -142,13 +142,13 @@ namespace Ini.Configuration.Values
         #region Validation
 
         /// <summary>
-        /// Determines whether the element conforms to the given option specification.
+        /// Determines whether the value conforms to the given option specification.
         /// </summary>
         /// <param name="optionSpec">The option specification.</param>
-        /// <param name="mode">The validation mode.</param>
-        /// <param name="eventLog">The validation event log.</param>
+        /// <param name="mode">Validation mode to use.</param>
+        /// <param name="configLogger">Configuration validation event logger.</param>
         /// <returns></returns>
-        public override bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger eventLog = null)
+        public override bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger configLogger)
         {
             throw new NotImplementedException();
         }

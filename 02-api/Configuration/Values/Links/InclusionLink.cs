@@ -101,15 +101,30 @@ namespace Ini.Configuration.Values.Links
         }
 
         /// <summary>
-        /// Determines whether the element conforms to the given option specification.
+        /// Determines whether the link conforms to the given option specification.
         /// </summary>
         /// <param name="optionSpec">The option specification.</param>
         /// <param name="mode">The validation mode.</param>
-        /// <param name="eventLog">The validation event log.</param>
+        /// <param name="configLogger">Configuration validation event logger.</param>
         /// <returns></returns>
-        public bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger eventLog = null)
+        public bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger configLogger)
         {
-            return Values.All(value => value.IsValid(optionSpec, mode, eventLog));
+            // note: this implementation assumes type checks performed by 'OnContentChanged' method
+
+            // prepare the result validation state
+            bool linkValid = true;
+
+            // validate the inner structure against the specification
+            foreach(IValue value in Values)
+            {
+                if(!value.IsValid(optionSpec, mode, configLogger))
+                {
+                    linkValid = false;
+                }
+            }
+
+            // and return
+            return linkValid;
         }
 
         #endregion
