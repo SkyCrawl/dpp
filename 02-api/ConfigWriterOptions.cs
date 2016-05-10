@@ -23,7 +23,7 @@ namespace Ini
         static ConfigWriterOptions()
         {
             Default = new ConfigWriterOptions();
-            Default.ValidateConfig = true;
+            Default.Validate = true;
             Default.ValidationMode = ConfigValidationMode.Strict;
             Default.SectionSortOrder = ConfigBlockSortOrder.Insertion;
             Default.OptionSortOrder = ConfigBlockSortOrder.Insertion;
@@ -36,7 +36,7 @@ namespace Ini
         /// to be invalid, it will NOT be written.
         /// </summary>
         /// <value><c>true</c> if configuration is to be validated; otherwise, <c>false</c>.</value>
-        public bool ValidateConfig { get; set; }
+        public bool Validate { get; set; }
 
         /// <summary>
         /// Validation mode to apply when validating configuration.

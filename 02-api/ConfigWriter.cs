@@ -94,7 +94,7 @@ namespace Ini
         {
             // first check validity of both specification and configuration, if defined and required
             options = options ?? ConfigWriterOptions.Default;
-            if(options.ValidateConfig && !configuration.IsValid(options.ValidationMode, configWriterEventLogger, specValidatorEventLogger))
+            if(options.Validate && !configuration.IsValid(options.ValidationMode, configWriterEventLogger, specValidatorEventLogger))
             {
                 throw new InvalidConfigException();
             }
