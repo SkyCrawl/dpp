@@ -93,13 +93,14 @@ namespace Ini.Configuration.Values
         /// <summary>
         /// Do not use.
         /// </summary>
-        /// <param name="optionSpec">Whatever.</param>
-        /// <param name="mode">Whatever.</param>
+        /// <param name="config">Whatever.</param>
+        /// <param name="section">Whatever.</param>
+        /// <param name="specification">Whatever.</param>
         /// <param name="configLogger">Whatever.</param>
         /// <returns>Nothing.</returns>
         /// <exception cref="InvalidOperationException">Always.</exception>
         [Obsolete("This method throws an exception as it was inherited and doesn't hold its meaning in this special class.")]
-        public bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger configLogger)
+        public bool IsValid(Config config, string section, OptionSpec specification, IConfigValidatorEventLogger configLogger)
         {
             throw new InvalidOperationException();
         }

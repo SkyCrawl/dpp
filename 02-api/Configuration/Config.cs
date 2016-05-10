@@ -338,12 +338,12 @@ namespace Ini.Configuration
                 if(sectionSpecification == null)
                 {
                     // okay, that's something we should know about
-                    configLogger.MissingSectionSpecification(section.Identifier);
+                    configLogger.NoSectionSpecification(section.Identifier);
 
                     // and error status depends on the validation mode
                     configValid = mode == ConfigValidationMode.Relaxed;
                 }
-                else if(!section.IsValid(sectionSpecification, mode, configLogger))
+                else if(!section.IsValid(this, sectionSpecification, mode, configLogger))
                 {
                     configValid = false;
                 }

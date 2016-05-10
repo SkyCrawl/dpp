@@ -70,11 +70,12 @@ namespace Ini.Configuration.Base
         /// <summary>
         /// Determines whether the element conforms to the given option specification.
         /// </summary>
-        /// <param name="optionSpec">The option specification.</param>
-        /// <param name="mode">The validation mode.</param>
-        /// <param name="eventLog">The validation event log.</param>
+        /// <param name="config">The parent configuration.</param>
+        /// <param name="section">The current section.</param>
+        /// <param name="specification">The current option's specification.</param>
+        /// <param name="configLogger">Configuration validation event logger.</param>
         /// <returns></returns>
-        public abstract bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger eventLog = null);
+        public abstract bool IsValid(Config config, string section, OptionSpec specification, IConfigValidatorEventLogger configLogger);
 
         #endregion
     }

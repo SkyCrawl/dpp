@@ -27,7 +27,7 @@ namespace Ini.EventLoggers
         /// probably want to distinguish the previous output from the new.
         /// </summary>
         /// <param name="specOrigin">Spec origin.</param>
-        public void NewSpecification(string specOrigin)
+        public virtual void NewSpecification(string specOrigin)
         {
             throw new NotImplementedException();
         }
@@ -36,7 +36,7 @@ namespace Ini.EventLoggers
         /// A general parsing/format error has occurred.
         /// </summary>
         /// <param name="message"></param>
-        public void SpecificationMalformed(string message)
+        public virtual void SpecificationMalformed(string message)
         {
             throw new NotImplementedException();
         }

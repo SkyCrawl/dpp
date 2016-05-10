@@ -2,6 +2,8 @@
 using Ini.Util.LinkResolving;
 using Ini.EventLoggers;
 using Ini.Util;
+using Ini.Specification;
+using Ini.Validation;
 
 namespace Ini.Configuration.Base
 {

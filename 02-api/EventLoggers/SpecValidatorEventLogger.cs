@@ -29,7 +29,7 @@ namespace Ini.EventLoggers
         /// A duplicate section has been found in the associated specification.
         /// </summary>
         /// <param name="sectionIdentifier">Containing section's identifier.</param>
-        public void DuplicateSection(string sectionIdentifier)
+        public virtual void DuplicateSection(string sectionIdentifier)
         {
             throw new NotImplementedException();
         }
@@ -39,17 +39,17 @@ namespace Ini.EventLoggers
         /// </summary>
         /// <param name="sectionIdentifier">The containing section's identifier.</param>
         /// <param name="optionIdentifier">The involved option's identifier.</param>
-        public void DuplicateOption(string sectionIdentifier, string optionIdentifier)
+        public virtual void DuplicateOption(string sectionIdentifier, string optionIdentifier)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Mandatory option have to define at least one default value.
+        /// The given option is mandatory but it doesn't define any default value.
         /// </summary>
         /// <param name="sectionIdentifier">The containing section's identifier.</param>
         /// <param name="optionIdentifier">The involved option's identifier.</param>
-        public void NoDefaultValue(string sectionIdentifier, string optionIdentifier)
+        public virtual void NoValue(string sectionIdentifier, string optionIdentifier)
         {
             throw new NotImplementedException();
         }
@@ -59,7 +59,7 @@ namespace Ini.EventLoggers
         /// </summary>
         /// <param name="sectionIdentifier">The containing section's identifier.</param>
         /// <param name="optionIdentifier">The involved option's identifier.</param>
-        public void TooManyValues(string sectionIdentifier, string optionIdentifier)
+        public virtual void TooManyValues(string sectionIdentifier, string optionIdentifier)
         {
             throw new NotImplementedException();
         }
@@ -69,7 +69,7 @@ namespace Ini.EventLoggers
         /// </summary>
         /// <param name="sectionIdentifier">The containing section's identifier.</param>
         /// <param name="optionIdentifier">The involved option's identifier.</param>
-        public void MissingEnumValues(string sectionIdentifier, string optionIdentifier)
+        public virtual void NoEnumValues(string sectionIdentifier, string optionIdentifier)
         {
             throw new NotImplementedException();
         }
@@ -80,7 +80,7 @@ namespace Ini.EventLoggers
         /// <param name="sectionIdentifier">The containing section's identifier.</param>
         /// <param name="optionIdentifier">The involved option's identifier.</param>
         /// <param name="value">The affected value.</param>
-        public void ValueNotAllowed(string sectionIdentifier, string optionIdentifier, object value)
+        public virtual void ValueNotAllowed(string sectionIdentifier, string optionIdentifier, object value)
         {
             throw new NotImplementedException();
         }
@@ -91,7 +91,7 @@ namespace Ini.EventLoggers
         /// <param name="sectionIdentifier">The containing section's identifier.</param>
         /// <param name="optionIdentifier">The involved option's identifier.</param>
         /// <param name="value">The affected value.</param>
-        public void ValueOutOfRange(string sectionIdentifier, string optionIdentifier, object value)
+        public virtual void ValueOutOfRange(string sectionIdentifier, string optionIdentifier, object value)
         {
             throw new NotImplementedException();
         }

@@ -18,7 +18,7 @@ namespace Ini.Configuration
     /// <summary>
     /// Class representing option as a whole.
     /// </summary>
-    public class Option : ConfigBlockBase, IElement, IEnumerable<IElement>
+    public class Option : ConfigBlockBase, IEnumerable<IElement>
     {
         #region Properties
 
@@ -162,23 +162,48 @@ namespace Ini.Configuration
         #region Validation
 
         /// <summary>
-        /// Determines whether the option conforms to the given option specification.
+        /// Determines whether this instance is valid the specified config section specification configLogger.
         /// </summary>
-        /// <returns><c>true</c> if this instance validates against the given mode and specification; otherwise, <c>false</c>.</returns>
-        /// <param name="optionSpec">The option specification.</param>
-        /// <param name="mode">Validation mode to use.</param>
-        /// <param name="configLogger">Configuration validation event logger.</param>
-        public bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger configLogger)
+        /// <returns><c>true</c> if this instance is valid the specified config section specification configLogger; otherwise, <c>false</c>.</returns>
+        /// <param name="config">Config.</param>
+        /// <param name="section">Section.</param>
+        /// <param name="specification">Specification.</param>
+        /// <param name="configLogger">Config logger.</param>
+        public bool IsValid(Config config, string section, OptionSpec specification, IConfigValidatorEventLogger configLogger)
         {
             // prepare the result validation state
             bool optionValid = true;
 
-            // validate the inner structure against the specification
-            foreach(IElement element in Elements)
+            // validate general conditions
+            int valueCount = GetObjectValues().Count;
+            if(specification.IsMandatory && valueCount == 0)
             {
-                if(!element.IsValid(optionSpec, mode, configLogger))
+                optionValid = false;
+                configLogger.NoValue(section, Identifier);
+            }
+            if(specification.HasSingleValue && valueCount > 1)
+            {
+                optionValid = false;
+                configLogger.TooManyValues(section, Identifier);
+            }
+            if(!ValueType.Equals(specification.GetValueType()))
+            {
+                optionValid = false;
+                configLogger.ValueTypeMismatch(
+                    section,
+                    Identifier,
+                    specification.GetValueType(),
+                    ValueType);
+            }
+            else
+            {
+                // only validate inner elements if there's no type mismatch
+                foreach(IElement element in Elements)
                 {
-                    optionValid = false;
+                    if(!element.IsValid(config, section, specification, configLogger))
+                    {
+                        optionValid = false;
+                    }
                 }
             }
 

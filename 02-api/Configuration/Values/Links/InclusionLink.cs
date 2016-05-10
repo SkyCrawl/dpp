@@ -101,23 +101,51 @@ namespace Ini.Configuration.Values.Links
         }
 
         /// <summary>
-        /// Determines whether the link conforms to the given option specification.
+        /// Determines whether the element conforms to the given option specification.
         /// </summary>
-        /// <param name="optionSpec">The option specification.</param>
-        /// <param name="mode">The validation mode.</param>
+        /// <param name="config">The parent configuration.</param>
+        /// <param name="section">The current section.</param>
+        /// <param name="specification">The current option's specification.</param>
         /// <param name="configLogger">Configuration validation event logger.</param>
         /// <returns></returns>
-        public bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger configLogger)
+        public bool IsValid(Config config, string section, OptionSpec specification, IConfigValidatorEventLogger configLogger)
         {
-            // note: this implementation assumes type checks performed by 'OnContentChanged' method
+            /*
+             * First catch bugs.
+             */
+
+            // if there's a value type mismatch, this code should never have been called, so:
+            if(!ValueType.Equals(specification.GetValueType()))
+            {
+                throw new InvalidOperationException("Value type is assumed to have been checked in the parent option and yet, there's a mismatch at value-level. A bug?");
+            }
+
+            if(!IsResolved)
+            {
+                throw new InvalidOperationException("Can not validate links that have not been resolved.");
+            }
+
+            /*
+             * And then validate.
+             */
 
             // prepare the result validation state
             bool linkValid = true;
 
+            // validate target
+            if(config.GetOption(Target.Section, Target.Option) == null)
+            {
+                linkValid = false;
+                configLogger.LinkInconsistent(
+                    section,
+                    specification.Identifier,
+                    this);
+            }
+
             // validate the inner structure against the specification
             foreach(IValue value in Values)
             {
-                if(!value.IsValid(optionSpec, mode, configLogger))
+                if(!value.IsValid(config, section, specification, configLogger))
                 {
                     linkValid = false;
                 }

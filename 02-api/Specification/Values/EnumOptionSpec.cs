@@ -46,7 +46,7 @@ namespace Ini.Specification.Values
             if(AllowedValues.Count < 2)
             {
                 result = false;
-                eventLogger.MissingEnumValues(sectionIdentifier, Identifier);
+                eventLogger.NoEnumValues(sectionIdentifier, Identifier);
             }
             foreach(string value in DefaultValues)
             {

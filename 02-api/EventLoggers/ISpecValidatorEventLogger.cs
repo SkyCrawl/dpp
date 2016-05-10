@@ -23,11 +23,11 @@ namespace Ini.EventLoggers
         void DuplicateOption(string sectionIdentifier, string optionIdentifier);
 
         /// <summary>
-        /// Mandatory option have to define at least one default value.
+        /// The given option is mandatory but it doesn't define any default value.
         /// </summary>
         /// <param name="sectionIdentifier">The containing section's identifier.</param>
         /// <param name="optionIdentifier">The involved option's identifier.</param>
-        void NoDefaultValue(string sectionIdentifier, string optionIdentifier);
+        void NoValue(string sectionIdentifier, string optionIdentifier);
 
         /// <summary>
         /// The given option was declared as single-value but defined multiple default values.
@@ -41,7 +41,7 @@ namespace Ini.EventLoggers
         /// </summary>
         /// <param name="sectionIdentifier">The containing section's identifier.</param>
         /// <param name="optionIdentifier">The involved option's identifier.</param>
-        void MissingEnumValues(string sectionIdentifier, string optionIdentifier);
+        void NoEnumValues(string sectionIdentifier, string optionIdentifier);
 
         /// <summary>
         /// The given option defined a default value that was not listed as allowed.

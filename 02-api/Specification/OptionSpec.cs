@@ -96,7 +96,7 @@ namespace Ini.Specification
             if(IsMandatory && DefaultValues.Count == 0)
             {
                 result = false;
-                eventLogger.NoDefaultValue(sectionIdentifier, Identifier);
+                eventLogger.NoValue(sectionIdentifier, Identifier);
             }
             if(HasSingleValue && DefaultValues.Count > 1)
             {

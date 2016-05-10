@@ -5,6 +5,7 @@ using Ini.Specification;
 using Ini.Util;
 using Ini.Validation;
 using Ini.Configuration.Base;
+using Ini.Specification.Values;
 
 namespace Ini.Configuration.Values
 {
@@ -142,15 +143,16 @@ namespace Ini.Configuration.Values
         #region Validation
 
         /// <summary>
-        /// Determines whether the value conforms to the given option specification.
+        /// Determines whether the element conforms to the given option specification.
         /// </summary>
-        /// <param name="optionSpec">The option specification.</param>
-        /// <param name="mode">Validation mode to use.</param>
+        /// <param name="config">The parent configuration.</param>
+        /// <param name="section">The current section.</param>
+        /// <param name="specification">The current option's specification.</param>
         /// <param name="configLogger">Configuration validation event logger.</param>
         /// <returns></returns>
-        public override bool IsValid(OptionSpec optionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger configLogger)
+        public override bool IsValid(Config config, string section, OptionSpec specification, IConfigValidatorEventLogger configLogger)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         #endregion

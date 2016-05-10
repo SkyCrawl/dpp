@@ -23,8 +23,9 @@ namespace Ini.Configuration
         #region Properties
 
         /// <summary>
-        /// Trailing commentary for the section.
+        /// The section's trailing commentary.
         /// </summary>
+        /// <value>The section's trailing commentary.</value>
         public string TrailingCommentary { get; set; }
 
         /// <summary>
@@ -261,34 +262,35 @@ namespace Ini.Configuration
         /// Determines whether the section conforms to the given section specification.
         /// </summary>
         /// <returns><c>true</c> if this instance validates against the given mode and specification; otherwise, <c>false</c>.</returns>
+        /// <param name="config">The parent configuration object.</param>
         /// <param name="sectionSpec">The section specification.</param>
         /// <param name="mode">Validation mode to use.</param>
         /// <param name="configLogger">Configuration validation event logger.</param>
-        public bool IsValid(SectionSpec sectionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger configLogger)
+        public bool IsValid(Config config, SectionSpec sectionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger configLogger)
         {
             // prepare the result validation state
-            bool sectionValid = true;
+            bool result = true;
 
             // validate the inner structure against the specification
             foreach(Option option in Items.Values.Where(item => item is Option))
             {
-                OptionSpec optionSpecification = sectionSpec.GetOption(option.Identifier);
-                if(optionSpecification == null)
+                OptionSpec optionSpec = sectionSpec.GetOption(option.Identifier);
+                if(optionSpec == null)
                 {
                     // okay, that's something we should know about
-                    configLogger.MissingOptionSpecification(option.Identifier);
+                    configLogger.NoOptionSpecification(option.Identifier);
 
                     // and error status depends on the validation mode
-                    sectionValid = mode == ConfigValidationMode.Relaxed;
+                    result = mode == ConfigValidationMode.Relaxed;
                 }
-                else if(!option.IsValid(optionSpecification, mode, configLogger))
+                else if(!option.IsValid(config, Identifier, optionSpec, configLogger))
                 {
-                    sectionValid = false;
+                    result = false;
                 }
             }
 
             // and return
-            return sectionValid;
+            return result;
         }
 
         #endregion

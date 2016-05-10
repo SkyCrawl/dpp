@@ -18,20 +18,5 @@ namespace Ini.EventLoggers
         {
             this.writer = writer;
         }
-
-        #region IConfigWriterEventLogger implementation
-
-        /// <summary>
-        /// One of the links in the configuration was inconsistent with it's origin option.
-        /// </summary>
-        /// <param name="section">The link section</param>
-        /// <param name="option">The link option</param>
-        /// <param name="link">The link instance</param>
-        public void LinkInconsistent(string section, string option, ILink link)
-        {
-            this.writer.WriteLine("The link pointing on section {0} and option {1} is inconsistent.", section, option);
-        }
-
-        #endregion
     }
 }
