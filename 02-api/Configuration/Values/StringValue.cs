@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Ini.EventLoggers;
 using Ini.Specification;
 using Ini.Util;
-using Ini.Validation;
 using Ini.Configuration.Base;
 
 namespace Ini.Configuration.Values

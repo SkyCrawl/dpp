@@ -7,7 +7,6 @@ using System.Linq;
 using Ini.EventLoggers;
 using Ini.Specification;
 using Ini.Util;
-using Ini.Validation;
 using Ini.Exceptions;
 using Ini.Configuration.Base;
 using Ini.Configuration.Values;

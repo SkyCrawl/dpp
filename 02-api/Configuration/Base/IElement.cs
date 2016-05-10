@@ -1,6 +1,5 @@
 ﻿using System;
 using Ini.Specification;
-using Ini.Validation;
 using Ini.EventLoggers;
 
 namespace Ini.Configuration.Base

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Ini.Validation
+namespace Ini.Util
 {
     /// <summary>
     /// Validation mode for configurations.

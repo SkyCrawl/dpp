@@ -5,7 +5,6 @@ using System.Linq;
 using Ini.EventLoggers;
 using Ini.Specification;
 using Ini.Util;
-using Ini.Validation;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Ini.Exceptions;

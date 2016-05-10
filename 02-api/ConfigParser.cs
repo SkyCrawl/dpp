@@ -7,7 +7,6 @@ using Ini.EventLoggers;
 using Ini.Configuration;
 using Ini.Specification;
 using Ini.Util;
-using Ini.Validation;
 using Ini.Exceptions;
 using Ini.Configuration.Values;
 using Ini.Util.LinkResolving;

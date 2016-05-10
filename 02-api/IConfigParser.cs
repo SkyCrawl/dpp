@@ -2,8 +2,8 @@
 using System.IO;
 using Ini.EventLoggers;
 using Ini.Configuration;
-using Ini.Validation;
 using Ini.Specification;
+using Ini.Util;
 
 namespace Ini
 {

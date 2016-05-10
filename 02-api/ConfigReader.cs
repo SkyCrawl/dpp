@@ -6,7 +6,6 @@ using Ini.Configuration;
 using Ini.Specification;
 using Ini.EventLoggers;
 using Ini.Util;
-using Ini.Validation;
 
 namespace Ini
 {

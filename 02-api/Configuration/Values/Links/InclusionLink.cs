@@ -5,7 +5,6 @@ using System.Linq;
 using Ini.Configuration;
 using Ini.Configuration.Base;
 using Ini.Specification;
-using Ini.Validation;
 using Ini.EventLoggers;
 using Ini.Util.LinkResolving;
 using Ini.Util;
