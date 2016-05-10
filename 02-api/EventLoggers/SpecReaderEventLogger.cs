@@ -8,15 +8,15 @@ using System.IO;
 namespace Ini.EventLoggers
 {
     /// <summary>
-    /// An implementation of <see cref="ISchemaReaderEventLogger"/> that writes a text writer.
+    /// An implementation of <see cref="ISpecReaderEventLogger"/> that writes a text writer.
     /// </summary>
-    public class SchemaReaderEventLogger : SchemaValidatorEventLogger, ISchemaReaderEventLogger
+    public class SpecReaderEventLogger : SpecValidatorEventLogger, ISpecReaderEventLogger
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SchemaReaderEventLogger"/> class.
+        /// Initializes a new instance of the <see cref="SpecReaderEventLogger"/> class.
         /// </summary>
         /// <param name="writer">The output stream to write event logs to.</param>
-        public SchemaReaderEventLogger(TextWriter writer) : base(writer)
+        public SpecReaderEventLogger(TextWriter writer) : base(writer)
         {
         }
 

@@ -23,6 +23,10 @@ namespace Ini
     {
         #region Constants
 
+        /// <summary>
+        /// The commentary separator in INI files.
+        /// </summary>
+        public const string COMMENTARY_SEPARATOR = ";";
         const string ESCAPE_SEQUENCE = "\\";
 
         const string IDENTIFIER_START_CHAR_REGEX = "[a-zA-Z.$:]";
@@ -452,8 +456,8 @@ namespace Ini
                         // report unknown syntax
                         configEventLog.UnknownLineSyntax(context.LineNumber, lineInfo.Line);
 
-                        // and place an empty line instead
-                        config.Add(new Commentary(new string[] { "" }));
+                        // and only keep the line's commentary
+                        config.Add(new Commentary(new string[] { string.IsNullOrEmpty(lineInfo.TrailingCommentary) ? "" : lineInfo.TrailingCommentary }));
                     }
                 }
             }
@@ -749,10 +753,10 @@ namespace Ini
         protected static string RemoveTrailingCommentary(string line, out string commentary)
         {
             // match the first semicolon that is not preceded by an escape sequence
-            Match match = Regex.Match(line, UnescapedTokenRegex(";"));
+            Match match = Regex.Match(line, UnescapedTokenRegex(COMMENTARY_SEPARATOR));
             if(match.Success)
             {
-                commentary = line.Substring(match.Index, line.Length - match.Index);
+                commentary = line.Substring(match.Index + 1, line.Length - match.Index - 1);
                 return line.Substring(0, match.Index);
             }
             else

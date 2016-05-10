@@ -8,9 +8,9 @@ using Ini.Configuration.Base;
 namespace Ini.EventLoggers
 {
     /// <summary>
-    /// Interface providing information about reading configurations.
+    /// Interface defining configuration reading events.
     /// </summary>
-    public interface IConfigReaderEventLogger
+    public interface IConfigReaderEventLogger : IConfigValidationBase
     {
         /// <summary>
         /// A new configuration parsing task has commenced.
@@ -19,16 +19,6 @@ namespace Ini.EventLoggers
         /// <param name="schemaOrigin">Origin of the newly parsed configuration's specification.</param>
         /// <param name="mode">Validation mode applied to the parsing task.</param>
         void NewConfig(string configOrigin, string schemaOrigin = null, ConfigValidationMode mode = ConfigValidationMode.Strict);
-
-        /// <summary>
-        /// Strict validation mode was applied but the parser didn't receive a specification.
-        /// </summary>
-        void NoSpecification();
-
-        /// <summary>
-        /// Strict validation mode was applied but the received specification was not valid.
-        /// </summary>
-        void SpecificationNotValid();
 
         /// <summary>
         /// A duplicate section has been found.

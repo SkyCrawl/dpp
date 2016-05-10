@@ -7,7 +7,7 @@ namespace Ini.EventLoggers
     /// <summary>
     /// An implementation of <see cref="ISpecValidatorEventLogger"/> that writes a text writer.
     /// </summary>
-    public class SchemaValidatorEventLogger : ISpecValidatorEventLogger
+    public class SpecValidatorEventLogger : ISpecValidatorEventLogger
     {
         /// <summary>
         /// The output stream to write event logs to.
@@ -15,10 +15,10 @@ namespace Ini.EventLoggers
         protected TextWriter writer;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SchemaValidatorEventLogger"/> class.
+        /// Initializes a new instance of the <see cref="SpecValidatorEventLogger"/> class.
         /// </summary>
         /// <param name="writer">The output stream to write event logs to.</param>
-        public SchemaValidatorEventLogger(TextWriter writer)
+        public SpecValidatorEventLogger(TextWriter writer)
         {
             this.writer = writer;
         }
@@ -31,7 +31,7 @@ namespace Ini.EventLoggers
         /// <param name="sectionIdentifier">Containing section's identifier.</param>
         public void DuplicateSection(string sectionIdentifier)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(); 
         }
 
         /// <summary>

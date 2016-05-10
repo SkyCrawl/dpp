@@ -19,23 +19,7 @@ namespace Ini.EventLoggers
             this.writer = writer;
         }
 
-        #region IConfigWriterBacklog implementation
-
-        /// <summary>
-        /// Specs the not valid.
-        /// </summary>
-        public void SpecificationNotValid()
-        {
-            this.writer.WriteLine("The supplied specification is invalid!");
-        }
-
-        /// <summary>
-        /// Configs the not valid.
-        /// </summary>
-        public void ConfigurationNotValid()
-        {
-            this.writer.WriteLine("The supplied configuration is invalid!");
-        }
+        #region IConfigWriterEventLogger implementation
 
         /// <summary>
         /// One of the links in the configuration was inconsistent with it's origin option.

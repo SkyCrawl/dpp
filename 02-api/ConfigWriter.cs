@@ -38,7 +38,7 @@ namespace Ini
         /// <param name="configWriterOutput">Configuration writer event logger output.</param>
         public ConfigWriter(TextWriter specValidatorOutput = null, TextWriter configWriterOutput = null)
         {
-            this.specValidatorEventLogger = new SchemaValidatorEventLogger(specValidatorOutput ?? Console.Out);
+            this.specValidatorEventLogger = new SpecValidatorEventLogger(specValidatorOutput ?? Console.Out);
             this.configWriterEventLogger = new ConfigWriterEventLogger(configWriterOutput ?? Console.Out);
         }
 
@@ -50,7 +50,7 @@ namespace Ini
         /// <param name="configWriterEventLogger">Configuration writer event logger.</param>
         public ConfigWriter(ISpecValidatorEventLogger specValidatorEventLogger, IConfigWriterEventLogger configWriterEventLogger)
         {
-            this.specValidatorEventLogger = specValidatorEventLogger ?? new SchemaValidatorEventLogger(Console.Out);
+            this.specValidatorEventLogger = specValidatorEventLogger ?? new SpecValidatorEventLogger(Console.Out);
             this.configWriterEventLogger = configWriterEventLogger ?? new ConfigWriterEventLogger(Console.Out);
         }
 
@@ -96,12 +96,11 @@ namespace Ini
             options = options ?? ConfigWriterOptions.Default;
             if(options.ValidateConfig && !configuration.IsValid(options.ValidationMode, configWriterEventLogger, specValidatorEventLogger))
             {
-                configWriterEventLogger.ConfigurationNotValid();
                 throw new InvalidConfigException();
             }
             else
             {
-                // and only then proceed with the writing; TODO: don't forget about the sorting order
+                // and only then proceed with the writing
                 configuration.WriteTo(writer, options);
             }
         }
@@ -118,7 +117,8 @@ namespace Ini
             }
             else
             {
-                writer.Write("; ");
+                writer.Write(ConfigParser.COMMENTARY_SEPARATOR);
+                writer.Write(' ');
                 writer.WriteLine(comment);
             }
         }

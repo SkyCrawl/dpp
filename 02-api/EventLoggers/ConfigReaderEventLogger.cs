@@ -29,7 +29,7 @@ namespace Ini.EventLoggers
         /// <param name="configOrigin">Origin of the newly parsed configuration.</param>
         /// <param name="schemaOrigin">Origin of the newly parsed configuration's specification.</param>
         /// <param name="mode">Validation mode applied to the parsing task.</param>
-        public void NewConfig(string configOrigin, string schemaOrigin = null, ConfigValidationMode mode = ConfigValidationMode.Strict)
+        public virtual void NewConfig(string configOrigin, string schemaOrigin = null, ConfigValidationMode mode = ConfigValidationMode.Strict)
         {
             this.writer.WriteLine("...Beginning to parse configuration from origin:");
             if(configOrigin != null)
@@ -51,7 +51,7 @@ namespace Ini.EventLoggers
         /// <summary>
         /// Strict validation mode was applied but the parser didn't receive a specification.
         /// </summary>
-        public void NoSpecification()
+        public override void NoSpecification()
         {
             this.writer.WriteLine("ERROR: strict validation mode was applied but no specification has been specified.");
         }
@@ -59,7 +59,7 @@ namespace Ini.EventLoggers
         /// <summary>
         /// Strict validation mode was applied but the received specification was not valid.
         /// </summary>
-        public void SpecificationNotValid()
+        public override void SpecificationNotValid()
         {
             this.writer.WriteLine("ERROR: strict validation mode was applied but the received specification was not valid.");
         }
@@ -69,7 +69,7 @@ namespace Ini.EventLoggers
         /// </summary>
         /// <param name="lineNumber">1-based line number of the problem.</param>
         /// <param name="line">The line.</param>
-        public void UnknownLineSyntax(int lineNumber, string line)
+        public virtual void UnknownLineSyntax(int lineNumber, string line)
         {
             this.writer.WriteLine(string.Format("Line {0}: unknown syntax. Content:", lineNumber));
             this.writer.WriteLine("\t" + line);
@@ -80,7 +80,7 @@ namespace Ini.EventLoggers
         /// </summary>
         /// <param name="lineNumber">1-based line number of the problem.</param>
         /// <param name="identifier">The duplicate section identifier.</param>
-        public void DuplicateSection(int lineNumber, string identifier)
+        public virtual void DuplicateSection(int lineNumber, string identifier)
         {
             this.writer.WriteLine(string.Format("Line {0}: duplicate section ('{1}').", lineNumber, identifier));
         }
@@ -91,7 +91,7 @@ namespace Ini.EventLoggers
         /// <param name="lineNumber">1-based line number of the problem.</param>
         /// <param name="section">The option's containing section's identifier.</param>
         /// <param name="option">The duplicate option identifier.</param>
-        public void DuplicateOption(int lineNumber, string section, string option)
+        public virtual void DuplicateOption(int lineNumber, string section, string option)
         {
             this.writer.WriteLine(string.Format("Line {0}: duplicate option '{1}' in section '{2}'.", lineNumber, option, section));
         }
@@ -102,7 +102,7 @@ namespace Ini.EventLoggers
         /// </summary>
         /// <param name="lineNumber">1-based line number of the problem.</param>
         /// <param name="identifier">The missing section identifier.</param>
-        public void NoSectionSpecification(int lineNumber, string identifier)
+        public virtual void NoSectionSpecification(int lineNumber, string identifier)
         {
             this.writer.WriteLine(string.Format("Line {0}: specification is missing definition for section '{1}'.", lineNumber, identifier));
         }
@@ -114,7 +114,7 @@ namespace Ini.EventLoggers
         /// <param name="lineNumber">1-based line number of the problem.</param>
         /// <param name="section">The option's containing section's identifier.</param>
         /// <param name="option">The option's identifier.</param>
-        public void NoOptionSpecification(int lineNumber, string section, string option)
+        public virtual void NoOptionSpecification(int lineNumber, string section, string option)
         {
             this.writer.WriteLine(string.Format("Line {0}: specification is missing definition for option '{1}' in section '{2}'.", lineNumber, option, section));
         }
@@ -126,7 +126,7 @@ namespace Ini.EventLoggers
         /// <param name="section">The option's containing section's identifier.</param>
         /// <param name="option">The option's identifier.</param>
         /// <param name="link">The incomplete link.</param>
-        public void IncompleteLinkTarget(int lineNumber, string section, string option, string link)
+        public virtual void IncompleteLinkTarget(int lineNumber, string section, string option, string link)
         {
             this.writer.WriteLine(string.Format("Line {0}: link specifies too few target components in section '{1}' and option '{2}'. The link:", lineNumber, section, option));
             this.writer.WriteLine("\t" + link);
@@ -140,7 +140,7 @@ namespace Ini.EventLoggers
         /// <param name="section">The option's containing section's identifier.</param>
         /// <param name="option">The option's identifier.</param>
         /// <param name="link">The confusing link.</param>
-        public void ConfusingLinkTarget(int lineNumber, string section, string option, string link)
+        public virtual void ConfusingLinkTarget(int lineNumber, string section, string option, string link)
         {
             this.writer.WriteLine(string.Format("Line {0}: link specifies too many target components in section '{1}' and option '{2}'. The link:", lineNumber, section, option));
             this.writer.WriteLine("\t" + link);
@@ -153,7 +153,7 @@ namespace Ini.EventLoggers
         /// <param name="section">The option's containing section's identifier.</param>
         /// <param name="option">The option's identifier.</param>
         /// <param name="link">The confusing link.</param>
-        public void InvalidLinkTarget(int lineNumber, string section, string option, ILink link)
+        public virtual void InvalidLinkTarget(int lineNumber, string section, string option, ILink link)
         {
             this.writer.WriteLine(string.Format("Line {0}: link target (section '{1}' and option '{2}') not found.", lineNumber, link.Target.Section, link.Target.Option));
             this.writer.WriteLine(string.Format("\tLink defined in section '{0}' and option '{1}'.", section, option));

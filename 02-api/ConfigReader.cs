@@ -49,7 +49,7 @@ namespace Ini
         public ConfigReader(IConfigParser parser = null, TextWriter specEventOutput = null, TextWriter configEventOutput = null)
         {
             this.parser = parser ?? new ConfigParser();
-            this.specEventLogger = new SchemaValidatorEventLogger(specEventOutput);
+            this.specEventLogger = new SpecValidatorEventLogger(specEventOutput);
             this.configEventLogger = new ConfigReaderEventLogger(configEventOutput);
         }
 
@@ -63,7 +63,7 @@ namespace Ini
         public ConfigReader(IConfigParser parser, ISpecValidatorEventLogger specEventLogger, IConfigReaderEventLogger configEventLogger)
         {
             this.parser = parser ?? new ConfigParser();
-            this.specEventLogger = specEventLogger ?? new SchemaValidatorEventLogger(Console.Out);
+            this.specEventLogger = specEventLogger ?? new SpecValidatorEventLogger(Console.Out);
             this.configEventLogger = configEventLogger ?? new ConfigReaderEventLogger(Console.Out);
         }
 

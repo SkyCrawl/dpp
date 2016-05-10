@@ -7,15 +7,14 @@ using System.Threading.Tasks;
 namespace Ini.EventLoggers
 {
     /// <summary>
-    /// Interface providing information about reading schemas.
+    /// Interface defining specification reading events.
     /// </summary>
-    public interface ISchemaReaderEventLogger
+    public interface ISpecReaderEventLogger
     {
         /// <summary>
-        /// The associated reader will now parse a new schema. Consumers will
-        /// probably want to distinguish the previous output from the new.
+        /// A new specification reading task has commenced.
         /// </summary>
-        /// <param name="schemaOrigin">Origin of the newly parsed schema.</param>
+        /// <param name="schemaOrigin">Origin of the newly parsed specification.</param>
         void NewSpecification(string schemaOrigin);
 
         /// <summary>

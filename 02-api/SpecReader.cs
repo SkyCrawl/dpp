@@ -12,37 +12,37 @@ namespace Ini
     /// <summary>
     /// The class used to parse configuration schema.
     /// </summary>
-    public class SchemaReader
+    public class SpecReader
     {
         #region Fields
 
         /// <summary>
         /// The specification reader event logger.
         /// </summary>
-        protected ISchemaReaderEventLogger specReaderEventLogger;
+        protected ISpecReaderEventLogger specReaderEventLogger;
 
         #endregion
 
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Ini.SchemaReader"/> class, with
+        /// Initializes a new instance of the <see cref="Ini.SpecReader"/> class, with
         /// user-defined logger output.
         /// </summary>
         /// <param name="specReaderOutput">Specification reader event logger output.</param>
-        public SchemaReader(TextWriter specReaderOutput = null)
+        public SpecReader(TextWriter specReaderOutput = null)
         {
-            this.specReaderEventLogger = new SchemaReaderEventLogger(specReaderOutput ?? Console.Out);
+            this.specReaderEventLogger = new SpecReaderEventLogger(specReaderOutput ?? Console.Out);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Ini.SchemaReader"/> class, with
+        /// Initializes a new instance of the <see cref="Ini.SpecReader"/> class, with
         /// user-defined logger.
         /// </summary>
         /// <param name="specReaderEventLogger">Specification reader event logger.</param>
-        public SchemaReader(ISchemaReaderEventLogger specReaderEventLogger)
+        public SpecReader(ISpecReaderEventLogger specReaderEventLogger)
         {
-            this.specReaderEventLogger = specReaderEventLogger ?? new SchemaReaderEventLogger(Console.Out);
+            this.specReaderEventLogger = specReaderEventLogger ?? new SpecReaderEventLogger(Console.Out);
         }
 
         #endregion
@@ -101,7 +101,7 @@ namespace Ini
         {
             // prepare the YAML deserializer with custom typer resolving
             var deserializer = new Deserializer();
-            deserializer.TypeResolvers.Insert(0, new SchemaTypeResolver());
+            deserializer.TypeResolvers.Insert(0, new SpecTypeResolver());
 
             // and try to deserialize
             try

@@ -69,8 +69,6 @@
     <Compile Include="Specification\OptionSpec.cs" />
     <Compile Include="Specification\SectionSpec.cs" />
     <Compile Include="Specification\ConfigSpec.cs" />
-    <Compile Include="SchemaTypeResolver.cs" />
-    <Compile Include="SchemaReader.cs" />
     <Compile Include="Exceptions\MalformedConfigException.cs" />
     <Compile Include="Exceptions\MalformedSchemaException.cs" />
     <Compile Include="Util\LinkResolving\LinkNode.cs" />
@@ -83,12 +81,9 @@
     <Compile Include="EventLoggers\ConfigReaderEventLogger.cs" />
     <Compile Include="EventLoggers\ConfigValidatorEventLogger.cs" />
     <Compile Include="EventLoggers\ConfigWriterEventLogger.cs" />
-    <Compile Include="EventLoggers\SchemaReaderEventLogger.cs" />
-    <Compile Include="EventLoggers\SchemaValidatorEventLogger.cs" />
     <Compile Include="EventLoggers\IConfigReaderEventLogger.cs" />
     <Compile Include="EventLoggers\IConfigValidatorEventLogger.cs" />
     <Compile Include="EventLoggers\IConfigWriterEventLogger.cs" />
-    <Compile Include="EventLoggers\ISchemaReaderEventLogger.cs" />
     <Compile Include="EventLoggers\ISpecValidatorEventLogger.cs" />
     <Compile Include="Util\LinkResolving\LinkBase.cs" />
     <Compile Include="Configuration\Base\ConfigBlockBase.cs" />
@@ -113,6 +108,12 @@
     <Compile Include="Specification\Values\UnsignedOptionSpec.cs" />
     <Compile Include="IConfigParser.cs" />
     <Compile Include="Util\NumberBase.cs" />
+    <Compile Include="EventLoggers\IConfigValidationBase.cs" />
+    <Compile Include="EventLoggers\ISpecReaderEventLogger.cs" />
+    <Compile Include="EventLoggers\SpecReaderEventLogger.cs" />
+    <Compile Include="EventLoggers\SpecValidatorEventLogger.cs" />
+    <Compile Include="SpecReader.cs" />
+    <Compile Include="SpecTypeResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
