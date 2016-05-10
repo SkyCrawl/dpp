@@ -19,14 +19,14 @@ namespace Ini
         /// specification option. See class hierarchy for <see cref="OptionSpec"/>. Feel free
         /// to tinker with these mappings or add your own.
 		/// </summary>
-        public static Dictionary<string, Type> OptionTypesDictionary = new Dictionary<string, Type>
+        public static Dictionary<string, Type> OptionTypesDictionary = new Dictionary<string, Type>()
 		{
-            { "!String", typeof(StringOptionSpec)},
-            { "!Enum", typeof(EnumOptionSpec)},
-            { "!Boolean", typeof(BooleanOptionSpec)},
-			{ "!Float", typeof(FloatOptionSpec)},
-			{ "!Signed", typeof(SignedOptionSpec)},
-			{ "!Unsigned", typeof(UnsignedOptionSpec)},
+            { "!String", typeof(StringOptionSpec) },
+            { "!Enum", typeof(EnumOptionSpec) },
+            { "!Boolean", typeof(BooleanOptionSpec) },
+			{ "!Float", typeof(FloatOptionSpec) },
+			{ "!Signed", typeof(SignedOptionSpec) },
+			{ "!Unsigned", typeof(UnsignedOptionSpec) },
 		};
 
 		#endregion

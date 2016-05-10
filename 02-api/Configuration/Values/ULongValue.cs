@@ -16,8 +16,8 @@ namespace Ini.Configuration.Values
         #region Properties
 
         /// <summary>
-        /// The original number base when <see cref="FillFromString"/> method is used,
-        /// or the base for serialization. Default: decimal.
+        /// The original number base as determined by <see cref="FillFromString"/>,
+        /// or user-defined number base. It is used for serialization. Default: decimal.
         /// </summary>
         /// <value>The base.</value>
         public NumberBase Base { get; set; }

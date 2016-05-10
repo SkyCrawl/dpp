@@ -13,22 +13,79 @@ namespace Ini.Configuration.Values
     /// </summary>
     public class BoolValue : ValueBase<bool>
     {
+        #region Types
+
+        /// <summary>
+        /// The formats supported by conversion to/from strings.
+        /// </summary>
+        public enum BoolFormat
+        {
+            /// <summary>
+            /// True: '1'. False: '0'.
+            /// </summary>
+            CHARACTER_01,
+
+            /// <summary>
+            /// True: 't'. False: 'f'.
+            /// </summary>
+            CHARACTER_TF,
+
+            /// <summary>
+            /// True: 'y'. False: 'n'.
+            /// </summary>
+            CHARACTER_YN,
+
+            /// <summary>
+            /// True: 'on'. False: 'off'.
+            /// </summary>
+            ON_OFF,
+
+            /// <summary>
+            /// True: 'yes'. False: 'no'.
+            /// </summary>
+            YES_NO,
+
+            /// <summary>
+            /// True: 'enabled'. False: 'disabled'.
+            /// </summary>
+            ENABLED_DISABLED
+        }
+
+        #endregion
+
         #region Properties
 
         /// <summary>
-        /// The strings that represent "true" value.
+        /// The original format as determined by <see cref="FillFromString"/>,
+        /// or user-defined format. It is used for serialization. Default: yes/no.
         /// </summary>
-        protected HashSet<string> trueStrings = new HashSet<string>()
+        /// <value>The format.</value>
+        public BoolFormat Format { get; set; }
+
+        /// <summary>
+        /// The mapping of strings that represent "true" value to their respective format.
+        /// </summary>
+        protected static Dictionary<string, BoolFormat> trueStrings = new Dictionary<string, BoolFormat>
         {
-            "1", "t", "y", "on", "yes", "enabled"
+            { "1", BoolFormat.CHARACTER_01 },
+            { "t", BoolFormat.CHARACTER_TF },
+            { "y", BoolFormat.CHARACTER_YN },
+            { "on", BoolFormat.ON_OFF },
+            { "yes", BoolFormat.YES_NO },
+            { "enabled", BoolFormat.ENABLED_DISABLED },
         };
 
         /// <summary>
-        /// The strings that represent "false" value.
+        /// The mapping of strings that represent "false" value to their respective format.
         /// </summary>
-        protected HashSet<string> falseStrings = new HashSet<string>()
+        protected static Dictionary<string, BoolFormat> falseStrings = new Dictionary<string, BoolFormat>
         {
-            "0", "f", "n", "off", "no", "disabled"
+            { "0", BoolFormat.CHARACTER_01 },
+            { "f", BoolFormat.CHARACTER_TF },
+            { "n", BoolFormat.CHARACTER_YN },
+            { "off", BoolFormat.ON_OFF },
+            { "no", BoolFormat.YES_NO },
+            { "disabled", BoolFormat.ENABLED_DISABLED },
         };
 
         #endregion
@@ -46,6 +103,7 @@ namespace Ini.Configuration.Values
         /// </summary>
         public BoolValue(bool value) : base(value)
         {
+            this.Format = BoolFormat.YES_NO;
         }
 
         #endregion
@@ -61,13 +119,17 @@ namespace Ini.Configuration.Values
         {
             // the library doesn't care about casing, as long as the base string is matched
             string lowercaseValue = value.ToLower();
-            if(trueStrings.Contains(lowercaseValue))
+
+            // try to parse
+            if(trueStrings.ContainsKey(lowercaseValue))
             {
                 this.Value = true;
+                this.Format = trueStrings[lowercaseValue];
             }
-            else if(falseStrings.Contains(lowercaseValue))
+            else if(falseStrings.ContainsKey(lowercaseValue))
             {
                 this.Value = false;
+                this.Format = falseStrings[lowercaseValue];
             }
             else
             {
