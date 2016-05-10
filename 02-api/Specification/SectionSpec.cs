@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using Ini.EventLoggers;
 using Ini.Configuration;
 using YamlDotNet.Serialization;
+using System.Linq;
 
 namespace Ini.Specification
 {
     /// <summary>
-    /// The definition of a configuration section.
+    /// Specification for a section (see <see cref="Section"/>).
     /// </summary>
     public class SectionSpec : SpecBlockBase
     {
@@ -28,7 +29,7 @@ namespace Ini.Specification
         /// </summary>
         public SectionSpec()
         {
-            Options = new List<OptionSpec>();
+            this.Options = new List<OptionSpec>();
         }
 
         #endregion
@@ -59,13 +60,36 @@ namespace Ini.Specification
         #region Validation
 
         /// <summary>
-        /// Verifies the integrity of the configuration section definition.
+        /// Determines whether the specification is valid.
         /// </summary>
-        /// <param name="eventLog"></param>
-        /// <returns></returns>
-        public override bool IsValid(ISpecValidatorEventLogger eventLog = null)
+        /// <returns><c>true</c> if this instance is valid; otherwise, <c>false</c>.</returns>
+        /// <param name="eventLogger">Specification validation event logger.</param>
+        public bool IsValid(ISpecValidatorEventLogger eventLogger)
         {
-            throw new NotImplementedException();
+            // validate
+            bool specValid = true;
+            HashSet<string> validated = new HashSet<string>();
+            foreach(OptionSpec optionSpec in Options)
+            {
+                if(validated.Contains(optionSpec.Identifier))
+                {
+                    // only forward the event, don't validate
+                    specValid = false;
+                    eventLogger.DuplicateOption(Identifier, optionSpec.Identifier);
+                }
+                else
+                {
+                    // validate
+                    validated.Add(optionSpec.Identifier);
+                    if(!optionSpec.IsValid(Identifier, eventLogger))
+                    {
+                        specValid = false;
+                    }
+                }
+            }
+
+            // and return
+            return specValid;
         }
 
         #endregion

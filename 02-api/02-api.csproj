@@ -102,10 +102,7 @@
     <Compile Include="Configuration\Values\ValueStub.cs" />
     <Compile Include="Specification\Values\BooleanOptionSpec.cs" />
     <Compile Include="Specification\Values\EnumOptionSpec.cs" />
-    <Compile Include="Specification\Values\FloatOptionSpec.cs" />
-    <Compile Include="Specification\Values\SignedOptionSpec.cs" />
     <Compile Include="Specification\Values\StringOptionSpec.cs" />
-    <Compile Include="Specification\Values\UnsignedOptionSpec.cs" />
     <Compile Include="IConfigParser.cs" />
     <Compile Include="Util\NumberBase.cs" />
     <Compile Include="EventLoggers\IConfigValidationBase.cs" />
@@ -114,6 +111,9 @@
     <Compile Include="EventLoggers\SpecValidatorEventLogger.cs" />
     <Compile Include="SpecReader.cs" />
     <Compile Include="SpecTypeResolver.cs" />
+    <Compile Include="Specification\Values\DoubleOptionSpec.cs" />
+    <Compile Include="Specification\Values\LongOptionSpec.cs" />
+    <Compile Include="Specification\Values\ULongOptionSpec.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -264,6 +264,7 @@ namespace Ini
 
             // prepare fields (forward arguments)
             this.specification = specification;
+            this.config = new Config(specification);
             this.configEventLog = configEventLog;
             this.specEventLog = specEventLog;
         }
@@ -373,23 +374,16 @@ namespace Ini
 
         /// <summary>
         /// Check preconditions for parsing.
+        /// <exception cref="UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
+        /// <exception cref="InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
         /// </summary>
         protected void PreconditionsTrue()
         {
-            if(validationMode == ConfigValidationMode.Strict) // we need a valid specification
+            // no need to check specification for relaxed mode (everything will simply be a string)
+            if(validationMode == ConfigValidationMode.Strict)
             {
-                if(config.Spec == null) // and we have none
-                {
-                    configEventLog.NoSpecification();
-                    throw new UndefinedSpecException();
-                }
-                if(!config.Spec.IsValid(specEventLog)) // we have one but it's not valid
-                {
-                    configEventLog.SpecificationNotValid();
-
-                    // raise an exception or face undefined behaviour
-                    throw new InvalidSpecException();
-                }
+                // we need a defined and valid specification
+                config.ThrowIfSpecUndefinedOrInvalid(configEventLog, specEventLog);
             }
         }
 

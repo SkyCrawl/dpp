@@ -1,14 +1,13 @@
-origin: The configuration origin
 sections:
-- identifier: Sekce1							# mandatory
-  mandatory: true								# mandatory
-  description: the purpose of Sekce1			# mandatory
-  options:										# optional
+- identifier: Sekce1
+  mandatory: true
+  description: the purpose of Sekce1
+  options:
   - !String
-    identifier: Option 1						# mandatory
-    mandatory: true								# mandatory
-    description: the purpose of Option 1		# mandatory
-    single_value: true							# mandatory (TODO: 'value: single|multiple" instead?)
+    identifier: Option 1
+    mandatory: true
+    description: the purpose of Option 1
+    single_value: true
   - !Signed
     identifier: Option 2
     mandatory: true
@@ -21,7 +20,7 @@ sections:
     mandatory: false
     description: the purpose of Option 3
     single_value: false
-    default_value:								# mandatory (TODO: 'value_default' instead?)
+    default_values:
     - Value1
     allowed_values:
     - Value1
@@ -41,14 +40,14 @@ sections:
     mandatory: false
     description: the purpose of cele_bin
     single_value: true
-    default_value:
+    default_values:
     - 0b00000001
   - !Unsigned
     identifier: cele_hex
     mandatory: false
     description: the purpose of cele_hex
     single_value: false
-    default_value:
+    default_values:
     - 0xABCD
   - !Float
     identifier: float1
@@ -60,6 +59,6 @@ sections:
     mandatory: false
     description: the purpose of float2
     single_value: false
-    default_value:
+    default_values:
     - 3.14159265359
              

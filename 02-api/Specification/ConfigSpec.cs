@@ -5,24 +5,25 @@ using Ini.Configuration;
 using Ini.EventLoggers;
 using Ini.Exceptions;
 using YamlDotNet.Serialization;
+using System.Linq;
 
 namespace Ini.Specification
 {
     /// <summary>
-    /// Configuration specification. Represents configuration schema.
+    /// Object representation of a schema. In other words, specification
+    /// for a configuration (see <see cref="Config"/>).
     /// </summary>
     public class ConfigSpec
     {
         #region Properties
 
         /// <summary>
-        /// Path to the configuration, if any.
+        /// Origin of the specification (e.g. system path), if any.
         /// </summary>
-        [YamlMember(Alias = "origin")]
         public string Origin { get; set; }
 
         /// <summary>
-        /// The list of configuration sections.
+        /// List of section specifications.
         /// </summary>
         [YamlMember(Alias = "sections")]
         public List<SectionSpec> Sections { get; set; }
@@ -78,14 +79,36 @@ namespace Ini.Specification
         #region Validation
 
         /// <summary>
-        /// Determines whether the current content of the specification is valid.
+        /// Determines whether the specification is valid.
         /// </summary>
-        /// <returns>true</returns>
-        /// <c>false</c>
-        /// <param name="eventLog">Schema validation event log.</param>
-        public bool IsValid(ISpecValidatorEventLogger eventLog)
+        /// <returns><c>true</c> if this instance is valid; otherwise, <c>false</c>.</returns>
+        /// <param name="eventLogger">Specification validation event logger.</param>
+        public bool IsValid(ISpecValidatorEventLogger eventLogger)
         {
-            throw new NotImplementedException();
+            // validate
+            bool specValid = true;
+            HashSet<string> validated = new HashSet<string>();
+            foreach(SectionSpec sectionSpec in Sections)
+            {
+                if(validated.Contains(sectionSpec.Identifier))
+                {
+                    // only forward the event, don't validate
+                    specValid = false;
+                    eventLogger.DuplicateSection(sectionSpec.Identifier);
+                }
+                else
+                {
+                    // validate
+                    validated.Add(sectionSpec.Identifier);
+                    if(!sectionSpec.IsValid(eventLogger))
+                    {
+                        specValid = false;
+                    }
+                }
+            }
+
+            // and return
+            return specValid;
         }
 
         /// <summary>

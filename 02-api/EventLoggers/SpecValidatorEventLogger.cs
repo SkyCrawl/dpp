@@ -22,8 +22,8 @@ namespace Ini.EventLoggers
         {
             this.writer = writer;
         }
-
-        #region IValidationBacklog Members
+            
+        #region ISpecValidatorEventLogger implementation
 
         /// <summary>
         /// A duplicate section has been found in the associated specification.
@@ -31,7 +31,7 @@ namespace Ini.EventLoggers
         /// <param name="sectionIdentifier">Containing section's identifier.</param>
         public void DuplicateSection(string sectionIdentifier)
         {
-            throw new NotImplementedException(); 
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -45,23 +45,53 @@ namespace Ini.EventLoggers
         }
 
         /// <summary>
-        /// Default value is expected for the given option.
+        /// Mandatory option have to define at least one default value.
         /// </summary>
         /// <param name="sectionIdentifier">The containing section's identifier.</param>
         /// <param name="optionIdentifier">The involved option's identifier.</param>
-        public void DefaultValueExpected(string sectionIdentifier, string optionIdentifier)
+        public void NoDefaultValue(string sectionIdentifier, string optionIdentifier)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// An option's default value is invalid.
+        /// The given option was declared as single-value but defined multiple default values.
         /// </summary>
         /// <param name="sectionIdentifier">The containing section's identifier.</param>
         /// <param name="optionIdentifier">The involved option's identifier.</param>
-        /// <param name="elementIndex">Index of the affected element.</param>
+        public void TooManyValues(string sectionIdentifier, string optionIdentifier)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// The given enumeration option didn't define enough allowed values.
+        /// </summary>
+        /// <param name="sectionIdentifier">The containing section's identifier.</param>
+        /// <param name="optionIdentifier">The involved option's identifier.</param>
+        public void MissingEnumValues(string sectionIdentifier, string optionIdentifier)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// The given option defined a default value that was not listed as allowed.
+        /// </summary>
+        /// <param name="sectionIdentifier">The containing section's identifier.</param>
+        /// <param name="optionIdentifier">The involved option's identifier.</param>
         /// <param name="value">The affected value.</param>
-        public void DefaultValueInvalid(string sectionIdentifier, string optionIdentifier, int elementIndex, object value)
+        public void ValueNotAllowed(string sectionIdentifier, string optionIdentifier, object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// The given option defined a default value that was out of range.
+        /// </summary>
+        /// <param name="sectionIdentifier">The containing section's identifier.</param>
+        /// <param name="optionIdentifier">The involved option's identifier.</param>
+        /// <param name="value">The affected value.</param>
+        public void ValueOutOfRange(string sectionIdentifier, string optionIdentifier, object value)
         {
             throw new NotImplementedException();
         }

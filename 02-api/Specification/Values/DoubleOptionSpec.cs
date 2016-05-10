@@ -6,28 +6,35 @@ using YamlDotNet.Serialization;
 namespace Ini.Specification.Values
 {
     /// <summary>
-    /// The definition for an enum option.
+    /// The definition of a float option.
     /// </summary>
-    public class EnumOptionSpec : OptionSpec<string>
+    public class DoubleOptionSpec : OptionSpec<double>
     {
         #region Properties
 
         /// <summary>
-        /// Allowed values for enum.
+        /// The minimal value.
         /// </summary>
-        [YamlMember(Alias = "allowed_values")]
-        public List<string> AllowedValues { get; set; }
+        [YamlMember(Alias = "min_value")]
+        public double MinValue { get; set; }
+
+        /// <summary>
+        /// The maximal value.
+        /// </summary>
+        [YamlMember(Alias = "max_value")]
+        public double MaxValue { get; set; }
 
         #endregion
 
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EnumOptionSpec"/> class.
+        /// Initializes a new instance of the <see cref="DoubleOptionSpec"/> class.
         /// </summary>
-        public EnumOptionSpec()
+        public DoubleOptionSpec()
         {
-            this.AllowedValues = new List<string>();
+            this.MinValue = double.MinValue;
+            this.MaxValue = double.MaxValue;
         }
 
         #endregion
@@ -43,17 +50,12 @@ namespace Ini.Specification.Values
         public override bool IsValid(string sectionIdentifier, ISpecValidatorEventLogger eventLogger)
         {
             bool result = base.IsValid(sectionIdentifier, eventLogger);
-            if(AllowedValues.Count < 2)
+            foreach(double value in DefaultValues)
             {
-                result = false;
-                eventLogger.MissingEnumValues(sectionIdentifier, Identifier);
-            }
-            foreach(string value in DefaultValues)
-            {
-                if(!AllowedValues.Contains(value))
+                if((value < MinValue) || (value > MaxValue))
                 {
                     result = false;
-                    eventLogger.ValueNotAllowed(
+                    eventLogger.ValueOutOfRange(
                         sectionIdentifier,
                         Identifier,
                         value);

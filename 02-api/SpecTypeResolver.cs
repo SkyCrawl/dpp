@@ -24,9 +24,9 @@ namespace Ini
             { "!String", typeof(StringOptionSpec) },
             { "!Enum", typeof(EnumOptionSpec) },
             { "!Boolean", typeof(BooleanOptionSpec) },
-			{ "!Float", typeof(FloatOptionSpec) },
-			{ "!Signed", typeof(SignedOptionSpec) },
-			{ "!Unsigned", typeof(UnsignedOptionSpec) },
+			{ "!Float", typeof(DoubleOptionSpec) },
+			{ "!Signed", typeof(LongOptionSpec) },
+			{ "!Unsigned", typeof(ULongOptionSpec) },
 		};
 
 		#endregion

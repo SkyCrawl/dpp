@@ -10,7 +10,7 @@ namespace Ini.EventLoggers
     /// <summary>
     /// Interface defining configuration reading events.
     /// </summary>
-    public interface IConfigReaderEventLogger : IConfigValidationBase
+    public interface IConfigReaderEventLogger : IConfigValidatorEventLogger
     {
         /// <summary>
         /// A new configuration parsing task has commenced.

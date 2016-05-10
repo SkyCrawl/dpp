@@ -9,18 +9,5 @@ namespace Ini.Specification.Values
     /// </summary>
     public class StringOptionSpec : OptionSpec<string>
     {
-        #region Overrides
-
-        /// <summary>
-        /// Verifies the integrity of the configuration definition.
-        /// </summary>
-        /// <param name="eventLog"></param>
-        /// <returns></returns>
-        public override bool IsValid(ISpecValidatorEventLogger eventLog = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
     }
 }

@@ -325,42 +325,53 @@ namespace Ini.Configuration
             configLogger = configLogger ?? new ConfigValidatorEventLogger(Console.Out);
             specLogger = specLogger ?? new SpecValidatorEventLogger(Console.Out);
 
-            // verify specification
+            // verify the associated specification
+            ThrowIfSpecUndefinedOrInvalid(configLogger, specLogger);
+
+            // prepare the result validation state
+            bool configValid = true;
+
+            // validate the inner structure against the specification
+            foreach(Section section in Items.Values.Where(item => item is Section))
+            {
+                SectionSpec sectionSpecification = Spec.GetSection(section.Identifier);
+                if(sectionSpecification == null)
+                {
+                    // okay, that's something we should know about
+                    configLogger.MissingSectionSpecification(section.Identifier);
+
+                    // and error status depends on the validation mode
+                    configValid = mode == ConfigValidationMode.Relaxed;
+                }
+                else if(!section.IsValid(sectionSpecification, mode, configLogger))
+                {
+                    configValid = false;
+                }
+            }
+
+            // and return
+            return configValid;
+        }
+
+        /// <summary>
+        /// Determines if <see cref="Spec"/> is defined and valid. Throws exceptions if not.
+        /// </summary>
+        /// <returns><c>true</c> if specification is defined and valid; otherwise, <c>false</c>.</returns>
+        /// <param name="configLogger">Configuration validation logger.</param>
+        /// <param name="specLogger">Specification validation logger.</param>
+        /// <exception cref="UndefinedSpecException">If no specification is defined.</exception>
+        /// <exception cref="InvalidSpecException">If the specification is defined but invalid.</exception>
+        public void ThrowIfSpecUndefinedOrInvalid(IConfigValidatorEventLogger configLogger, ISpecValidatorEventLogger specLogger)
+        {
             if(Spec == null)
             {
                 configLogger.NoSpecification();
-                return false;
+                throw new UndefinedSpecException(); // what's the point of the return value then?
             }
             else if(!Spec.IsValid(specLogger))
             {
                 configLogger.SpecificationNotValid();
-                return false;
-            }
-            else
-            {
-                // prepare the result validation state
-                bool configValid = true;
-
-                // validate the inner structure against the specification
-                foreach(Section section in Items.Values.Where(item => item is Section))
-                {
-                    SectionSpec sectionSpecification = Spec.GetSection(section.Identifier);
-                    if(sectionSpecification == null)
-                    {
-                        // okay, that's something we should know about
-                        configLogger.MissingSectionSpecification(section.Identifier);
-
-                        // and error status depends on the validation mode
-                        configValid = mode == ConfigValidationMode.Relaxed;
-                    }
-                    else if(!section.IsValid(sectionSpecification, mode, configLogger))
-                    {
-                        configValid = false;
-                    }
-                }
-
-                // and return
-                return configValid;
+                throw new InvalidSpecException(); // raise an exception or face undefined behaviour
             }
         }
 

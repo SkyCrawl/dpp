@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using Ini.Configuration;
 using YamlDotNet.Serialization;
+using Ini.EventLoggers;
 
 namespace Ini.Specification
 {
     /// <summary>
-    /// The definition of a schema option.
+    /// Specification for an option (see <see cref="Option"/>).
     /// </summary>
     public abstract class OptionSpec : SpecBlockBase
     {
         #region Properties
 
         /// <summary>
-        /// True if the option has only single value.
+        /// True if the option only has a single value.
         /// </summary>
         [YamlMember(Alias = "single_value")]
         public bool HasSingleValue { get; set; }
@@ -34,6 +35,14 @@ namespace Ini.Specification
         /// <returns></returns>
         public abstract Option CreateOptionStub();
 
+        /// <summary>
+        /// Determines whether the specification is valid.
+        /// </summary>
+        /// <returns><c>true</c> if this instance is valid; otherwise, <c>false</c>.</returns>
+        /// <param name="sectionIdentifier">The containing section's identifier.</param>
+        /// <param name="eventLogger">Specification validation event logger.</param>
+        public abstract bool IsValid(string sectionIdentifier, ISpecValidatorEventLogger eventLogger);
+
         #endregion
     }
 
@@ -47,7 +56,7 @@ namespace Ini.Specification
         /// <summary>
         /// Default value if the element is optional.
         /// </summary>
-        [YamlMember(Alias = "default_value")]
+        [YamlMember(Alias = "default_values")]
         public List<T> DefaultValues { get; set; }
 
         #endregion
@@ -59,7 +68,7 @@ namespace Ini.Specification
         /// </summary>
         public OptionSpec()
         {
-            DefaultValues = new List<T>();
+            this.DefaultValues = new List<T>();
         }
 
         #endregion
@@ -73,6 +82,28 @@ namespace Ini.Specification
         public override Type GetValueType()
         {
             return typeof(T);
+        }
+
+        /// <summary>
+        /// Determines whether the specification is valid.
+        /// </summary>
+        /// <returns><c>true</c> if this instance is valid; otherwise, <c>false</c>.</returns>
+        /// <param name="sectionIdentifier">The containing section's identifier.</param>
+        /// <param name="eventLogger">Specification validation event logger.</param>
+        public override bool IsValid(string sectionIdentifier, ISpecValidatorEventLogger eventLogger)
+        {
+            bool result = true;
+            if(IsMandatory && DefaultValues.Count == 0)
+            {
+                result = false;
+                eventLogger.NoDefaultValue(sectionIdentifier, Identifier);
+            }
+            if(HasSingleValue && DefaultValues.Count > 1)
+            {
+                result = false;
+                eventLogger.TooManyValues(sectionIdentifier, Identifier);
+            }
+            return result;
         }
 
         /// <summary>

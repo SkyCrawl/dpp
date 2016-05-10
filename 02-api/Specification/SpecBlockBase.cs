@@ -33,16 +33,5 @@ namespace Ini.Specification
         public string Description { get; set; }
 
         #endregion
-
-        #region IValidableDefinition Members
-
-        /// <summary>
-        /// Verifies the integrity of the configuration definition.
-        /// </summary>
-        /// <param name="eventLog"></param>
-        /// <returns></returns>
-        public abstract bool IsValid(ISpecValidatorEventLogger eventLog = null);
-
-        #endregion
     }
 }
