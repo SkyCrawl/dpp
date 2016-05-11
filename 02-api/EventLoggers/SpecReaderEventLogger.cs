@@ -29,16 +29,22 @@ namespace Ini.EventLoggers
         /// <param name="specOrigin">Spec origin.</param>
         public virtual void NewSpecification(string specOrigin)
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine(new String('-', 5));
+            this.writer.WriteLine("...Commencing new specification parsing task.");
+            if(specOrigin != null)
+            {
+                this.writer.WriteLine("\tOrigin: " + specOrigin);
+            }
         }
 
         /// <summary>
         /// A general parsing/format error has occurred.
         /// </summary>
-        /// <param name="message"></param>
-        public virtual void SpecificationMalformed(string message)
+        /// <param name="e">The exception that triggered the event.</param>
+        public virtual void SpecificationMalformed(Exception e)
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine("ERROR: couldn't read the specification because of the reason that follows.");
+            this.writer.WriteLine("\t" + e.StackTrace);
         }
 
         #endregion

@@ -17,7 +17,7 @@ namespace Ini.EventLoggers
         /// <param name="configOrigin">Origin of the newly parsed configuration.</param>
         /// <param name="schemaOrigin">Origin of the newly parsed configuration's specification.</param>
         /// <param name="mode">Validation mode applied to the parsing task.</param>
-        void NewConfig(string configOrigin, string schemaOrigin = null, ConfigValidationMode mode = ConfigValidationMode.Strict);
+        void NewConfig(string configOrigin, string schemaOrigin, ConfigValidationMode mode);
 
         /// <summary>
         /// A duplicate section has been found.

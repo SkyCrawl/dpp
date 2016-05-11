@@ -29,7 +29,7 @@ namespace Ini.EventLoggers
         /// </summary>
         public virtual void NoSpecification()
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine("ERROR: configuration can not be validated because it isn't associated to a specification.");
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Ini.EventLoggers
         /// </summary>
         public virtual void SpecificationNotValid()
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine("ERROR: configuration can not be validated because its associated specification is not valid.");
         }
 
         #endregion
@@ -50,81 +50,82 @@ namespace Ini.EventLoggers
         /// <param name="identifier">The section's identifier.</param>
         public virtual void NoSectionSpecification(string identifier)
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine(string.Format("ERROR: validation of section '{0}' was skipped as it wasn't found in the associated specification.", identifier));
         }
 
         /// <summary>
         /// Specification for the given option was not found when validating configuration.
         /// </summary>
-        /// <param name="identifier">The option's identifier.</param>
-        public virtual void NoOptionSpecification(string identifier)
+        /// <param name="section">The containing section's identifier.</param>
+        /// <param name="option">The involved option's identifier.</param>
+        public virtual void NoOptionSpecification(string section, string option)
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine(string.Format("ERROR: validation of option '{0}' in section '{1}' was skipped as it wasn't found in the associated specification.", option, section));
         }
 
         /// <summary>
         /// The given option's value type does not conform to the specification.
         /// </summary>
-        /// <param name="sectionIdentifier">The containing section's identifier.</param>
-        /// <param name="optionIdentifier">The involved option's identifier.</param>
-        /// <param name="specificationType">The option's value type from specification.</param>
-        /// <param name="optionType">The option's value type.</param>
-        public virtual void ValueTypeMismatch(string sectionIdentifier, string optionIdentifier, Type specificationType, Type optionType)
+        /// <param name="section">The containing section's identifier.</param>
+        /// <param name="option">The involved option's identifier.</param>
+        /// <param name="typeSpec">The option's value type from specification.</param>
+        /// <param name="typeOption">The option's value type.</param>
+        public virtual void ValueTypeMismatch(string section, string option, Type typeSpec, Type typeOption)
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' is of type '{2}'. Expected: '{3}'.", option, section, typeOption.FullName, typeSpec.FullName));
         }
 
         /// <summary>
         /// The given option is mandatory but it doesn't contain a value.
         /// </summary>
-        /// <param name="sectionIdentifier">The containing section's identifier.</param>
-        /// <param name="optionIdentifier">The involved option's identifier.</param>
-        public virtual void NoValue(string sectionIdentifier, string optionIdentifier)
+        /// <param name="section">The containing section's identifier.</param>
+        /// <param name="option">The involved option's identifier.</param>
+        public virtual void NoValue(string section, string option)
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' is mandatory but it doesn't contain a value.", option, section));
         }
 
         /// <summary>
         /// The given option is declared as single-value but it contains multiple values.
         /// </summary>
-        /// <param name="sectionIdentifier">The containing section's identifier.</param>
-        /// <param name="optionIdentifier">The involved option's identifier.</param>
-        public virtual void TooManyValues(string sectionIdentifier, string optionIdentifier)
+        /// <param name="section">The containing section's identifier.</param>
+        /// <param name="option">The involved option's identifier.</param>
+        public virtual void TooManyValues(string section, string option)
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' is declared as single-value but instead it contains multiple values.", option, section));
         }
 
         /// <summary>
         /// The given option contains a link that references a removed option (target).
         /// </summary>
-        /// <param name="sectionIdentifier">The containing section's identifier.</param>
-        /// <param name="optionIdentifier">The involved option's identifier.</param>
+        /// <param name="section">The containing section's identifier.</param>
+        /// <param name="option">The involved option's identifier.</param>
         /// <param name="link">The affected link.</param>
-        public virtual void LinkInconsistent(string sectionIdentifier, string optionIdentifier, Ini.Configuration.Base.ILink link)
+        public virtual void LinkInconsistent(string section, string option, Ini.Configuration.Base.ILink link)
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' contains a link that references a removed option '{2}' or section '{3}'.", option, section, link.Target.Option, link.Target.Section));
         }
 
         /// <summary>
         /// The given option contains a value that is not allowed.
         /// </summary>
-        /// <param name="sectionIdentifier">The containing section's identifier.</param>
-        /// <param name="optionIdentifier">The involved option's identifier.</param>
+        /// <param name="section">The containing section's identifier.</param>
+        /// <param name="option">The involved option's identifier.</param>
         /// <param name="value">The affected value.</param>
-        public virtual void ValueNotAllowed(string sectionIdentifier, string optionIdentifier, Ini.Configuration.Base.IValue value)
+        public virtual void ValueNotAllowed(string section, string option, Ini.Configuration.Base.IValue value)
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' contains a value that is not explicitly allowed ('{2}').", option, section, value.ToStringFormat()));
         }
 
         /// <summary>
         /// The given option contains a value that is out of range.
         /// </summary>
-        /// <param name="sectionIdentifier">The containing section's identifier.</param>
-        /// <param name="optionIdentifier">The involved option's identifier.</param>
+        /// <param name="section">The containing section's identifier.</param>
+        /// <param name="option">The involved option's identifier.</param>
         /// <param name="value">The affected value.</param>
-        public virtual void ValueOutOfRange(string sectionIdentifier, string optionIdentifier, Ini.Configuration.Base.IValue value)
+        public virtual void ValueOutOfRange(string section, string option, Ini.Configuration.Base.IValue value)
         {
-            throw new NotImplementedException();
+            this.writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' contains a value that is out of range ('{2}').", option, section, value.ToStringFormat()));
         }
 
         #endregion

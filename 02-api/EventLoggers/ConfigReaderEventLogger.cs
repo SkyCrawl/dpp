@@ -30,19 +30,20 @@ namespace Ini.EventLoggers
         /// <param name="mode">Validation mode applied to the parsing task.</param>
         public virtual void NewConfig(string configOrigin, string schemaOrigin = null, ConfigValidationMode mode = ConfigValidationMode.Strict)
         {
-            this.writer.WriteLine("...Beginning to parse configuration from origin:");
+            this.writer.WriteLine(new String('-', 5));
+            this.writer.WriteLine("...Commencing new configuration parsing task.");
             if(configOrigin != null)
             {
-                this.writer.WriteLine("\t" + configOrigin);
+                this.writer.WriteLine("\tOrigin: " + configOrigin);
             }
             if(schemaOrigin != null)
             {
-                this.writer.WriteLine("...Configuration will be validated against specification at:");
-                this.writer.WriteLine("\t" + schemaOrigin);
+                this.writer.WriteLine("...Configuration validated against a specification.");
+                this.writer.WriteLine("\tOrigin: " + schemaOrigin);
             }
             else
             {
-                this.writer.WriteLine("...Configuration will not be validated.");
+                this.writer.WriteLine("...Configuration not validated.");
             }
             this.writer.WriteLine("...Validation mode: " + mode.ToString());
         }

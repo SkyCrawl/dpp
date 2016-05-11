@@ -20,7 +20,7 @@ namespace Ini.EventLoggers
         /// <summary>
         /// A general parsing/format error has occurred.
         /// </summary>
-        /// <param name="message"></param>
-        void SpecificationMalformed(string message);
+        /// <param name="e">The exception that triggered the event.</param>
+        void SpecificationMalformed(Exception e);
     }
 }
