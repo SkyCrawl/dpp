@@ -111,7 +111,7 @@ namespace Ini
             }
             catch (Exception e)
             {
-                specReaderEventLogger.SpecificationMalformed(e.ToString());
+                specReaderEventLogger.SpecificationMalformed(e);
                 throw new MalformedSchemaException("Could not deserialize the schema.", e);
             }
         }
