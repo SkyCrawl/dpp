@@ -277,7 +277,7 @@ namespace Ini.Configuration
                 if(optionSpec == null)
                 {
                     // okay, that's something we should know about
-                    configLogger.NoOptionSpecification(option.Identifier);
+                    configLogger.NoOptionSpecification(sectionSpec.Identifier, option.Identifier);
 
                     // and error status depends on the validation mode
                     result = mode == ConfigValidationMode.Relaxed;

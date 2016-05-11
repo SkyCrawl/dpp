@@ -12,6 +12,27 @@ namespace Ini.Util
 	public static class Extensions
 	{
         /// <summary>
+        /// Gets a collection of keys mapped to values that are equal to the specified value.
+        /// </summary>
+        /// <returns>The collection.</returns>
+        /// <param name="dictionary">The current dictionary.</param>
+        /// <param name="value">The specified value.</param>
+        /// <typeparam name="TKey">Key type for the dictionary.</typeparam>
+        /// <typeparam name="TValue">Value type for the dictionary.</typeparam>
+        public static IEnumerable<TKey> GetKeysForValue<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TValue value)
+        {
+            List<TKey> result = new List<TKey>();
+            foreach(KeyValuePair<TKey, TValue> entry in dictionary)
+            {
+                if(entry.Value.Equals(value))
+                {
+                    result.Add(entry.Key);
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
 		/// Replaces the specified element in the specified list with the specified elements.
 		/// </summary>
 		/// <param name="list">The list.</param>

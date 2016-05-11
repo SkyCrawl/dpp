@@ -60,6 +60,15 @@ namespace Ini.Configuration.Values
             this.Value = value;
         }
 
+        /// <summary>
+        /// Converts the inner value into a string with the appropriate format.
+        /// </summary>
+        /// <returns>The value converted to a string.</returns>
+        public override string ToStringFormat()
+        {
+            return this.Value;
+        }
+
         #endregion
 
         #region Validation

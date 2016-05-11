@@ -15,5 +15,11 @@ namespace Ini.Configuration.Base
         /// The element's value, cast to the output type.
         /// </summary>
         OutputType GetValue<OutputType>();
+
+        /// <summary>
+        /// Converts the inner value into a string with the appropriate format.
+        /// </summary>
+        /// <returns>The value converted to a string.</returns>
+        string ToStringFormat();
     }
 }

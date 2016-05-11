@@ -5,6 +5,7 @@ using Ini.Specification;
 using Ini.Util;
 using Ini.Configuration.Base;
 using Ini.Specification.Values;
+using System.Linq;
 
 namespace Ini.Configuration.Values
 {
@@ -135,6 +136,15 @@ namespace Ini.Configuration.Values
             {
                 throw new ArgumentException("Unknown boolean representation: " + value);
             }
+        }
+
+        /// <summary>
+        /// Converts the inner value into a string with the appropriate format.
+        /// </summary>
+        /// <returns>The value converted to a string.</returns>
+        public override string ToStringFormat()
+        {
+            return (this.Value ? trueStrings : falseStrings).GetKeysForValue(Format).Single();
         }
 
         #endregion

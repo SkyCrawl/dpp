@@ -62,18 +62,6 @@ namespace Ini.Configuration.Values
         #region Public methods
 
         /// <summary>
-        /// Do not use.
-        /// </summary>
-        /// <returns>Nothing.</returns>
-        /// <typeparam name="OutputType">Anything.</typeparam>
-        /// <exception cref="InvalidOperationException">Always.</exception>
-        [Obsolete("This method throws an exception as it was inherited and doesn't hold its meaning in this special class.")]
-        public OutputType GetValue<OutputType>()
-        {
-            throw new InvalidOperationException();
-        }
-
-        /// <summary>
         /// Converts this stub into an interpreted value object. Simply put, this method
         /// takes <see cref="DataType"/>, creates a new instance from it and feeds it
         /// <see cref="Value"/>. If the data type has not been specified, a default
@@ -92,6 +80,18 @@ namespace Ini.Configuration.Values
         /// <summary>
         /// Do not use.
         /// </summary>
+        /// <returns>Nothing.</returns>
+        /// <typeparam name="OutputType">Anything.</typeparam>
+        /// <exception cref="InvalidOperationException">Always.</exception>
+        [Obsolete("This method throws an exception as it was inherited and doesn't hold its meaning in this special class.")]
+        public OutputType GetValue<OutputType>()
+        {
+            throw new InvalidOperationException();
+        }
+
+        /// <summary>
+        /// Do not use.
+        /// </summary>
         /// <param name="config">Whatever.</param>
         /// <param name="section">Whatever.</param>
         /// <param name="specification">Whatever.</param>
@@ -100,6 +100,17 @@ namespace Ini.Configuration.Values
         /// <exception cref="InvalidOperationException">Always.</exception>
         [Obsolete("This method throws an exception as it was inherited and doesn't hold its meaning in this special class.")]
         public bool IsValid(Config config, string section, OptionSpec specification, IConfigValidatorEventLogger configLogger)
+        {
+            throw new InvalidOperationException();
+        }
+
+        /// <summary>
+        /// Do not use.
+        /// </summary>
+        /// <returns>Nothingg.</returns>
+        /// <exception cref="InvalidOperationException">Always.</exception>
+        [Obsolete("This method throws an exception as it was inherited and doesn't hold its meaning in this special class.")]
+        public string ToStringFormat()
         {
             throw new InvalidOperationException();
         }

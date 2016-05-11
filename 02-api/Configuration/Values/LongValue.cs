@@ -72,6 +72,33 @@ namespace Ini.Configuration.Values
             this.Value = Convert.ToInt64(value, this.Base.ToBase());
         }
 
+        /// <summary>
+        /// Converts the inner value into a string with the appropriate format.
+        /// </summary>
+        /// <returns>The value converted to a string.</returns>
+        public override string ToStringFormat()
+        {
+            string prefix = null;
+            switch(Base)
+            {
+                case NumberBase.BINARY:
+                    prefix = "0b";
+                    break;
+                case NumberBase.OCTAL:
+                    prefix = "0";
+                    break;
+                case NumberBase.DECIMAL:
+                    prefix = "";
+                    break;
+                case NumberBase.HEXADECIMAL:
+                    prefix = "0x";
+                    break;
+                default:
+                    throw new ArgumentException("Unknown number base: " + Base.ToString());
+            }
+            return prefix + Convert.ToString(this.Value, Base.ToBase());
+        }
+
         #endregion
 
         #region Validation

@@ -76,6 +76,12 @@ namespace Ini.Configuration.Base
         /// <returns></returns>
         public abstract bool IsValid(Config config, string section, OptionSpec specification, IConfigValidatorEventLogger configLogger);
 
+        /// <summary>
+        /// Converts the inner value into a string with the appropriate format.
+        /// </summary>
+        /// <returns>The value converted to a string.</returns>
+        public abstract string ToStringFormat();
+
         #endregion
     }
 }

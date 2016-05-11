@@ -41,6 +41,15 @@ namespace Ini.Configuration.Values
             this.Value = Double.Parse(value);
         }
 
+        /// <summary>
+        /// Converts the inner value into a string with the appropriate format.
+        /// </summary>
+        /// <returns>The value converted to a string.</returns>
+        public override string ToStringFormat()
+        {
+            return this.Value.ToString();
+        }
+
         #endregion
 
         #region Validation
