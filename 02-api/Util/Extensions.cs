@@ -98,5 +98,23 @@ namespace Ini.Util
                     throw new ArgumentException("Unknown number base: " + numberBase.ToString());
             }
         }
-	}
+
+        /// <summary>
+        /// Returns value from a dictionary for a specified key. If the dictionary does not contain the key, returns default value.
+        /// </summary>
+        /// <typeparam name="KeyType">The key type.</typeparam>
+        /// <typeparam name="ValueType">The value type.</typeparam>
+        /// <param name="dictionary">The dictionary.</param>
+        /// <param name="key">The key that identifies the searched value.</param>
+        /// <returns>The search result or a default value.</returns>
+        public static ValueType TryGetValue<KeyType, ValueType>(this IDictionary<KeyType, ValueType> dictionary, KeyType key)
+        {
+            if (dictionary == null)
+                return default(ValueType);
+
+            ValueType result;
+            dictionary.TryGetValue(key, out result);
+            return result;
+        }
+    }
 }

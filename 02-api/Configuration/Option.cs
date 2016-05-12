@@ -262,10 +262,20 @@ namespace Ini.Configuration
         protected internal override void WriteTo(TextWriter writer, ConfigWriterOptions options, SectionSpec sectionSpecification)
         {
             writer.Write("{0} = ", Identifier);
+            var firstElement = true;
 
             foreach (var element in Elements)
             {
-                // TODO
+                if (firstElement)
+                {
+                    firstElement = false;
+                }
+                else
+                {
+                    writer.Write(", ");
+                }
+
+                writer.Write(element.)
             }
 
             ConfigWriter.WriteComment(writer, TrailingCommentary);

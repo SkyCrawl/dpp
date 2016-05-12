@@ -114,7 +114,7 @@ namespace Ini.EventLoggers
         /// <param name="value">The affected value.</param>
         public virtual void ValueNotAllowed(string section, string option, Ini.Configuration.Base.IValue value)
         {
-            this.writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' contains a value that is not explicitly allowed ('{2}').", option, section, value.ToStringFormat()));
+            this.writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' contains a value that is not explicitly allowed ('{2}').", option, section, value.ToString()));
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace Ini.EventLoggers
         /// <param name="value">The affected value.</param>
         public virtual void ValueOutOfRange(string section, string option, Ini.Configuration.Base.IValue value)
         {
-            this.writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' contains a value that is out of range ('{2}').", option, section, value.ToStringFormat()));
+            this.writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' contains a value that is out of range ('{2}').", option, section, value.ToString()));
         }
 
         #endregion

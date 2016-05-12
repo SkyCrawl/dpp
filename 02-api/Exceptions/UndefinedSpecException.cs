@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Ini.Exceptions
 {
 	/// <summary>
-	/// A configuration validation was called but its associated specification was not defined.
+	/// An operation requiring a specification was called but no specification was defined.
 	/// </summary>
 	public class UndefinedSpecException : Exception
 	{

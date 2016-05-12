@@ -13,9 +13,9 @@ namespace Ini.Util
         Insertion,
 
         /// <summary>
-        /// Same order as in the associated schema.
+        /// Same order as in the associated specification.
         /// </summary>
-        Schema,
+        Specification,
 
         /// <summary>
         /// Top to bottom, lexicographically lowest to highest.

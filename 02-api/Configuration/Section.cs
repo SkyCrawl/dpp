@@ -345,7 +345,9 @@ namespace Ini.Configuration
             writer.Write("[{0}]", Identifier);
             ConfigWriter.WriteComment(writer, TrailingCommentary);
 
-            var items = GetOrderedItems(options.OptionSortOrder, sectionSpecification);
+            var optionIdentifiers = sectionSpecification != null ? sectionSpecification.Options.Select(item => item.Identifier) : null;
+
+            var items = Items.Values.GetOrderedItems(options.OptionSortOrder, optionIdentifiers);
 
             foreach(var item in items)
             {
@@ -363,7 +365,7 @@ namespace Ini.Configuration
                     return Items.OrderByDescending(item => item.Key).Select(item => item.Value);
                 case ConfigBlockSortOrder.Insertion:
                     return Items.Select(item => item.Value);
-                case ConfigBlockSortOrder.Schema:
+                case ConfigBlockSortOrder.Specification:
                 default:
                     var result = new List<ConfigBlockBase>();
                     var itemsToWrite = new Dictionary<string, ConfigBlockBase>(Items);

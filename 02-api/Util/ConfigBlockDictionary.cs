@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using Ini.Configuration;
 using Ini.Configuration.Base;
 
@@ -13,10 +14,14 @@ namespace Ini.Util
 	/// </summary>
     public class ConfigBlockDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>>, INotifyCollectionChanged where TValue : ConfigBlockBase
 	{
-		/// <summary>
-		/// The inner ordered dictionary.
-		/// </summary>
-		protected OrderedDictionary dictionary;
+        #region Fields
+
+        /// <summary>
+        /// The inner ordered dictionary.
+        /// </summary>
+        protected OrderedDictionary dictionary;
+
+        #endregion
 
         #region INotifyCollectionChanged implementation
 
@@ -27,7 +32,9 @@ namespace Ini.Util
 
         #endregion
 
-		/// <summary>
+        #region Constructor
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Ini.Util.ConfigBlockDictionary{TKey,TValue}"/> class.
         /// </summary>
         /// <param name="eventHandler">Event handler.</param>
@@ -37,15 +44,17 @@ namespace Ini.Util
             this.CollectionChanged = eventHandler;
 		}
 
-		#region IDictionary implementation
+        #endregion
 
-		/// <summary>
-		/// Add the specified identifier and value to the collection.
-		/// </summary>
-		/// <exception cref="System.ArgumentException">An item with the same key has already been added.</exception>
-		/// <param name="identifier">Identifier.</param>
-		/// <param name="value">Value.</param>
-		public void Add(TKey identifier, TValue value)
+        #region IDictionary implementation
+
+        /// <summary>
+        /// Add the specified identifier and value to the collection.
+        /// </summary>
+        /// <exception cref="System.ArgumentException">An item with the same key has already been added.</exception>
+        /// <param name="identifier">Identifier.</param>
+        /// <param name="value">Value.</param>
+        public void Add(TKey identifier, TValue value)
 		{
             CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, value));
 			dictionary.Add(identifier, value);

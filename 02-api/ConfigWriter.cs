@@ -94,15 +94,14 @@ namespace Ini
         {
             // first check validity of both specification and configuration, if defined and required
             options = options ?? ConfigWriterOptions.Default;
-            if(options.Validate && !configuration.IsValid(options.ValidationMode, configWriterEventLogger, specValidatorEventLogger))
+            if(options.Validate && !configuration.IsValid(options.ValidationMode, configWriterEventLogger.ValidationLogger, specValidatorEventLogger))
             {
+                configWriterEventLogger.IsNotValid();
                 throw new InvalidConfigException();
             }
-            else
-            {
-                // and only then proceed with the writing
-                configuration.WriteTo(writer, options);
-            }
+
+            // and only then proceed with the writing
+            configuration.WriteTo(writer, options);
         }
 
         #endregion

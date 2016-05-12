@@ -416,55 +416,32 @@ namespace Ini.Configuration
 
         #region Writing configuration
 
-        internal void WriteTo(TextWriter writer, ConfigWriterOptions options)
+        internal void WriteTo(TextWriter writer, ConfigWriterOptions options, ConfigWriterEventLogger logger)
         {
-            var items = GetOrderedItems(options.SectionSortOrder);
+            // Check if the specification is required and present.
+            if (IsSchemaRequiredNotPresent(options))
+            {
+                logger.NoSpecification();
+                throw new UndefinedSpecException();
+            }
+
+            var specIdentifiers = Spec != null ? Spec.Sections.Select(item => item.Identifier) : null;
             var specDictionary = Spec != null ? Spec.Sections.ToDictionary(item => item.Identifier) : null;
+
+            var items = Items.Values.GetOrderedItems(options.SectionSortOrder, specIdentifiers);
 
             foreach(var item in items)
             {
-                item.WriteTo(writer, options, TryGetSectionSpec(item.Identifier, specDictionary));
+                item.WriteTo(writer, options, specDictionary.TryGetValue(item.Identifier));
             }
         }
 
-        IEnumerable<ConfigBlockBase> GetOrderedItems(ConfigBlockSortOrder sortOrder)
+        bool IsSchemaRequiredNotPresent(ConfigWriterOptions options)
         {
-            switch(sortOrder)
-            {
-                case ConfigBlockSortOrder.Ascending:
-                    return Items.OrderBy(item => item.Key).Select(item => item.Value);
-                case ConfigBlockSortOrder.Descending:
-                    return Items.OrderByDescending(item => item.Key).Select(item => item.Value);
-                case ConfigBlockSortOrder.Insertion:
-                    return Items.Select(item => item.Value);
-                case ConfigBlockSortOrder.Schema:
-                default:
-                    var result = new List<ConfigBlockBase>();
-                    var itemsToWrite = new Dictionary<string, ConfigBlockBase>(Items);
-
-                    foreach(var section in Spec.Sections)
-                    {
-                        ConfigBlockBase block;
-                        if (itemsToWrite.TryGetValue(section.Identifier, out block))
-                        {
-                            itemsToWrite.Remove(section.Identifier);
-                            result.Add(block);
-                        }
-                    }
-
-                    result.AddRange(itemsToWrite.Values);
-                    
-                    return result;
-            }
-        }
-
-        SectionSpec TryGetSectionSpec(string identifier, Dictionary<string, SectionSpec> specDictionary)
-        {
-            if (specDictionary == null)
-                return null;
-
-            SectionSpec result;
-            specDictionary.TryGetValue(identifier, out result);
+            var result =
+                ((options.OptionSortOrder == ConfigBlockSortOrder.Specification ||
+                options.SectionSortOrder == ConfigBlockSortOrder.Specification) &&
+                Spec == null);
 
             return result;
         }
