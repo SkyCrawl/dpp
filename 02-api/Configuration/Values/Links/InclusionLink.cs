@@ -154,6 +154,16 @@ namespace Ini.Configuration.Values.Links
             return linkValid;
         }
 
+        /// <summary>
+        /// Converts the inner value into a string.
+        /// </summary>
+        /// <returns>The value converted to a string.</returns>
+        public string ToOutputString()
+        {
+            // TODO
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region Keeping internal state

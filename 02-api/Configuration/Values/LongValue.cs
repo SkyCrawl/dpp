@@ -76,7 +76,7 @@ namespace Ini.Configuration.Values
         /// Converts the inner value into a string with the appropriate format.
         /// </summary>
         /// <returns>The value converted to a string.</returns>
-        public override string ToStringFormat()
+        public override string ToOutputString()
         {
             string prefix = null;
             switch(Base)

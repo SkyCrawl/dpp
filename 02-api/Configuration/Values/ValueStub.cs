@@ -110,7 +110,7 @@ namespace Ini.Configuration.Values
         /// <returns>Nothingg.</returns>
         /// <exception cref="InvalidOperationException">Always.</exception>
         [Obsolete("This method throws an exception as it was inherited and doesn't hold its meaning in this special class.")]
-        public string ToStringFormat()
+        public string ToOutputString()
         {
             throw new InvalidOperationException();
         }

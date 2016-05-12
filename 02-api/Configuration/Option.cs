@@ -275,7 +275,7 @@ namespace Ini.Configuration
                     writer.Write(", ");
                 }
 
-                writer.Write(element.)
+                writer.Write(element.ToOutputString());
             }
 
             ConfigWriter.WriteComment(writer, TrailingCommentary);

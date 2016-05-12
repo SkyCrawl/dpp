@@ -101,7 +101,7 @@ namespace Ini
             }
 
             // and only then proceed with the writing
-            configuration.WriteTo(writer, options);
+            configuration.WriteTo(writer, options, configWriterEventLogger);
         }
 
         #endregion

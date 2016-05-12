@@ -416,7 +416,7 @@ namespace Ini.Configuration
 
         #region Writing configuration
 
-        internal void WriteTo(TextWriter writer, ConfigWriterOptions options, ConfigWriterEventLogger logger)
+        internal void WriteTo(TextWriter writer, ConfigWriterOptions options, IConfigWriterEventLogger logger)
         {
             // Check if the specification is required and present.
             if (IsSchemaRequiredNotPresent(options))

@@ -23,5 +23,11 @@ namespace Ini.Configuration.Base
         /// <param name="configLogger">Configuration validation event logger.</param>
         /// <returns></returns>
         bool IsValid(Config config, string section, OptionSpec specification, IConfigValidatorEventLogger configLogger);
+
+        /// <summary>
+        /// Converts the inner value into a string.
+        /// </summary>
+        /// <returns>The value converted to a string.</returns>
+        string ToOutputString();
     }
 }
