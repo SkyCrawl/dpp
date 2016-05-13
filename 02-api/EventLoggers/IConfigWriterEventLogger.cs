@@ -6,23 +6,28 @@ using Ini.Configuration.Base;
 namespace Ini.EventLoggers
 {
     /// <summary>
-    /// Interface defining configuration writing events.
+    /// Interface that defines events for configuration writing.
     /// </summary>
     public interface IConfigWriterEventLogger
     {
         /// <summary>
+        /// Logger for specification validation.
+        /// </summary>
+        ISpecValidatorEventLogger SpecValidationLogger { get; }
+
+        /// <summary>
         /// Logger for configuration validation.
         /// </summary>
-        IConfigValidatorEventLogger ValidationLogger { get; }
+        IConfigValidatorEventLogger ConfigValidationLogger { get; }
 
         /// <summary>
-        /// Configuration validation was called before writing and the configuration is not valid.
-        /// </summary>
-        void IsNotValid();
-
-        /// <summary>
-        /// The specification must be present for selected writed options.
+        /// The task's options instructed to use a specification for writing, but the configuration didn't have an associated specification.
         /// </summary>
         void NoSpecification();
+
+        /// <summary>
+        /// The task's options instructed to validate the configuration before writing, and it was found to be invalid.
+        /// </summary>
+        void InvalidConfiguration();
     }
 }

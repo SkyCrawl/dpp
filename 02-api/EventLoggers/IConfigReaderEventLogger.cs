@@ -7,14 +7,14 @@ using Ini.Configuration.Base;
 namespace Ini.EventLoggers
 {
     /// <summary>
-    /// Interface defining configuration reading events.
+    /// Interface that defines events for configuration reading and parsing.
     /// </summary>
     public interface IConfigReaderEventLogger
     {
         /// <summary>
-        /// Logger for configuration validation.
+        /// Logger for specification validation.
         /// </summary>
-        IConfigValidatorEventLogger ValidationLogger { get; }
+        ISpecValidatorEventLogger SpecValidationLogger { get; }
 
         /// <summary>
         /// A new configuration parsing task has commenced.
@@ -23,6 +23,16 @@ namespace Ini.EventLoggers
         /// <param name="schemaOrigin">Origin of the newly parsed configuration's specification.</param>
         /// <param name="mode">Validation mode applied to the parsing task.</param>
         void NewConfig(string configOrigin, string schemaOrigin, ConfigValidationMode mode);
+
+        /// <summary>
+        /// Strict validation mode was applied but no specification was defined.
+        /// </summary>
+        void NoSpecification();
+
+        /// <summary>
+        /// Strict validation mode was applied but the specification was invalid.
+        /// </summary>
+        void InvalidSpecification();
 
         /// <summary>
         /// A duplicate section has been found.

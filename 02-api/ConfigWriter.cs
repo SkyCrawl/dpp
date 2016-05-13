@@ -19,7 +19,7 @@ namespace Ini
         /// <summary>
         /// The configuration writer event logger.
         /// </summary>
-        protected IConfigWriterEventLogger configWriterEventLogger;
+        protected IConfigWriterEventLogger eventLogger;
 
         #endregion
 
@@ -33,17 +33,19 @@ namespace Ini
         /// <param name="configWriterOutput">Configuration writer event logger output.</param>
         public ConfigWriter(TextWriter specValidatorOutput = null, TextWriter configWriterOutput = null)
         {
-            this.configWriterEventLogger = new ConfigWriterEventLogger(configWriterOutput ?? Console.Out, specValidatorOutput);
+            // TODO:
+            this.eventLogger = new ConfigWriterEventLogger(configWriterOutput ?? Console.Out, specValidatorOutput ?? Console.Out);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Ini.ConfigWriter"/> class, with
         /// user-defined loggers.
         /// </summary>
-        /// <param name="configWriterEventLogger">Configuration writer event logger.</param>
-        public ConfigWriter(IConfigWriterEventLogger configWriterEventLogger)
+        /// <param name="eventLogger">Configuration writer event logger.</param>
+        public ConfigWriter(IConfigWriterEventLogger eventLogger)
         {
-            this.configWriterEventLogger = configWriterEventLogger ?? new ConfigWriterEventLogger(Console.Out);
+            // TODO:
+            this.eventLogger = eventLogger ?? new ConfigWriterEventLogger(Console.Out);
         }
 
         #endregion
@@ -86,14 +88,14 @@ namespace Ini
         {
             // first check validity of both specification and configuration, if defined and required
             options = options ?? ConfigWriterOptions.Default;
-            if(options.Validate && !configuration.IsValid(options.ValidationMode, configWriterEventLogger.ValidationLogger))
+            if(options.Validate && !configuration.IsValid(options.ValidationMode, eventLogger.ConfigValidationLogger))
             {
-                configWriterEventLogger.IsNotValid();
+                eventLogger.InvalidConfiguration();
                 throw new InvalidConfigException();
             }
 
             // and only then proceed with the writing
-            configuration.WriteTo(writer, options, configWriterEventLogger);
+            configuration.WriteTo(writer, options, eventLogger);
         }
 
         #endregion

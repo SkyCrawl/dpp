@@ -344,7 +344,7 @@ namespace Ini.Configuration
         protected internal override void WriteTo(TextWriter writer, ConfigWriterOptions options, SectionSpec sectionSpecification, Config config)
         {
             writer.Write("[{0}]", Identifier);
-            writer.WriteComment(TrailingCommentary);
+            writer.WriteLine(IniSyntax.SerializeComment(TrailingCommentary));
 
             var optionIdentifiers = sectionSpecification != null ? sectionSpecification.Options.Select(item => item.Identifier) : null;
 

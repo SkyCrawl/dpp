@@ -7,22 +7,21 @@ using Ini.Configuration.Base;
 namespace Ini.EventLoggers
 {
     /// <summary>
-    /// An implementation of <see cref="IConfigReaderEventLogger"/> that writes a text writer.
+    /// An implementation of <see cref="IConfigReaderEventLogger"/> forwarding output to the inherited <see cref="BaseEventLogger"/>.
     /// </summary>
-    public class ConfigReaderEventLogger : TextWriterLogger, IConfigReaderEventLogger
+    public class ConfigReaderEventLogger : BaseEventLogger, IConfigReaderEventLogger
     {
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigReaderEventLogger"/> class.
         /// </summary>
-        /// <param name="writer">The output stream to write event logs to.</param>
-        /// <param name="configValidationWriter">The output stream to write validation logs to.</param>
-        /// <param name="specValidationWriter">The output stream to write spec validation logs to.</param>
-        public ConfigReaderEventLogger(TextWriter writer, TextWriter configValidationWriter = null, TextWriter specValidationWriter = null)
+        /// <param name="writer">Output stream for configuration reading events.</param>
+        /// <param name="specValidationWriter">Output stream for specification validation events.</param>
+        public ConfigReaderEventLogger(TextWriter writer, TextWriter specValidationWriter = null)
             : base(writer)
         {
-            ValidationLogger = new ConfigReaderValidatorEventLogger(configValidationWriter ?? writer, specValidationWriter);
+            SpecValidationLogger = new SpecValidatorEventLogger(specValidationWriter ?? writer);
         }
 
         #endregion
@@ -30,9 +29,10 @@ namespace Ini.EventLoggers
         #region IConfigReaderEventLogger Members
 
         /// <summary>
-        /// Logger for configuration validation.
+        /// Logger for specification validation.
         /// </summary>
-        public IConfigValidatorEventLogger ValidationLogger { get; private set; }
+        /// <value>The specification validation logger.</value>
+        public ISpecValidatorEventLogger SpecValidationLogger { get; private set; }
 
         /// <summary>
         /// A new configuration parsing task has commenced.
@@ -58,6 +58,22 @@ namespace Ini.EventLoggers
                 Writer.WriteLine("...Configuration not validated.");
             }
             Writer.WriteLine("...Validation mode: " + mode.ToString());
+        }
+
+        /// <summary>
+        /// Strict validation mode was applied but the parser didn't receive a specification.
+        /// </summary>
+        public virtual void NoSpecification()
+        {
+            Writer.WriteLine("ERROR: strict validation mode was applied but no specification has been specified.");
+        }
+
+        /// <summary>
+        /// Strict validation mode was applied but the received specification was not valid.
+        /// </summary>
+        public virtual void InvalidSpecification()
+        {
+            Writer.WriteLine("ERROR: strict validation mode was applied but the received specification was not valid.");
         }
 
         /// <summary>
@@ -153,40 +169,6 @@ namespace Ini.EventLoggers
         {
             Writer.WriteLine(string.Format("Line {0}: link target (section '{1}' and option '{2}') not found.", lineNumber, link.Target.Section, link.Target.Option));
             Writer.WriteLine(string.Format("\tLink defined in section '{0}' and option '{1}'.", section, option));
-        }
-
-        #endregion
-
-        #region Classes
-
-        /// <summary>
-        /// Modified validation logger for configuration reader.
-        /// </summary>
-        public class ConfigReaderValidatorEventLogger : ConfigValidatorEventLogger
-        {
-            /// <summary>
-            /// Initializes a new instance of the <see cref="ConfigReaderValidatorEventLogger"/> class.
-            /// </summary>
-            /// <param name="writer">The output stream to write event logs to.</param>
-            /// <param name="specWriter">The output stream to write spec validation logs to.</param>
-            public ConfigReaderValidatorEventLogger(TextWriter writer, TextWriter specWriter = null)
-                : base(writer, specWriter) { }
-
-            /// <summary>
-            /// Strict validation mode was applied but the parser didn't receive a specification.
-            /// </summary>
-            public override void NoSpecification()
-            {
-                Writer.WriteLine("ERROR: strict validation mode was applied but no specification has been specified.");
-            }
-
-            /// <summary>
-            /// Strict validation mode was applied but the received specification was not valid.
-            /// </summary>
-            public override void SpecificationNotValid()
-            {
-                Writer.WriteLine("ERROR: strict validation mode was applied but the received specification was not valid.");
-            }
         }
 
         #endregion

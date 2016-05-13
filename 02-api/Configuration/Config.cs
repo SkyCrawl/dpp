@@ -319,11 +319,12 @@ namespace Ini.Configuration
         /// <param name="logger">Configuration validation event logger.</param>
         public bool IsValid(ConfigValidationMode mode, IConfigValidatorEventLogger logger)
         {
-            // prepare event loggers
-            logger = logger ?? new ConfigValidatorEventLogger(Console.Out);
-
             // verify the associated specification
-            ThrowIfSpecUndefinedOrInvalid(logger);
+            ThrowIfSpecUndefinedOrInvalid(
+                logger.SpecValidationLogger,
+                () => logger.NoSpecification(),
+                () => logger.InvalidSpecification()
+            );
 
             // prepare the result validation state
             bool configValid = true;
@@ -351,22 +352,25 @@ namespace Ini.Configuration
         }
 
         /// <summary>
-        /// Determines if <see cref="Spec"/> is defined and valid. Throws exceptions if not.
+        /// Determines if <see cref="Spec"/> is defined and valid. If not, calls the appropriate action
+        /// and throws the appropriate exception.
         /// </summary>
         /// <returns><c>true</c> if specification is defined and valid; otherwise, <c>false</c>.</returns>
-        /// <param name="logger">Configuration validation logger.</param>
+        /// <param name="specValidationEventLogger">Configuration validation logger.</param>
+        /// <param name="noSpecAction">The action to execute if no specification is defined.</param>
+        /// <param name="invalidSpecAction">The action to execute if specification is defined but invalid.</param>
         /// <exception cref="UndefinedSpecException">If no specification is defined.</exception>
-        /// <exception cref="InvalidSpecException">If the specification is defined but invalid.</exception>
-        public void ThrowIfSpecUndefinedOrInvalid(IConfigValidatorEventLogger logger)
+        /// <exception cref="InvalidSpecException">If specification is defined but invalid.</exception>
+        public void ThrowIfSpecUndefinedOrInvalid(ISpecValidatorEventLogger specValidationEventLogger, Action noSpecAction, Action invalidSpecAction)
         {
             if(Spec == null)
             {
-                logger.NoSpecification();
-                throw new UndefinedSpecException(); // what's the point of the return value then?
+                noSpecAction.Invoke();
+                throw new UndefinedSpecException();
             }
-            else if(!Spec.IsValid(logger.SpecValidationLogger))
+            else if(!Spec.IsValid(specValidationEventLogger))
             {
-                logger.SpecificationNotValid();
+                invalidSpecAction.Invoke();
                 throw new InvalidSpecException(); // raise an exception or face undefined behaviour
             }
         }

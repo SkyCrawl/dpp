@@ -10,6 +10,7 @@ using Ini.Util.LinkResolving;
 using Ini.Util;
 using Ini.Configuration.Values;
 using Ini.Exceptions;
+using System.Collections;
 
 namespace Ini.Configuration.Values.Links
 {
@@ -155,93 +156,63 @@ namespace Ini.Configuration.Values.Links
         }
 
         /// <summary>
-        /// Converts the link into a string.
+        /// Serializes this link into a string that can be deserialized back using <see cref="ConfigParser"/>.
         /// </summary>
         /// <param name="config">The parent configuration.</param>
-        /// <returns>The value converted to a string.</returns>
+        /// <returns>The serialized representation of the current link.</returns>
         public string ToOutputString(Config config)
         {
-            var linkConsistent = IsLinkConsistent(config);
-
-            if (linkConsistent)
+            if (IsTargetDifferentFromInnerValues(config))
             {
-                return GetRepresentation();
+                return IniSyntax.ConstructLink(Target);
             }
             else
             {
-                return GetValue(Values, config);
+                return IniSyntax.JoinElements(Values, config);
             }
         }
 
         #endregion
 
-        #region Private Methods
+        #region Protected Methods
 
         /// <summary>
-        /// Checks the configuration and determines, whether the link is consistent.
+        /// Determines whether this link's values or the target option have changed
+        /// since the parsing operation took place.
         /// </summary>
-        /// <param name="config"></param>
-        /// <returns></returns>
-        bool IsLinkConsistent(Config config)
+        /// <returns><c>true</c> if this link's values are still identical to the target option, assuming that
+        /// the option has not been removed from the configuration; otherwise, <c>false</c>.</returns>
+        /// <param name="config">The parent configuration.</param>
+        protected bool IsTargetDifferentFromInnerValues(Config config)
         {
-            if (config == null)
-                return true;
-
-            // Both link and target are converted to string and compared.
-            var localValue = GetValue(Values, config);
-            var targetOption = config.GetOption(Target.Section, Target.Option);
-            var targetValues = FlattenOption(targetOption);
-            var targetValue = GetValue(Values, config);
-
-            return localValue == targetValue;
-        }
-
-        /// <summary>
-        /// Returns option values extracted from all links.
-        /// </summary>
-        /// <param name="option"></param>
-        /// <returns></returns>
-        List<IElement> FlattenOption(Option option)
-        {
-            var result = new List<IElement>();
-
-            foreach(var element in option.Elements)
+            // check whether the target has been removed from the configuration
+            Option targetOption = config.GetOption(Target.Section, Target.Option);
+            if(targetOption == null)
             {
-                if (element is ILink)
+                return true;
+            }
+
+            // check whether the target's values differ from this link's values
+            IList<IValue> targetValues = targetOption.GetObjectValues();
+            if(targetValues.Count != this.Values.Count)
+            {
+                return true;
+            }
+            else // check individual values pair-wise
+            {
+                IEnumerator<IValue> thisValue = Values.GetEnumerator();
+                IEnumerator<IValue> targetValue = targetValues.GetEnumerator();
+                while (targetValue.MoveNext() && thisValue.MoveNext())
                 {
-                    var link = (ILink)element;
-                    result.AddRange(link.Values);
-                }
-                else
-                {
-                    result.Add(element);
+                    if(!targetValue.Current.GetValue<object>().Equals(thisValue.Current.GetValue<object>()))
+                    {
+                        return true;
+                    }
                 }
             }
 
-            return result;
-        }
-        
-        /// <summary>
-        /// The string representation of the link.
-        /// </summary>
-        /// <returns></returns>
-        string GetRepresentation()
-        {
-            return string.Format("${{{0}#{1}}}", Target.Section, Target.Option);
-        }
-
-        /// <summary>
-        /// Returns link value as string.
-        /// </summary>
-        /// <param name="elements"></param>
-        /// <param name="config"></param>
-        /// <returns></returns>
-        string GetValue(IEnumerable<IElement> elements, Config config)
-        {
-            var values = elements.Select(item => item.ToOutputString(config));
-            var result = string.Join(", ", values);
-
-            return result;
+            // if not, return false
+            return false;
         }
 
         #endregion

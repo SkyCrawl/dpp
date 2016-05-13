@@ -7,20 +7,20 @@ using System.Threading.Tasks;
 namespace Ini.EventLoggers
 {
     /// <summary>
-    /// Interface defining specification reading events.
+    /// Interface that defines events for specification reading.
     /// </summary>
     public interface ISpecReaderEventLogger
     {
         /// <summary>
         /// A new specification reading task has commenced.
         /// </summary>
-        /// <param name="schemaOrigin">Origin of the newly parsed specification.</param>
-        void NewSpecification(string schemaOrigin);
+        /// <param name="specOrigin">Origin of the newly parsed specification.</param>
+        void NewSpecification(string specOrigin);
 
         /// <summary>
         /// A general parsing/format error has occurred.
         /// </summary>
         /// <param name="e">The exception that triggered the event.</param>
-        void SpecificationMalformed(Exception e);
+        void MalformedSpecification(Exception e);
     }
 }

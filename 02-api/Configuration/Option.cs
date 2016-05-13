@@ -279,7 +279,7 @@ namespace Ini.Configuration
                 writer.Write(element.ToOutputString(config));
             }
 
-            writer.WriteComment(TrailingCommentary);
+            writer.WriteLine(IniSyntax.SerializeComment(TrailingCommentary));
         }
 
         #region IEnumerable implementation

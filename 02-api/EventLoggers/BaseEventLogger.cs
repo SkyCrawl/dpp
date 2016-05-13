@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 namespace Ini.EventLoggers
 {
     /// <summary>
-    /// Base class for loggers, that use textwritter.
+    /// Base class for loggers that use <see cref="TextWriter"/>.
     /// </summary>
-    public abstract class TextWriterLogger
+    public abstract class BaseEventLogger
     {
         #region Properties
 
         /// <summary>
-        /// The writer used for log output.
+        /// The log output.
         /// </summary>
         protected TextWriter Writer { get; private set; }
 
@@ -24,10 +24,10 @@ namespace Ini.EventLoggers
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TextWriterLogger"/> class.
+        /// Initializes a new instance of the <see cref="BaseEventLogger"/> class.
         /// </summary>
-        /// <param name="writer">The text writer for log output.</param>
-        public TextWriterLogger(TextWriter writer)
+        /// <param name="writer">The log output.</param>
+        public BaseEventLogger(TextWriter writer)
         {
             Writer = writer;
         }

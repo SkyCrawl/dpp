@@ -8,16 +8,16 @@ using System.IO;
 namespace Ini.EventLoggers
 {
     /// <summary>
-    /// An implementation of <see cref="ISpecReaderEventLogger"/> that writes a text writer.
+    /// An implementation of <see cref="ISpecReaderEventLogger"/> forwarding output to the inherited <see cref="BaseEventLogger"/>.
     /// </summary>
-    public class SpecReaderEventLogger : TextWriterLogger, ISpecReaderEventLogger
+    public class SpecReaderEventLogger : BaseEventLogger, ISpecReaderEventLogger
     {
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SpecReaderEventLogger"/> class.
         /// </summary>
-        /// <param name="writer">The output stream to write event logs to.</param>
+        /// <param name="writer">Output stream for reading events.</param>
         public SpecReaderEventLogger(TextWriter writer)
             : base(writer) { }
 

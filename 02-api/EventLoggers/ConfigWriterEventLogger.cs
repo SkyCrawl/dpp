@@ -6,47 +6,61 @@ using Ini.Configuration.Base;
 namespace Ini.EventLoggers
 {
     /// <summary>
-    /// An implementation of <see cref="IConfigWriterEventLogger"/> that writes a text writer.
+    /// An implementation of <see cref="IConfigWriterEventLogger"/> forwarding output to the inherited <see cref="BaseEventLogger"/>.
     /// </summary>
-    public class ConfigWriterEventLogger : TextWriterLogger, IConfigWriterEventLogger
+    public class ConfigWriterEventLogger : BaseEventLogger, IConfigWriterEventLogger
     {
+        #region Properties
+
+        /// <summary>
+        /// Logger for specification validation.
+        /// </summary>
+        /// <value>The spec validation logger.</value>
+        public ISpecValidatorEventLogger SpecValidationLogger { get; private set; }
+
+        /// <summary>
+        /// Logger for configuration validation.
+        /// </summary>
+        /// <value>The config validation logger.</value>
+        public IConfigValidatorEventLogger ConfigValidationLogger { get; private set; }
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigWriterEventLogger"/> class.
         /// </summary>
-        /// <param name="writer">The output stream to write event logs to.</param>
-        /// <param name="configValidationWriter">The output stream to write validation logs to.</param>
-        /// <param name="specValidationWriter">The output stream to write spec validation logs to.</param>
-        public ConfigWriterEventLogger(TextWriter writer, TextWriter configValidationWriter = null, TextWriter specValidationWriter = null)
+        /// <param name="writer">Output stream for writing events.</param>
+        /// <param name="specValidationWriter">Output stream for specification validation events.</param>
+        /// <param name="configValidationWriter">Output stream for configuration validation events.</param>
+        public ConfigWriterEventLogger(TextWriter writer, TextWriter specValidationWriter = null, TextWriter configValidationWriter = null)
             : base(writer)
         {
-            ValidationLogger = new ConfigValidatorEventLogger(configValidationWriter ?? writer, specValidationWriter);
+            SpecValidationLogger = new SpecValidatorEventLogger(specValidationWriter ?? writer);
+            ConfigValidationLogger = new ConfigValidatorEventLogger(configValidationWriter ?? writer, specValidationWriter ?? writer);
         }
 
         #endregion
 
-        #region IConfigValidatorEventLogger Members
+        #region IConfigWriterEventLogger Members
 
         /// <summary>
-        /// Logger for configuration validation.
-        /// </summary>
-        public IConfigValidatorEventLogger ValidationLogger { get; private set; }
-
-        /// <summary>
-        /// Configuration validation was called before writing and the configuration is not valid.
-        /// </summary>
-        public void IsNotValid()
-        {
-            Writer.WriteLine("ERROR: configuration can not be written because it is not valid.");
-        }
-
-        /// <summary>
-        /// The specification must be present for selected writed options.
+        /// The task's options instructed to use a specification for writing, but the configuration didn't have an associated specification.
         /// </summary>
         public void NoSpecification()
         {
-            Writer.WriteLine("ERROR: configuration can not be written because the specification must be present for selected writer options.");
+            Writer.WriteLine("ERROR: no specification to use. Stopping...");
+            Writer.WriteLine("\tHint: either associate the configuration with a specification or try again with different options.");
+        }
+
+        /// <summary>
+        /// The task's options instructed to validate the configuration before writing, and it was found to be invalid.
+        /// </summary>
+        public void InvalidConfiguration()
+        {
+            Writer.WriteLine("ERROR: invalid configuration. Stopping...");
+            Writer.WriteLine("\tHint: either correct the configuration or try again with validation disabled.");
         }
 
         #endregion

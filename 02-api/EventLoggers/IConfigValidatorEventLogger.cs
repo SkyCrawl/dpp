@@ -4,14 +4,24 @@ using Ini.Configuration.Base;
 namespace Ini.EventLoggers
 {
     /// <summary>
-    /// Interface defining configuration validation events.
+    /// Interface that defines events for configuration validation.
     /// </summary>
-    public interface IConfigValidatorEventLogger : IConfigValidationBase
+    public interface IConfigValidatorEventLogger
     {
         /// <summary>
         /// The logger used for spec validation.
         /// </summary>
         ISpecValidatorEventLogger SpecValidationLogger { get; }
+
+        /// <summary>
+        /// Configuration can not be validated without a specification.
+        /// </summary>
+        void NoSpecification();
+
+        /// <summary>
+        /// Configuration can not be validated without a valid specification.
+        /// </summary>
+        void InvalidSpecification();
 
         /// <summary>
         /// Specification for the given section was not found when validating configuration.

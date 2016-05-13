@@ -46,8 +46,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\WriteHelper.cs" />
-    <Compile Include="EventLoggers\TextWriterLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ConfigParser.cs" />
     <Compile Include="ConfigReader.cs" />
@@ -106,7 +104,6 @@
     <Compile Include="Specification\Values\StringOptionSpec.cs" />
     <Compile Include="IConfigParser.cs" />
     <Compile Include="Util\NumberBase.cs" />
-    <Compile Include="EventLoggers\IConfigValidationBase.cs" />
     <Compile Include="EventLoggers\ISpecReaderEventLogger.cs" />
     <Compile Include="EventLoggers\SpecReaderEventLogger.cs" />
     <Compile Include="EventLoggers\SpecValidatorEventLogger.cs" />
@@ -116,6 +113,9 @@
     <Compile Include="Specification\Values\LongOptionSpec.cs" />
     <Compile Include="Specification\Values\ULongOptionSpec.cs" />
     <Compile Include="Util\ConfigValidationMode.cs" />
+    <Compile Include="EventLoggers\BaseEventLogger.cs" />
+    <Compile Include="IniSyntax.cs" />
+    <Compile Include="Util\WriteHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

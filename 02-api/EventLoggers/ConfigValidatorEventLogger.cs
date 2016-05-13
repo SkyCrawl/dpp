@@ -6,24 +6,29 @@ namespace Ini.EventLoggers
     /// <summary>
     /// An implementation of <see cref="IConfigValidatorEventLogger"/> that writes a text writer.
     /// </summary>
-    public class ConfigValidatorEventLogger : TextWriterLogger, IConfigValidatorEventLogger
+    public class ConfigValidatorEventLogger : BaseEventLogger, IConfigValidatorEventLogger
     {
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigValidatorEventLogger"/> class.
         /// </summary>
-        /// <param name="writer">The output stream to write event logs to.</param>
-        /// <param name="specWriter">The output stream to write spec validation logs to.</param>
-        public ConfigValidatorEventLogger(TextWriter writer, TextWriter specWriter = null)
+        /// <param name="writer">Output stream for configuration validation events.</param>
+        /// <param name="specValidationWriter">Output stream for specification validation events.</param>
+        public ConfigValidatorEventLogger(TextWriter writer, TextWriter specValidationWriter = null)
             : base (writer)
         {
-            SpecValidationLogger = new SpecValidatorEventLogger(specWriter ?? writer);
+            SpecValidationLogger = new SpecValidatorEventLogger(specValidationWriter ?? writer);
         }
 
         #endregion
 
-        #region IConfigValidationBase implementation
+        #region IConfigValidatorEventLogger Members
+
+        /// <summary>
+        /// The logger used for spec validation.
+        /// </summary>
+        public ISpecValidatorEventLogger SpecValidationLogger { get; private set; }
 
         /// <summary>
         /// Configuration can not be validated without a specification.
@@ -36,19 +41,10 @@ namespace Ini.EventLoggers
         /// <summary>
         /// Configuration can not be validated without a valid specification.
         /// </summary>
-        public virtual void SpecificationNotValid()
+        public virtual void InvalidSpecification()
         {
             Writer.WriteLine("ERROR: configuration can not be validated because its associated specification is not valid.");
         }
-
-        #endregion
-
-        #region IConfigValidatorEventLogger Members
-
-        /// <summary>
-        /// The logger used for spec validation.
-        /// </summary>
-        public ISpecValidatorEventLogger SpecValidationLogger { get; private set; }
 
         /// <summary>
         /// Specification for the given section was not found when validating configuration.

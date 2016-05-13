@@ -5,7 +5,7 @@ using Ini.Specification;
 namespace Ini.EventLoggers
 {
     /// <summary>
-    /// Interface providing information about validating specifications.
+    /// Interface that defines events for specification validation.
     /// </summary>
     public interface ISpecValidatorEventLogger
     {

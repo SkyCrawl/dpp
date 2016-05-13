@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ini.Configuration
+namespace Ini.Util
 {
     /// <summary>
     /// Helper class with common methods used for writing configuration.

@@ -5,18 +5,20 @@ using System.IO;
 namespace Ini.EventLoggers
 {
     /// <summary>
-    /// An implementation of <see cref="ISpecValidatorEventLogger"/> that writes a text writer.
+    /// An implementation of <see cref="ISpecValidatorEventLogger"/> forwarding output to the inherited <see cref="BaseEventLogger"/>.
     /// </summary>
-    public class SpecValidatorEventLogger : TextWriterLogger, ISpecValidatorEventLogger
+    public class SpecValidatorEventLogger : BaseEventLogger, ISpecValidatorEventLogger
     {
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SpecValidatorEventLogger"/> class.
         /// </summary>
-        /// <param name="writer">The output stream to write event logs to.</param>
+        /// <param name="writer">Output stream for specification validation events.</param>
         public SpecValidatorEventLogger(TextWriter writer)
-            : base(writer) { }
+            : base(writer)
+        {
+        }
 
         #endregion
 
