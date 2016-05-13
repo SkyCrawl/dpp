@@ -340,10 +340,11 @@ namespace Ini.Configuration
         /// <param name="writer">The writer to write to.</param>
         /// <param name="options">The output options.</param>
         /// <param name="sectionSpecification">The specification of section with the configuration block.</param>
-        protected internal override void WriteTo(TextWriter writer, ConfigWriterOptions options, SectionSpec sectionSpecification)
+        /// <param name="config">The parent configuration.</param>
+        protected internal override void WriteTo(TextWriter writer, ConfigWriterOptions options, SectionSpec sectionSpecification, Config config)
         {
             writer.Write("[{0}]", Identifier);
-            ConfigWriter.WriteComment(writer, TrailingCommentary);
+            writer.WriteComment(TrailingCommentary);
 
             var optionIdentifiers = sectionSpecification != null ? sectionSpecification.Options.Select(item => item.Identifier) : null;
 
@@ -351,7 +352,7 @@ namespace Ini.Configuration
 
             foreach(var item in items)
             {
-                item.WriteTo(writer, options, sectionSpecification);
+                item.WriteTo(writer, options, sectionSpecification, config);
             }
         }
 

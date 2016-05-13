@@ -25,11 +25,6 @@ namespace Ini
         protected IConfigParser parser;
 
         /// <summary>
-        /// The specification validator event logger.
-        /// </summary>
-        protected ISpecValidatorEventLogger specEventLogger;
-
-        /// <summary>
         /// The configuration reader event logger.
         /// </summary>
         protected IConfigReaderEventLogger configEventLogger;
@@ -48,8 +43,7 @@ namespace Ini
         public ConfigReader(IConfigParser parser = null, TextWriter specEventOutput = null, TextWriter configEventOutput = null)
         {
             this.parser = parser ?? new ConfigParser();
-            this.specEventLogger = new SpecValidatorEventLogger(specEventOutput);
-            this.configEventLogger = new ConfigReaderEventLogger(configEventOutput);
+            this.configEventLogger = new ConfigReaderEventLogger(configEventOutput, specEventOutput);
         }
 
         /// <summary>
@@ -57,12 +51,10 @@ namespace Ini
         /// user-defined parser and loggers.
         /// </summary>
         /// <param name="parser">The parser to use.</param>
-        /// <param name="specEventLogger">Specification validator event logger.</param>
         /// <param name="configEventLogger">Configuration reader event logger.</param>
-        public ConfigReader(IConfigParser parser, ISpecValidatorEventLogger specEventLogger, IConfigReaderEventLogger configEventLogger)
+        public ConfigReader(IConfigParser parser, IConfigReaderEventLogger configEventLogger)
         {
             this.parser = parser ?? new ConfigParser();
-            this.specEventLogger = specEventLogger ?? new SpecValidatorEventLogger(Console.Out);
             this.configEventLogger = configEventLogger ?? new ConfigReaderEventLogger(Console.Out);
         }
 
@@ -132,7 +124,7 @@ namespace Ini
         /// <exception cref="Ini.Exceptions.MalformedConfigException">If the configuration's format is malformed.</exception>
         public Config LoadFromText(string origin, TextReader reader, ConfigSpec spec, ConfigValidationMode mode = ConfigValidationMode.Strict)
         {
-            parser.Prepare(spec, configEventLogger, specEventLogger);
+            parser.Prepare(spec, configEventLogger);
             return parser.Parse(reader, mode);
         }
 
@@ -148,7 +140,7 @@ namespace Ini
         /// <param name="mode">The validation mode.</param>
         public bool TryLoadFromText(string origin, TextReader reader, out Config configuration, ConfigSpec spec, ConfigValidationMode mode = ConfigValidationMode.Strict)
         {
-            parser.Prepare(spec, configEventLogger, specEventLogger);
+            parser.Prepare(spec, configEventLogger);
             try
             {
                 configuration = parser.Parse(reader, mode);

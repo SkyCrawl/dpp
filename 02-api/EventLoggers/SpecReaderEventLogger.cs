@@ -10,15 +10,18 @@ namespace Ini.EventLoggers
     /// <summary>
     /// An implementation of <see cref="ISpecReaderEventLogger"/> that writes a text writer.
     /// </summary>
-    public class SpecReaderEventLogger : SpecValidatorEventLogger, ISpecReaderEventLogger
+    public class SpecReaderEventLogger : TextWriterLogger, ISpecReaderEventLogger
     {
+        #region Constructor
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SpecReaderEventLogger"/> class.
         /// </summary>
         /// <param name="writer">The output stream to write event logs to.</param>
-        public SpecReaderEventLogger(TextWriter writer) : base(writer)
-        {
-        }
+        public SpecReaderEventLogger(TextWriter writer)
+            : base(writer) { }
+
+        #endregion
 
         #region ISpecReaderBacklog Members
 
@@ -29,11 +32,11 @@ namespace Ini.EventLoggers
         /// <param name="specOrigin">Spec origin.</param>
         public virtual void NewSpecification(string specOrigin)
         {
-            this.writer.WriteLine(new String('-', 5));
-            this.writer.WriteLine("...Commencing new specification parsing task.");
+            Writer.WriteLine(new String('-', 5));
+            Writer.WriteLine("...Commencing new specification parsing task.");
             if(specOrigin != null)
             {
-                this.writer.WriteLine("\tOrigin: " + specOrigin);
+                Writer.WriteLine("\tOrigin: " + specOrigin);
             }
         }
 
@@ -43,8 +46,8 @@ namespace Ini.EventLoggers
         /// <param name="e">The exception that triggered the event.</param>
         public virtual void SpecificationMalformed(Exception e)
         {
-            this.writer.WriteLine("ERROR: couldn't read the specification because of the reason that follows.");
-            this.writer.WriteLine("\t" + e.StackTrace);
+            Writer.WriteLine("ERROR: couldn't read the specification because of the reason that follows.");
+            Writer.WriteLine("\t" + e.StackTrace);
         }
 
         #endregion

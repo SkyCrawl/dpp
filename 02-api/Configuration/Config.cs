@@ -316,16 +316,14 @@ namespace Ini.Configuration
         /// </summary>
         /// <returns><c>true</c> if this instance validates against the given mode and specification; otherwise, <c>false</c>.</returns>
         /// <param name="mode">Validation mode to use.</param>
-        /// <param name="configLogger">Configuration validation event logger.</param>
-        /// <param name="specLogger">Specification validation event logger.</param>
-        public bool IsValid(ConfigValidationMode mode, IConfigValidatorEventLogger configLogger, ISpecValidatorEventLogger specLogger)
+        /// <param name="logger">Configuration validation event logger.</param>
+        public bool IsValid(ConfigValidationMode mode, IConfigValidatorEventLogger logger)
         {
             // prepare event loggers
-            configLogger = configLogger ?? new ConfigValidatorEventLogger(Console.Out);
-            specLogger = specLogger ?? new SpecValidatorEventLogger(Console.Out);
+            logger = logger ?? new ConfigValidatorEventLogger(Console.Out);
 
             // verify the associated specification
-            ThrowIfSpecUndefinedOrInvalid(configLogger, specLogger);
+            ThrowIfSpecUndefinedOrInvalid(logger);
 
             // prepare the result validation state
             bool configValid = true;
@@ -337,12 +335,12 @@ namespace Ini.Configuration
                 if(sectionSpecification == null)
                 {
                     // okay, that's something we should know about
-                    configLogger.NoSectionSpecification(section.Identifier);
+                    logger.NoSectionSpecification(section.Identifier);
 
                     // and error status depends on the validation mode
                     configValid = mode == ConfigValidationMode.Relaxed;
                 }
-                else if(!section.IsValid(this, sectionSpecification, mode, configLogger))
+                else if(!section.IsValid(this, sectionSpecification, mode, logger))
                 {
                     configValid = false;
                 }
@@ -356,20 +354,19 @@ namespace Ini.Configuration
         /// Determines if <see cref="Spec"/> is defined and valid. Throws exceptions if not.
         /// </summary>
         /// <returns><c>true</c> if specification is defined and valid; otherwise, <c>false</c>.</returns>
-        /// <param name="configLogger">Configuration validation logger.</param>
-        /// <param name="specLogger">Specification validation logger.</param>
+        /// <param name="logger">Configuration validation logger.</param>
         /// <exception cref="UndefinedSpecException">If no specification is defined.</exception>
         /// <exception cref="InvalidSpecException">If the specification is defined but invalid.</exception>
-        public void ThrowIfSpecUndefinedOrInvalid(IConfigValidatorEventLogger configLogger, ISpecValidatorEventLogger specLogger)
+        public void ThrowIfSpecUndefinedOrInvalid(IConfigValidatorEventLogger logger)
         {
             if(Spec == null)
             {
-                configLogger.NoSpecification();
+                logger.NoSpecification();
                 throw new UndefinedSpecException(); // what's the point of the return value then?
             }
-            else if(!Spec.IsValid(specLogger))
+            else if(!Spec.IsValid(logger.SpecValidationLogger))
             {
-                configLogger.SpecificationNotValid();
+                logger.SpecificationNotValid();
                 throw new InvalidSpecException(); // raise an exception or face undefined behaviour
             }
         }
@@ -432,7 +429,7 @@ namespace Ini.Configuration
 
             foreach(var item in items)
             {
-                item.WriteTo(writer, options, specDictionary.TryGetValue(item.Identifier));
+                item.WriteTo(writer, options, specDictionary.TryGetValue(item.Identifier), this);
             }
         }
 

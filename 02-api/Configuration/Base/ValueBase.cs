@@ -79,8 +79,9 @@ namespace Ini.Configuration.Base
         /// <summary>
         /// Converts the inner value into a string with the appropriate format.
         /// </summary>
+        /// <param name="config">The parent configuration.</param>
         /// <returns>The value converted to a string.</returns>
-        public abstract string ToOutputString();
+        public abstract string ToOutputString(Config config);
 
 
         #endregion

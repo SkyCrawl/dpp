@@ -63,8 +63,9 @@ namespace Ini.Configuration.Values
         /// <summary>
         /// Converts the inner value into a string with the appropriate format.
         /// </summary>
+        /// <param name="config">The parent configuration.</param>
         /// <returns>The value converted to a string.</returns>
-        public override string ToOutputString()
+        public override string ToOutputString(Config config)
         {
             return this.Value;
         }

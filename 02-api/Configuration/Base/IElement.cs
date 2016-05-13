@@ -27,7 +27,8 @@ namespace Ini.Configuration.Base
         /// <summary>
         /// Converts the inner value into a string.
         /// </summary>
+        /// <param name="config">The parent configuration.</param>
         /// <returns>The value converted to a string.</returns>
-        string ToOutputString();
+        string ToOutputString(Config config);
     }
 }

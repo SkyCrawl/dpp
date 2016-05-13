@@ -5,58 +5,59 @@ using Ini.Util.Guid;
 using Ini.Configuration.Base;
 using System.IO;
 using Ini.Specification;
+using Ini.Util;
 
 namespace Ini.Configuration
 {
-	/// <summary>
-	/// Represents a block of empty and commentary lines.
-	/// </summary>
-	public class Commentary : ConfigBlockBase, IEnumerable<string>
-	{
-		#region Properties
-		/// <summary>
-		/// A block of empty and commentary lines.
-		/// </summary>
-		public List<string> Lines { get; private set; }
+    /// <summary>
+    /// Represents a block of empty and commentary lines.
+    /// </summary>
+    public class Commentary : ConfigBlockBase, IEnumerable<string>
+    {
+        #region Properties
+        /// <summary>
+        /// A block of empty and commentary lines.
+        /// </summary>
+        public List<string> Lines { get; private set; }
 
-		/// <summary>
-		/// Static identifier generator for instances of this class.
-		/// </summary>
-		public static IGuid<string> identifierGenerator = new SystemGuidGenerator();
+        /// <summary>
+        /// Static identifier generator for instances of this class.
+        /// </summary>
+        public static IGuid<string> identifierGenerator = new SystemGuidGenerator();
 
-		#endregion
+        #endregion
 
-		#region Constructor
+        #region Constructor
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Commentary"/> class.
-		/// </summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Commentary"/> class.
+        /// </summary>
         public Commentary(IEnumerable<string> lines) : base(identifierGenerator.Next())
-		{
-			this.Lines = new List<string>(lines);
-		}
+        {
+            this.Lines = new List<string>(lines);
+        }
 
-		#endregion
+        #endregion
 
-		#region IEnumerable implementation
+        #region IEnumerable implementation
 
-		/// <summary>
-		/// Gets the content enumerator.
-		/// </summary>
-		/// <returns>The enumerator.</returns>
-		public IEnumerator<string> GetEnumerator()
-		{
-			return Lines.GetEnumerator();
-		}
+        /// <summary>
+        /// Gets the content enumerator.
+        /// </summary>
+        /// <returns>The enumerator.</returns>
+        public IEnumerator<string> GetEnumerator()
+        {
+            return Lines.GetEnumerator();
+        }
 
-		/// <summary>
-		/// Gets the content enumerator.
-		/// </summary>
-		/// <returns>The enumerator.</returns>
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return Lines.GetEnumerator();
-		}
+        /// <summary>
+        /// Gets the content enumerator.
+        /// </summary>
+        /// <returns>The enumerator.</returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return Lines.GetEnumerator();
+        }
 
         #endregion
 
@@ -68,11 +69,12 @@ namespace Ini.Configuration
         /// <param name="writer">The writer to write to.</param>
         /// <param name="options">The output options.</param>
         /// <param name="sectionSpecification">The specification of section with the configuration block.</param>
-        protected internal override void WriteTo(TextWriter writer, ConfigWriterOptions options, SectionSpec sectionSpecification)
+        /// <param name="config">The parent configuration.</param>
+        protected internal override void WriteTo(TextWriter writer, ConfigWriterOptions options, SectionSpec sectionSpecification, Config config)
         {
             foreach(var line in Lines)
             {
-                ConfigWriter.WriteComment(writer, line);
+                writer.WriteComment(line);
             }
         }
 

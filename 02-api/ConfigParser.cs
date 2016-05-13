@@ -75,11 +75,6 @@ namespace Ini
         protected ConfigValidationMode validationMode;
 
         /// <summary>
-        /// Event logger to call when validating the specification.
-        /// </summary>
-        protected ISpecValidatorEventLogger specEventLog;
-
-        /// <summary>
         /// Event logger to call when reading the configuration.
         /// </summary>
         protected IConfigReaderEventLogger configEventLog;
@@ -255,8 +250,7 @@ namespace Ini
         /// </summary>
         /// <param name="specification">The result configuration's specification.</param>
         /// <param name="configEventLog">Configuration reading event logger.</param>
-        /// <param name="specEventLog">Specification validation event logger.</param>
-        public void Prepare(ConfigSpec specification, IConfigReaderEventLogger configEventLog, ISpecValidatorEventLogger specEventLog)
+        public void Prepare(ConfigSpec specification, IConfigReaderEventLogger configEventLog)
         {
             // reset the parser
             Reset();
@@ -265,7 +259,6 @@ namespace Ini
             this.specification = specification;
             this.config = new Config(specification);
             this.configEventLog = configEventLog;
-            this.specEventLog = specEventLog;
         }
 
         /// <summary>
@@ -363,7 +356,6 @@ namespace Ini
             this.context = null;
             this.uncertainLinks = new Dictionary<LinkNode, Action>();
             this.validationMode = ConfigValidationMode.Strict;
-            this.specEventLog = null;
             this.configEventLog = null;
         }
 
@@ -382,7 +374,7 @@ namespace Ini
             if(validationMode == ConfigValidationMode.Strict)
             {
                 // we need a defined and valid specification
-                config.ThrowIfSpecUndefinedOrInvalid(configEventLog, specEventLog);
+                config.ThrowIfSpecUndefinedOrInvalid(configEventLog.ValidationLogger);
             }
         }
 

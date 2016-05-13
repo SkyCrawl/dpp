@@ -9,18 +9,30 @@ namespace Ini.EventLoggers
     /// <summary>
     /// An implementation of <see cref="IConfigReaderEventLogger"/> that writes a text writer.
     /// </summary>
-    public class ConfigReaderEventLogger : ConfigValidatorEventLogger, IConfigReaderEventLogger
+    public class ConfigReaderEventLogger : TextWriterLogger, IConfigReaderEventLogger
     {
+        #region Constructor
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigReaderEventLogger"/> class.
         /// </summary>
         /// <param name="writer">The output stream to write event logs to.</param>
-        public ConfigReaderEventLogger(TextWriter writer) : base(writer)
+        /// <param name="configValidationWriter">The output stream to write validation logs to.</param>
+        /// <param name="specValidationWriter">The output stream to write spec validation logs to.</param>
+        public ConfigReaderEventLogger(TextWriter writer, TextWriter configValidationWriter = null, TextWriter specValidationWriter = null)
+            : base(writer)
         {
-            this.writer = writer;
+            ValidationLogger = new ConfigReaderValidatorEventLogger(configValidationWriter ?? writer, specValidationWriter);
         }
 
-        #region IParsingBacklog Members
+        #endregion
+
+        #region IConfigReaderEventLogger Members
+
+        /// <summary>
+        /// Logger for configuration validation.
+        /// </summary>
+        public IConfigValidatorEventLogger ValidationLogger { get; private set; }
 
         /// <summary>
         /// A new configuration parsing task has commenced.
@@ -30,40 +42,24 @@ namespace Ini.EventLoggers
         /// <param name="mode">Validation mode applied to the parsing task.</param>
         public virtual void NewConfig(string configOrigin, string schemaOrigin = null, ConfigValidationMode mode = ConfigValidationMode.Strict)
         {
-            this.writer.WriteLine(new String('-', 5));
-            this.writer.WriteLine("...Commencing new configuration parsing task.");
+            Writer.WriteLine(new String('-', 5));
+            Writer.WriteLine("...Commencing new configuration parsing task.");
             if(configOrigin != null)
             {
-                this.writer.WriteLine("\tOrigin: " + configOrigin);
+                Writer.WriteLine("\tOrigin: " + configOrigin);
             }
             if(schemaOrigin != null)
             {
-                this.writer.WriteLine("...Configuration validated against a specification.");
-                this.writer.WriteLine("\tOrigin: " + schemaOrigin);
+                Writer.WriteLine("...Configuration validated against a specification.");
+                Writer.WriteLine("\tOrigin: " + schemaOrigin);
             }
             else
             {
-                this.writer.WriteLine("...Configuration not validated.");
+                Writer.WriteLine("...Configuration not validated.");
             }
-            this.writer.WriteLine("...Validation mode: " + mode.ToString());
+            Writer.WriteLine("...Validation mode: " + mode.ToString());
         }
 
-        /// <summary>
-        /// Strict validation mode was applied but the parser didn't receive a specification.
-        /// </summary>
-        public override void NoSpecification()
-        {
-            this.writer.WriteLine("ERROR: strict validation mode was applied but no specification has been specified.");
-        }
-
-        /// <summary>
-        /// Strict validation mode was applied but the received specification was not valid.
-        /// </summary>
-        public override void SpecificationNotValid()
-        {
-            this.writer.WriteLine("ERROR: strict validation mode was applied but the received specification was not valid.");
-        }
-            
         /// <summary>
         /// Parser didn't know how to parse the specified line.
         /// </summary>
@@ -71,8 +67,8 @@ namespace Ini.EventLoggers
         /// <param name="line">The line.</param>
         public virtual void UnknownLineSyntax(int lineNumber, string line)
         {
-            this.writer.WriteLine(string.Format("Line {0}: unknown syntax. Content:", lineNumber));
-            this.writer.WriteLine("\t" + line);
+            Writer.WriteLine(string.Format("Line {0}: unknown syntax. Content:", lineNumber));
+            Writer.WriteLine("\t" + line);
         }
 
         /// <summary>
@@ -82,7 +78,7 @@ namespace Ini.EventLoggers
         /// <param name="identifier">The duplicate section identifier.</param>
         public virtual void DuplicateSection(int lineNumber, string identifier)
         {
-            this.writer.WriteLine(string.Format("Line {0}: duplicate section ('{1}').", lineNumber, identifier));
+            Writer.WriteLine(string.Format("Line {0}: duplicate section ('{1}').", lineNumber, identifier));
         }
 
         /// <summary>
@@ -93,7 +89,7 @@ namespace Ini.EventLoggers
         /// <param name="option">The duplicate option identifier.</param>
         public virtual void DuplicateOption(int lineNumber, string section, string option)
         {
-            this.writer.WriteLine(string.Format("Line {0}: duplicate option '{1}' in section '{2}'.", lineNumber, option, section));
+            Writer.WriteLine(string.Format("Line {0}: duplicate option '{1}' in section '{2}'.", lineNumber, option, section));
         }
 
         /// <summary>
@@ -104,7 +100,7 @@ namespace Ini.EventLoggers
         /// <param name="identifier">The missing section identifier.</param>
         public virtual void NoSectionSpecification(int lineNumber, string identifier)
         {
-            this.writer.WriteLine(string.Format("Line {0}: specification is missing definition for section '{1}'.", lineNumber, identifier));
+            Writer.WriteLine(string.Format("Line {0}: specification is missing definition for section '{1}'.", lineNumber, identifier));
         }
 
         /// <summary>
@@ -116,7 +112,7 @@ namespace Ini.EventLoggers
         /// <param name="option">The option's identifier.</param>
         public virtual void NoOptionSpecification(int lineNumber, string section, string option)
         {
-            this.writer.WriteLine(string.Format("Line {0}: specification is missing definition for option '{1}' in section '{2}'.", lineNumber, option, section));
+            Writer.WriteLine(string.Format("Line {0}: specification is missing definition for option '{1}' in section '{2}'.", lineNumber, option, section));
         }
 
         /// <summary>
@@ -128,8 +124,8 @@ namespace Ini.EventLoggers
         /// <param name="link">The incomplete link.</param>
         public virtual void IncompleteLinkTarget(int lineNumber, string section, string option, string link)
         {
-            this.writer.WriteLine(string.Format("Line {0}: link specifies too few target components in section '{1}' and option '{2}'. The link:", lineNumber, section, option));
-            this.writer.WriteLine("\t" + link);
+            Writer.WriteLine(string.Format("Line {0}: link specifies too few target components in section '{1}' and option '{2}'. The link:", lineNumber, section, option));
+            Writer.WriteLine("\t" + link);
         }
 
         /// <summary>
@@ -142,8 +138,8 @@ namespace Ini.EventLoggers
         /// <param name="link">The confusing link.</param>
         public virtual void ConfusingLinkTarget(int lineNumber, string section, string option, string link)
         {
-            this.writer.WriteLine(string.Format("Line {0}: link specifies too many target components in section '{1}' and option '{2}'. The link:", lineNumber, section, option));
-            this.writer.WriteLine("\t" + link);
+            Writer.WriteLine(string.Format("Line {0}: link specifies too many target components in section '{1}' and option '{2}'. The link:", lineNumber, section, option));
+            Writer.WriteLine("\t" + link);
         }
 
         /// <summary>
@@ -155,8 +151,42 @@ namespace Ini.EventLoggers
         /// <param name="link">The confusing link.</param>
         public virtual void InvalidLinkTarget(int lineNumber, string section, string option, ILink link)
         {
-            this.writer.WriteLine(string.Format("Line {0}: link target (section '{1}' and option '{2}') not found.", lineNumber, link.Target.Section, link.Target.Option));
-            this.writer.WriteLine(string.Format("\tLink defined in section '{0}' and option '{1}'.", section, option));
+            Writer.WriteLine(string.Format("Line {0}: link target (section '{1}' and option '{2}') not found.", lineNumber, link.Target.Section, link.Target.Option));
+            Writer.WriteLine(string.Format("\tLink defined in section '{0}' and option '{1}'.", section, option));
+        }
+
+        #endregion
+
+        #region Classes
+
+        /// <summary>
+        /// Modified validation logger for configuration reader.
+        /// </summary>
+        public class ConfigReaderValidatorEventLogger : ConfigValidatorEventLogger
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ConfigReaderValidatorEventLogger"/> class.
+            /// </summary>
+            /// <param name="writer">The output stream to write event logs to.</param>
+            /// <param name="specWriter">The output stream to write spec validation logs to.</param>
+            public ConfigReaderValidatorEventLogger(TextWriter writer, TextWriter specWriter = null)
+                : base(writer, specWriter) { }
+
+            /// <summary>
+            /// Strict validation mode was applied but the parser didn't receive a specification.
+            /// </summary>
+            public override void NoSpecification()
+            {
+                Writer.WriteLine("ERROR: strict validation mode was applied but no specification has been specified.");
+            }
+
+            /// <summary>
+            /// Strict validation mode was applied but the received specification was not valid.
+            /// </summary>
+            public override void SpecificationNotValid()
+            {
+                Writer.WriteLine("ERROR: strict validation mode was applied but the received specification was not valid.");
+            }
         }
 
         #endregion

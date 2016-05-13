@@ -17,11 +17,6 @@ namespace Ini
         #region Properties
 
         /// <summary>
-        /// The specification validator event logger.
-        /// </summary>
-        protected ISpecValidatorEventLogger specValidatorEventLogger;
-
-        /// <summary>
         /// The configuration writer event logger.
         /// </summary>
         protected IConfigWriterEventLogger configWriterEventLogger;
@@ -38,19 +33,16 @@ namespace Ini
         /// <param name="configWriterOutput">Configuration writer event logger output.</param>
         public ConfigWriter(TextWriter specValidatorOutput = null, TextWriter configWriterOutput = null)
         {
-            this.specValidatorEventLogger = new SpecValidatorEventLogger(specValidatorOutput ?? Console.Out);
-            this.configWriterEventLogger = new ConfigWriterEventLogger(configWriterOutput ?? Console.Out);
+            this.configWriterEventLogger = new ConfigWriterEventLogger(configWriterOutput ?? Console.Out, specValidatorOutput);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Ini.ConfigWriter"/> class, with
         /// user-defined loggers.
         /// </summary>
-        /// <param name="specValidatorEventLogger">Specification validation event logger.</param>
         /// <param name="configWriterEventLogger">Configuration writer event logger.</param>
-        public ConfigWriter(ISpecValidatorEventLogger specValidatorEventLogger, IConfigWriterEventLogger configWriterEventLogger)
+        public ConfigWriter(IConfigWriterEventLogger configWriterEventLogger)
         {
-            this.specValidatorEventLogger = specValidatorEventLogger ?? new SpecValidatorEventLogger(Console.Out);
             this.configWriterEventLogger = configWriterEventLogger ?? new ConfigWriterEventLogger(Console.Out);
         }
 
@@ -94,7 +86,7 @@ namespace Ini
         {
             // first check validity of both specification and configuration, if defined and required
             options = options ?? ConfigWriterOptions.Default;
-            if(options.Validate && !configuration.IsValid(options.ValidationMode, configWriterEventLogger.ValidationLogger, specValidatorEventLogger))
+            if(options.Validate && !configuration.IsValid(options.ValidationMode, configWriterEventLogger.ValidationLogger))
             {
                 configWriterEventLogger.IsNotValid();
                 throw new InvalidConfigException();
@@ -102,24 +94,6 @@ namespace Ini
 
             // and only then proceed with the writing
             configuration.WriteTo(writer, options, configWriterEventLogger);
-        }
-
-        #endregion
-
-        #region Internal Methods
-
-        internal static void WriteComment(TextWriter writer, string comment)
-        {
-            if (string.IsNullOrWhiteSpace(comment))
-            {
-                writer.WriteLine();
-            }
-            else
-            {
-                writer.Write(ConfigParser.COMMENTARY_SEPARATOR);
-                writer.Write(' ');
-                writer.WriteLine(comment);
-            }
         }
 
         #endregion

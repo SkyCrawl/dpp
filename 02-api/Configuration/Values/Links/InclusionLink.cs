@@ -155,13 +155,93 @@ namespace Ini.Configuration.Values.Links
         }
 
         /// <summary>
-        /// Converts the inner value into a string.
+        /// Converts the link into a string.
         /// </summary>
+        /// <param name="config">The parent configuration.</param>
         /// <returns>The value converted to a string.</returns>
-        public string ToOutputString()
+        public string ToOutputString(Config config)
         {
-            // TODO
-            throw new NotImplementedException();
+            var linkConsistent = IsLinkConsistent(config);
+
+            if (linkConsistent)
+            {
+                return GetRepresentation();
+            }
+            else
+            {
+                return GetValue(Values, config);
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Checks the configuration and determines, whether the link is consistent.
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        bool IsLinkConsistent(Config config)
+        {
+            if (config == null)
+                return true;
+
+            // Both link and target are converted to string and compared.
+            var localValue = GetValue(Values, config);
+            var targetOption = config.GetOption(Target.Section, Target.Option);
+            var targetValues = FlattenOption(targetOption);
+            var targetValue = GetValue(Values, config);
+
+            return localValue == targetValue;
+        }
+
+        /// <summary>
+        /// Returns option values extracted from all links.
+        /// </summary>
+        /// <param name="option"></param>
+        /// <returns></returns>
+        List<IElement> FlattenOption(Option option)
+        {
+            var result = new List<IElement>();
+
+            foreach(var element in option.Elements)
+            {
+                if (element is ILink)
+                {
+                    var link = (ILink)element;
+                    result.AddRange(link.Values);
+                }
+                else
+                {
+                    result.Add(element);
+                }
+            }
+
+            return result;
+        }
+        
+        /// <summary>
+        /// The string representation of the link.
+        /// </summary>
+        /// <returns></returns>
+        string GetRepresentation()
+        {
+            return string.Format("${{{0}#{1}}}", Target.Section, Target.Option);
+        }
+
+        /// <summary>
+        /// Returns link value as string.
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        string GetValue(IEnumerable<IElement> elements, Config config)
+        {
+            var values = elements.Select(item => item.ToOutputString(config));
+            var result = string.Join(", ", values);
+
+            return result;
         }
 
         #endregion

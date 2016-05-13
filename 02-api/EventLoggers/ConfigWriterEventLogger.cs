@@ -8,24 +8,20 @@ namespace Ini.EventLoggers
     /// <summary>
     /// An implementation of <see cref="IConfigWriterEventLogger"/> that writes a text writer.
     /// </summary>
-    public class ConfigWriterEventLogger : IConfigWriterEventLogger
+    public class ConfigWriterEventLogger : TextWriterLogger, IConfigWriterEventLogger
     {
-        #region Fields
-
-        TextWriter writer;
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigWriterEventLogger"/> class.
         /// </summary>
         /// <param name="writer">The output stream to write event logs to.</param>
-        public ConfigWriterEventLogger(TextWriter writer)
+        /// <param name="configValidationWriter">The output stream to write validation logs to.</param>
+        /// <param name="specValidationWriter">The output stream to write spec validation logs to.</param>
+        public ConfigWriterEventLogger(TextWriter writer, TextWriter configValidationWriter = null, TextWriter specValidationWriter = null)
+            : base(writer)
         {
-            this.writer = writer;
-            ValidationLogger = new ConfigValidatorEventLogger(writer);
+            ValidationLogger = new ConfigValidatorEventLogger(configValidationWriter ?? writer, specValidationWriter);
         }
 
         #endregion
@@ -42,7 +38,7 @@ namespace Ini.EventLoggers
         /// </summary>
         public void IsNotValid()
         {
-            this.writer.WriteLine("ERROR: configuration can not be written because it is not valid.");
+            Writer.WriteLine("ERROR: configuration can not be written because it is not valid.");
         }
 
         /// <summary>
@@ -50,7 +46,7 @@ namespace Ini.EventLoggers
         /// </summary>
         public void NoSpecification()
         {
-            this.writer.WriteLine("ERROR: configuration can not be written because the specification must be present for selected writer options.");
+            Writer.WriteLine("ERROR: configuration can not be written because the specification must be present for selected writer options.");
         }
 
         #endregion

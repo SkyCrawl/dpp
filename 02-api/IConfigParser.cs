@@ -17,8 +17,7 @@ namespace Ini
         /// </summary>
         /// <param name="specification">The result configuration's specification.</param>
         /// <param name="configEventLog">Configuration reading event logger.</param>
-        /// <param name="specEventLog">Specification validation event logger.</param>
-        void Prepare(ConfigSpec specification, IConfigReaderEventLogger configEventLog, ISpecValidatorEventLogger specEventLog);
+        void Prepare(ConfigSpec specification, IConfigReaderEventLogger configEventLog);
 
         /// <summary>
         /// Perform the next parsing task.

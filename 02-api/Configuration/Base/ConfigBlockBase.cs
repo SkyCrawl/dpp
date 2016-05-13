@@ -40,7 +40,8 @@ namespace Ini.Configuration.Base
         /// <param name="writer">The writer to write to.</param>
         /// <param name="options">The output options.</param>
         /// <param name="sectionSpecification">The specification of section with the configuration block.</param>
-        protected internal abstract void WriteTo(TextWriter writer, ConfigWriterOptions options, SectionSpec sectionSpecification);
+        /// <param name="config">The parent configuration.</param>
+        protected internal abstract void WriteTo(TextWriter writer, ConfigWriterOptions options, SectionSpec sectionSpecification, Config config);
 
         #endregion
     }

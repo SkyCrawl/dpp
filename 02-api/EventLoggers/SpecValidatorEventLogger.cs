@@ -7,22 +7,19 @@ namespace Ini.EventLoggers
     /// <summary>
     /// An implementation of <see cref="ISpecValidatorEventLogger"/> that writes a text writer.
     /// </summary>
-    public class SpecValidatorEventLogger : ISpecValidatorEventLogger
+    public class SpecValidatorEventLogger : TextWriterLogger, ISpecValidatorEventLogger
     {
-        /// <summary>
-        /// The output stream to write event logs to.
-        /// </summary>
-        protected TextWriter writer;
+        #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SpecValidatorEventLogger"/> class.
         /// </summary>
         /// <param name="writer">The output stream to write event logs to.</param>
         public SpecValidatorEventLogger(TextWriter writer)
-        {
-            this.writer = writer;
-        }
-            
+            : base(writer) { }
+
+        #endregion
+
         #region ISpecValidatorEventLogger implementation
 
         /// <summary>
@@ -31,7 +28,7 @@ namespace Ini.EventLoggers
         /// <param name="section">Containing section's identifier.</param>
         public virtual void DuplicateSection(string section)
         {
-            this.writer.WriteLine(string.Format("ERROR: duplicate section '{0}'.", section));
+            Writer.WriteLine(string.Format("ERROR: duplicate section '{0}'.", section));
         }
 
         /// <summary>
@@ -41,7 +38,7 @@ namespace Ini.EventLoggers
         /// <param name="option">The involved option's identifier.</param>
         public virtual void DuplicateOption(string section, string option)
         {
-            this.writer.WriteLine(string.Format("ERROR: duplicate option '{0}' in section '{1}'.", option, section));
+            Writer.WriteLine(string.Format("ERROR: duplicate option '{0}' in section '{1}'.", option, section));
         }
 
         /// <summary>
@@ -51,7 +48,7 @@ namespace Ini.EventLoggers
         /// <param name="option">The involved option's identifier.</param>
         public virtual void NoValue(string section, string option)
         {
-            this.writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' is mandatory but it doesn't define any default value.", option, section));
+            Writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' is mandatory but it doesn't define any default value.", option, section));
         }
 
         /// <summary>
@@ -61,7 +58,7 @@ namespace Ini.EventLoggers
         /// <param name="option">The involved option's identifier.</param>
         public virtual void TooManyValues(string section, string option)
         {
-            this.writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' is declared as single-value but instead it defines multiple default values.", option, section));
+            Writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' is declared as single-value but instead it defines multiple default values.", option, section));
         }
 
         /// <summary>
@@ -71,7 +68,7 @@ namespace Ini.EventLoggers
         /// <param name="option">The involved option's identifier.</param>
         public virtual void NoEnumValues(string section, string option)
         {
-            this.writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' doesn't define enough enumeration values.", option, section));
+            Writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' doesn't define enough enumeration values.", option, section));
         }
 
         /// <summary>
@@ -82,7 +79,7 @@ namespace Ini.EventLoggers
         /// <param name="value">The affected value.</param>
         public virtual void ValueNotAllowed(string section, string option, object value)
         {
-            this.writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' contains a default value ('{2}') that is not explicitly allowed.", option, section, value));
+            Writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' contains a default value ('{2}') that is not explicitly allowed.", option, section, value));
         }
 
         /// <summary>
@@ -93,7 +90,7 @@ namespace Ini.EventLoggers
         /// <param name="value">The affected value.</param>
         public virtual void ValueOutOfRange(string section, string option, object value)
         {
-            this.writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' contains a default value ('{2}') that is out of range.", option, section, value));
+            Writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' contains a default value ('{2}') that is out of range.", option, section, value));
         }
 
         #endregion

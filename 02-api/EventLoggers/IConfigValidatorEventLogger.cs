@@ -3,11 +3,16 @@ using Ini.Configuration.Base;
 
 namespace Ini.EventLoggers
 {
-	/// <summary>
+    /// <summary>
     /// Interface defining configuration validation events.
-	/// </summary>
+    /// </summary>
     public interface IConfigValidatorEventLogger : IConfigValidationBase
-	{
+    {
+        /// <summary>
+        /// The logger used for spec validation.
+        /// </summary>
+        ISpecValidatorEventLogger SpecValidationLogger { get; }
+
         /// <summary>
         /// Specification for the given section was not found when validating configuration.
         /// </summary>
@@ -67,5 +72,5 @@ namespace Ini.EventLoggers
         /// <param name="option">The involved option's identifier.</param>
         /// <param name="value">The affected value.</param>
         void ValueOutOfRange(string section, string option, IValue value);
-	}
+    }
 }

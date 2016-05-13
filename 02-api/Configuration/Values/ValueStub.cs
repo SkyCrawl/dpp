@@ -107,10 +107,11 @@ namespace Ini.Configuration.Values
         /// <summary>
         /// Do not use.
         /// </summary>
-        /// <returns>Nothingg.</returns>
+        /// <returns>Nothing.</returns>
+        /// <param name="config"></param>
         /// <exception cref="InvalidOperationException">Always.</exception>
         [Obsolete("This method throws an exception as it was inherited and doesn't hold its meaning in this special class.")]
-        public string ToOutputString()
+        public string ToOutputString(Config config)
         {
             throw new InvalidOperationException();
         }

@@ -9,8 +9,13 @@ namespace Ini.EventLoggers
     /// <summary>
     /// Interface defining configuration reading events.
     /// </summary>
-    public interface IConfigReaderEventLogger : IConfigValidatorEventLogger
+    public interface IConfigReaderEventLogger
     {
+        /// <summary>
+        /// Logger for configuration validation.
+        /// </summary>
+        IConfigValidatorEventLogger ValidationLogger { get; }
+
         /// <summary>
         /// A new configuration parsing task has commenced.
         /// </summary>
