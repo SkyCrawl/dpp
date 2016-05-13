@@ -33,8 +33,7 @@ namespace Ini
         /// <param name="configWriterOutput">Configuration writer event logger output.</param>
         public ConfigWriter(TextWriter specValidatorOutput = null, TextWriter configWriterOutput = null)
         {
-            // TODO:
-            this.eventLogger = new ConfigWriterEventLogger(configWriterOutput ?? Console.Out, specValidatorOutput ?? Console.Out);
+            this.eventLogger = new ConfigWriterEventLogger(configWriterOutput ?? Console.Out, specValidatorOutput);
         }
 
         /// <summary>
@@ -44,7 +43,6 @@ namespace Ini
         /// <param name="eventLogger">Configuration writer event logger.</param>
         public ConfigWriter(IConfigWriterEventLogger eventLogger)
         {
-            // TODO:
             this.eventLogger = eventLogger ?? new ConfigWriterEventLogger(Console.Out);
         }
 

@@ -8,11 +8,10 @@ using Ini.Util;
 namespace Ini.Configuration.Values
 {
     /// <summary>
-    /// Class representing a value of an option in early stage of configuration parsing.
-    /// It is necessary due to <see cref="Ini.Configuration.Values.Links.InclusionLink"/>
-    /// and once all the links are resolved, instances of this class will be replaced for
-    /// real data types that inherit from <see cref="ValueBase{T}"/>. As such, any attempt
-    /// to call <see cref="ValueStub.IsValid"/> results in an exception.
+    /// Representation of an option's value in early stages of configuration parsing.
+    /// It is necessary due to links and once all links are resolved, instances of this
+    /// class will be replaced with the final value objects that inherit from
+    /// <see cref="ValueBase{T}"/>.
     /// <seealso cref="InterpretSelf"/>
     /// </summary>
     public class ValueStub : IValue
@@ -20,7 +19,17 @@ namespace Ini.Configuration.Values
         #region Properties
 
         /// <summary>
-        /// The parent option's value type. Otherwise, it would refuse this instance.
+        /// The type of the value object (inherits from <see cref="ValueBase{T}"/>) this stub
+        /// should eventually be interpreted into. The parameter "T" must be equal to <see cref="ValueType"/>.
+        /// By default, this field is set to 'null' so feel free to change it. Should you wish to change
+        /// this property for multiple value stubs at once, consider looking at <see cref="ValueFactory.TypeBinding"/>.
+        /// </summary>
+        /// <value>Type type of the value object this stub should eventually be interpreted into.</value>
+        public Type ValueObjectType { get; set; }
+
+        /// <summary>
+        /// The type to eventually interpret <see cref="Value"/> with.
+        /// In other words, the parent option's value type.
         /// </summary>
         /// <value>Parent option's value type.</value>
         public Type ValueType { get; private set; }
@@ -31,16 +40,6 @@ namespace Ini.Configuration.Values
         /// <value>The value.</value>
         public string Value { get; private set; }
 
-        /// <summary>
-        /// Type of the value interpreted form this stub. Must be a subclass of <see cref="ValueBase{T}"/>
-        /// where the parameter "T" is <see cref="ValueType"/>. This property ensures custom transformations of
-        /// individual values, in the interest of extensibility. For custom transformations for all stubs alike, see
-        /// <see cref="ValueFactory.DefaultDataTypes"/>.
-        /// <seealso cref="InterpretSelf"/>
-        /// </summary>
-        /// <value>Type of the value interpreted form this stub.</value>
-        public Type DataType { get; set; }
-
         #endregion
 
         #region Constructor
@@ -48,13 +47,13 @@ namespace Ini.Configuration.Values
         /// <summary>
         /// Initializes a new instance of the <see cref="Ini.Configuration.Values.ValueStub"/> class.
         /// </summary>
-        /// <param name="valueType">Final elementary type of the value (i.e. parent option's value type).</param>
-        /// <param name="value">The initial value.</param>
+        /// <param name="valueType">The parent option's value type.</param>
+        /// <param name="value">The initial string value.</param>
         public ValueStub(Type valueType, string value)
         {
+            this.ValueObjectType = null;
             this.ValueType = valueType;
             this.Value = value;
-            this.DataType = null;
         }
 
         #endregion
@@ -62,19 +61,12 @@ namespace Ini.Configuration.Values
         #region Public methods
 
         /// <summary>
-        /// Converts this stub into an interpreted value object. Simply put, this method
-        /// takes <see cref="DataType"/>, creates a new instance from it and feeds it
-        /// <see cref="Value"/>. If the data type has not been specified, a default
-        /// one is taken from <see cref="ValueFactory.DefaultDataTypes"/>. If a default data type
-        /// is not available, an exception is thrown.
+        /// Converts this stub into an interpreted value object.
         /// </summary>
-        /// <returns>The interpreted value object.</returns>
-        /// <exception cref="InvalidOperationException">If the data type can not be determined
-        /// or doesn't inherit from <see cref="ValueBase{T}"/> where "T" inherits from
-        /// <see cref="ValueType"/>.</exception>
+        /// <returns>The interpreted value.</returns>
         public IValue InterpretSelf()
         {
-            return ValueFactory.GetValue(DataType, ValueType, Value);
+            return ValueFactory.GetValue(ValueObjectType, ValueType, Value);
         }
 
         /// <summary>

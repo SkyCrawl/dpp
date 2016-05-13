@@ -17,10 +17,10 @@ namespace Ini.Util
         #region Properties
 
         /// <summary>
-        /// Mapping of elementary value types (e.g. bool) to corresponding default data types
-        /// (e.g. BoolValue). Feel free to tinker with these mappings or add your own.
+        /// Binding of elementary value types (e.g. bool) to corresponding configuration
+        /// value objects (e.g. BoolValue). Feel free to tinker with the binding or add your own.
         /// </summary>
-        public static Dictionary<Type, Type> DefaultDataTypes = new Dictionary<Type, Type>()
+        public static Dictionary<Type, Type> TypeBinding = new Dictionary<Type, Type>()
         {
             { typeof(bool), typeof(BoolValue)},
             { typeof(double), typeof(DoubleValue)},
@@ -35,39 +35,47 @@ namespace Ini.Util
         #region Public Methods
 
         /// <summary>
-        /// Creates an instance of a value class based of supplied types.
+        /// Takes the specified value object type, creates a new instance from it and feeds it
+        /// the specified string value. If the value object type is not defined, a default
+        /// from <see cref="TypeBinding"/> is taken. If even a default is not available,
+        /// an exception is thrown.
+        /// The value object must inherit from <see cref="ValueBase{T}"/> where "T" inherits from
+        /// the specified value type.
         /// </summary>
-        /// <param name="dataType">The final type of the value.</param>
-        /// <param name="valueType">The inner type of the value.</param>
-        /// <param name="value">The string representation of the value.</param>
-        /// <returns></returns>
-        public static IValue GetValue(Type dataType, Type valueType, string value)
+        /// <param name="valueObjectType">The value object type to instantiate.</param>
+        /// <param name="valueType">The value type to use.</param>
+        /// <param name="value">The string value to interpret.</param>
+        /// <returns>The interpreted value.</returns>
+        /// <exception cref="InvalidOperationException">If the value object type can not be determined
+        /// or doesn't inherit from <see cref="ValueBase{T}"/> where "T" inherits from 
+        /// <see cref="ValueType"/>.</exception>
+        public static IValue GetValue(Type valueObjectType, Type valueType, string value)
         {
-            // prepare the data type
-            if ((dataType == null) && ValueFactory.DefaultDataTypes.ContainsKey(valueType))
+            // prepare the final value object type
+            if ((valueObjectType == null) && ValueFactory.TypeBinding.ContainsKey(valueType))
             {
-                dataType = ValueFactory.DefaultDataTypes[valueType];
+                valueObjectType = ValueFactory.TypeBinding[valueType];
             }
 
             // check if still not defined
-            if (dataType != null)
+            if (valueObjectType != null)
             {
-                if (dataType.IsSubclassOf(typeof(ValueBase<ValueType>)))
+                Type genericValueObjectType = typeof(ValueBase<>).MakeGenericType(valueType);
+                if (valueObjectType.IsSubclassOf(genericValueObjectType))
                 {
-                    var result = Activator.CreateInstance(dataType) as ValueBase<ValueType>;
+                    var result = Activator.CreateInstance(valueObjectType) as ValueBase<object>;
                     result.FillFromString(value);
-
                     return result;
                 }
                 else
                 {
-                    throw new InvalidOperationException(string.Format("The type '{0}' doesn't inherit from '{1}'.", dataType.FullName, typeof(ValueBase<ValueType>).FullName));
+                    throw new InvalidOperationException(string.Format("Value object type '{0}' doesn't inherit from '{1}'.", valueObjectType.ToString(), genericValueObjectType.ToString()));
                 }
             }
             else
             {
-                throw new InvalidOperationException(string.Format("Could not determine the interpreted value's data type. " +
-                    "Have you added a default data type for '{0}'?", valueType.FullName));
+                throw new InvalidOperationException(string.Format("Could not determine the type to interpret the value into. " +
+                    "Have you added a type binding for '{0}'?", valueType.ToString()));
             }
         }
 

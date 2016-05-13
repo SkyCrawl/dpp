@@ -44,7 +44,7 @@ namespace Ini.EventLoggers
         /// A general parsing/format error has occurred.
         /// </summary>
         /// <param name="e">The exception that triggered the event.</param>
-        public virtual void SpecificationMalformed(Exception e)
+        public virtual void MalformedSpecification(Exception e)
         {
             Writer.WriteLine("ERROR: couldn't read the specification because of the reason that follows.");
             Writer.WriteLine("\t" + e.StackTrace);

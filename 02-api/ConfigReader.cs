@@ -10,10 +10,9 @@ using Ini.Util;
 namespace Ini
 {
     /// <summary>
-    /// The class used to read configuration from various sources. While consumers
-    /// can specify arbitrary output for the event loggers (see constructors), they
-    /// are not public so as to avoid unnecessary issues when manipulating with them
-    /// while a task is running.
+    /// Configuration reader from various sources. While consumers can specify arbitrary
+    /// output for loggers, they are not public so as to avoid unnecessary issues when
+    /// manipulating with them while a task is running.
     /// </summary>
     public class ConfigReader
     {

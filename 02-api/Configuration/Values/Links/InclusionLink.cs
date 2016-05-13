@@ -91,7 +91,8 @@ namespace Ini.Configuration.Values.Links
         }
 
         /// <summary>
-        /// Interprets <see cref="Values"/>, according to <see cref="ValueType"/>.
+        /// Interprets <see cref="Values"/> and converts instances of <see cref="ValueStub"/> to
+        /// the respective value objects that inherit from <see cref="ValueBase{T}"/>.
         /// </summary>
         public void InterpretSelf()
         {
