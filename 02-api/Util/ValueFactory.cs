@@ -6,6 +6,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Specialized;
+using Ini.Exceptions;
 
 namespace Ini.Util
 {
@@ -20,15 +22,23 @@ namespace Ini.Util
         /// Binding of elementary value types (e.g. bool) to corresponding configuration
         /// value objects (e.g. BoolValue). Feel free to tinker with the binding or add your own.
         /// </summary>
-        public static Dictionary<Type, Type> TypeBinding = new Dictionary<Type, Type>()
+        public static ObservableInsertionDictionary<Type, Type> TypeBinding;
+
+        #endregion
+
+        #region Static code block
+
+        static ValueFactory()
         {
-            { typeof(bool), typeof(BoolValue)},
-            { typeof(double), typeof(DoubleValue)},
-            { typeof(Enum), typeof(EnumValue)},
-            { typeof(long), typeof(LongValue)},
-            { typeof(string), typeof(StringValue)},
-            { typeof(ulong), typeof(ULongValue)},
-        };
+            TypeBinding = new ObservableInsertionDictionary<Type, Type>();
+            TypeBinding.CollectionChanged += OnTypeBindingIsChanged;
+            TypeBinding.Add(typeof(bool), typeof(BoolValue));
+            TypeBinding.Add(typeof(double), typeof(DoubleValue));
+            TypeBinding.Add(typeof(Enum), typeof(EnumValue));
+            TypeBinding.Add(typeof(long), typeof(LongValue));
+            TypeBinding.Add(typeof(string), typeof(StringValue));
+            TypeBinding.Add(typeof(ulong), typeof(ULongValue));
+        }
 
         #endregion
 
@@ -76,6 +86,71 @@ namespace Ini.Util
             {
                 throw new InvalidOperationException(string.Format("Could not determine the type to interpret the value into. " +
                     "Have you added a type binding for '{0}'?", valueType.ToString()));
+            }
+        }
+
+        /// <summary>
+        /// Takes the specified value's type, looks into <see cref="TypeBinding"/> for its mapped
+        /// value object type, creates a new instance and feeds it the specified value. If there's
+        /// no mapped value object type, throws an exception.
+        /// </summary>
+        /// <returns>The new value object.</returns>
+        /// <param name="value">Initial value for the new value object.</param>
+        /// <typeparam name="TValue">The elementary value type to use.</typeparam>
+        public static ValueBase<TValue> GetValue<TValue>(TValue value)
+        {
+            // prepare the final value object type
+            Type valueObjectType = TypeBinding.TryGetValue(typeof(TValue));
+
+            // check if defined
+            if (valueObjectType != null)
+            {
+                // no need to check that a correct type is created - TypeBinding is internally observed
+                return (ValueBase<TValue>) Activator.CreateInstance(valueObjectType, value);
+            }
+            else
+            {
+                throw new InvalidOperationException(string.Format("Could not determine the type to create. " +
+                    "Have you added a type binding for '{0}'?", typeof(TValue).ToString()));
+            }
+        }
+
+        #endregion
+
+        #region Keeping internal state
+
+        /// <summary>
+        /// The delegate for <see cref="INotifyCollectionChanged"/>.
+        /// </summary>
+        /// <param name="sender">The observed collection, in this case <see cref="TypeBinding"/>.</param>
+        /// <param name="e">Changes that occurred.</param>
+        static void OnTypeBindingIsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+            case NotifyCollectionChangedAction.Add:
+            case NotifyCollectionChangedAction.Replace:
+                foreach(KeyValuePair<Type, Type> entry in e.NewItems)
+                {
+                    Type genericValueObjectType = typeof(ValueBase<>).MakeGenericType(entry.Key);
+                    if(!entry.Value.IsSubclassOf(genericValueObjectType))
+                    {
+                        throw new InvariantBrokenException(string.Format(
+                            "Invalid binding specified: if the key type is '{0}', then the value type has to inherit from '{1}'.",
+                            entry.Key.ToString(),
+                            genericValueObjectType.ToString()));
+                    }
+                }
+                break;
+
+            case NotifyCollectionChangedAction.Move:
+            case NotifyCollectionChangedAction.Remove:
+            case NotifyCollectionChangedAction.Reset:
+                // one or more items were moved or removed - that doesn't break any invariant
+                break;
+
+            default:
+                throw new ArgumentException("Unknown enum value: " + e.Action.ToString());
             }
         }
 

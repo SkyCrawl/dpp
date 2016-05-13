@@ -126,7 +126,17 @@ namespace Ini.Specification
             }
             else
             {
-                throw new NotImplementedException();
+                Config result = new Config(this);
+                result.Origin = "Generated default configuration";
+                foreach(SectionSpec sectionSpec in Sections)
+                {
+                    if(!string.IsNullOrWhiteSpace(sectionSpec.Description))
+                    {
+                        result.Add(new Commentary(new string[] { sectionSpec.Description }));
+                    }
+                    result.Add(sectionSpec.CreateSectionStub());
+                }
+                return result;
             }
         }
 

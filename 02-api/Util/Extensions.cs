@@ -80,7 +80,7 @@ namespace Ini.Util
         /// <param name="specItems">The specification items to search for if a particular order is applied.</param>
         /// <param name="order">The order to apply.</param>
         /// <returns>The reordered values.</returns>
-        public static IEnumerable<ConfigBlockBase> ReorderBlocks(this ConfigBlockDictionary<string, ConfigBlockBase> items, IEnumerable<SpecBlockBase> specItems, ConfigBlockSortOrder order)
+        public static IEnumerable<ConfigBlockBase> ReorderBlocks(this ObservableInsertionDictionary<string, ConfigBlockBase> items, IEnumerable<SpecBlockBase> specItems, ConfigBlockSortOrder order)
         {
             // first handle the trivial case
             if(order == ConfigBlockSortOrder.Insertion)

@@ -73,10 +73,10 @@ namespace Ini.Configuration.Values
         }
 
         /// <summary>
-        /// Converts the inner value into a string with the appropriate format.
+        /// Serializes this element into a string that can be deserialized back using <see cref="ConfigParser"/>.
         /// </summary>
         /// <param name="config">The parent configuration.</param>
-        /// <returns>The value converted to a string.</returns>
+        /// <returns>The element converted to a string.</returns>
         public override string ToOutputString(Config config)
         {
             string prefix = null;

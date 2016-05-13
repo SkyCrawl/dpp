@@ -52,7 +52,16 @@ namespace Ini.Specification
         /// <returns></returns>
         public Section CreateSectionStub()
         {
-            throw new NotImplementedException();
+            Section result = new Section(Identifier);
+            foreach(OptionSpec optionSpec in Options)
+            {
+                if(!string.IsNullOrWhiteSpace(optionSpec.Description))
+                {
+                    result.Add(new Commentary(new string[] { optionSpec.Description }));
+                }
+                result.Add(optionSpec.CreateOptionStub());
+            }
+            return result;
         }
 
         #endregion

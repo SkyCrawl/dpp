@@ -38,7 +38,7 @@ namespace Ini.Configuration
         /// <see cref="Commentary"/>) in insertion order. Use only if you know what you're doing.
         /// <see cref="OptionCount"/> is being managed manually.
         /// </summary>
-        public ConfigBlockDictionary<string, ConfigBlockBase> Items { get; private set; }
+        public ObservableInsertionDictionary<string, ConfigBlockBase> Items { get; private set; }
 
         #endregion
 
@@ -51,7 +51,7 @@ namespace Ini.Configuration
         {
             this.TrailingCommentary = commentary;
             this.OptionCount = 0;
-            this.Items = new ConfigBlockDictionary<string, ConfigBlockBase>(new NotifyCollectionChangedEventHandler(OnContentChanged));
+            this.Items = new ObservableInsertionDictionary<string, ConfigBlockBase>(new NotifyCollectionChangedEventHandler(OnContentChanged));
         }
 
         #endregion
@@ -320,14 +320,14 @@ namespace Ini.Configuration
             {
                 case NotifyCollectionChangedAction.Add:
                 case NotifyCollectionChangedAction.Replace:
-                foreach(ConfigBlockBase item in e.NewItems)
+                foreach(KeyValuePair<string, ConfigBlockBase> entry in e.NewItems)
                     {
-                        if(item is Section)
+                        if(entry.Value is Section)
                         {
                             throw new InvariantBrokenException(string.Format(
                                 "'{0}' can not contain instances of '{1}'.",
                                 this.GetType().ToString(),
-                                item.GetType().ToString()));
+                                entry.Value.GetType().ToString()));
                         }
                     }
                     break;

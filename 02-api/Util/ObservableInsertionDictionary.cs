@@ -9,10 +9,10 @@ using Ini.Configuration.Base;
 namespace Ini.Util
 {
 	/// <summary>
-	/// Dictionary storing blocks of configuration while keeping insertion order. Also implements the
+	/// Dictionary storing key-value pairs while keeping insertion order. Also implements the
     /// <see cref="INotifyCollectionChanged"/> to keep track of changes to the collection.
 	/// </summary>
-    public class ConfigBlockDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>>, INotifyCollectionChanged where TValue : ConfigBlockBase
+    public class ObservableInsertionDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>>, INotifyCollectionChanged
 	{
         #region Fields
 
@@ -35,10 +35,10 @@ namespace Ini.Util
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Ini.Util.ConfigBlockDictionary{TKey,TValue}"/> class.
+        /// Initializes a new instance of the <see cref="Ini.Util.ObservableInsertionDictionary{TKey,TValue}"/> class.
         /// </summary>
         /// <param name="eventHandler">Event handler.</param>
-        public ConfigBlockDictionary(NotifyCollectionChangedEventHandler eventHandler = null)
+        public ObservableInsertionDictionary(NotifyCollectionChangedEventHandler eventHandler = null)
 		{
 			this.dictionary = new OrderedDictionary();
             this.CollectionChanged = eventHandler;
@@ -56,7 +56,7 @@ namespace Ini.Util
         /// <param name="value">Value.</param>
         public void Add(TKey identifier, TValue value)
 		{
-            CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, value));
+            CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, new KeyValuePair<TKey, TValue>(identifier, value)));
 			dictionary.Add(identifier, value);
 		}
 
@@ -79,7 +79,7 @@ namespace Ini.Util
 			bool contains = dictionary.Contains(identifier);
 			if(contains)
 			{
-                CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, dictionary[identifier]));
+                CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, new KeyValuePair<TKey, TValue>(identifier, (TValue) dictionary[identifier])));
 				dictionary.Remove(identifier);
 			}
 			return contains;
@@ -94,7 +94,15 @@ namespace Ini.Util
 		public bool TryGetValue(TKey identifier, out TValue value)
 		{
 			value = ContainsKey(identifier) ? (TValue) dictionary[identifier] : default(TValue);
-			return value != default(TValue);
+            if(typeof(TValue).IsValueType)
+            {
+                return (object) value != Activator.CreateInstance(typeof(TValue));
+            }
+            else
+            {
+                return value != null;
+            }
+
 		}
 
 		/// <summary>
@@ -118,7 +126,7 @@ namespace Ini.Util
 			{
                 CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(
                     ContainsKey(identifier) ? NotifyCollectionChangedAction.Replace : NotifyCollectionChangedAction.Add,
-                    value));
+                    new KeyValuePair<TKey, TValue>(identifier, value)));
 				dictionary[identifier] = value;
 			}
 		}

@@ -56,7 +56,6 @@
     <Compile Include="Configuration\Commentary.cs" />
     <Compile Include="Util\ConfigBlockSortOrder.cs" />
     <Compile Include="Exceptions\InvariantBrokenException.cs" />
-    <Compile Include="Util\ConfigBlockDictionary.cs" />
     <Compile Include="ConfigWriterOptions.cs" />
     <Compile Include="Util\Guid\IGuid.cs" />
     <Compile Include="Util\Guid\SystemGuidGenerator.cs" />
@@ -115,6 +114,7 @@
     <Compile Include="EventLoggers\BaseEventLogger.cs" />
     <Compile Include="IniSyntax.cs" />
     <Compile Include="Exceptions\MalformedSpecException.cs" />
+    <Compile Include="Util\ObservableInsertionDictionary.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -157,10 +157,10 @@ namespace Ini.Configuration.Values.Links
         }
 
         /// <summary>
-        /// Serializes this link into a string that can be deserialized back using <see cref="ConfigParser"/>.
+        /// Serializes this element into a string that can be deserialized back using <see cref="ConfigParser"/>.
         /// </summary>
         /// <param name="config">The parent configuration.</param>
-        /// <returns>The serialized representation of the current link.</returns>
+        /// <returns>The element converted to a string.</returns>
         public string ToOutputString(Config config)
         {
             if (IsTargetDifferentFromInnerValues(config))

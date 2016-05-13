@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Ini.Configuration;
 using YamlDotNet.Serialization;
 using Ini.EventLoggers;
+using Ini.Util;
 
 namespace Ini.Specification
 {
@@ -49,7 +50,7 @@ namespace Ini.Specification
     /// <summary>
     /// The definition of a schema option.
     /// </summary>
-    public abstract class OptionSpec<T> : OptionSpec
+    public abstract class OptionSpec<TValue> : OptionSpec
     {
         #region Properties
 
@@ -57,7 +58,7 @@ namespace Ini.Specification
         /// Default value if the element is optional.
         /// </summary>
         [YamlMember(Alias = "default_values")]
-        public List<T> DefaultValues { get; set; }
+        public List<TValue> DefaultValues { get; set; }
 
         #endregion
 
@@ -68,7 +69,7 @@ namespace Ini.Specification
         /// </summary>
         public OptionSpec()
         {
-            this.DefaultValues = new List<T>();
+            this.DefaultValues = new List<TValue>();
         }
 
         #endregion
@@ -81,7 +82,7 @@ namespace Ini.Specification
         /// <returns>This option's value type.</returns>
         public override Type GetValueType()
         {
-            return typeof(T);
+            return typeof(TValue);
         }
 
         /// <summary>
@@ -112,7 +113,12 @@ namespace Ini.Specification
         /// <returns></returns>
         public override Option CreateOptionStub()
         {
-            throw new NotImplementedException();
+            Option result = new Option(Identifier, GetValueType());
+            foreach(TValue value in DefaultValues)
+            {
+                result.Elements.Add(ValueFactory.GetValue<TValue>(value));
+            }
+            return result;
         }
 
         #endregion
