@@ -93,7 +93,7 @@ namespace Ini
             }
 
             // and only then proceed with the writing
-            configuration.WriteTo(writer, options, eventLogger);
+            configuration.SerializeSelf(writer, options, eventLogger);
         }
 
         #endregion

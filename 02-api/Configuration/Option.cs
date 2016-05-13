@@ -164,31 +164,31 @@ namespace Ini.Configuration
         /// Determines whether this instance is valid the specified config section specification configLogger.
         /// </summary>
         /// <returns><c>true</c> if this instance is valid the specified config section specification configLogger; otherwise, <c>false</c>.</returns>
-        /// <param name="config">Config.</param>
-        /// <param name="section">Section.</param>
-        /// <param name="specification">Specification.</param>
-        /// <param name="configLogger">Config logger.</param>
-        public bool IsValid(Config config, string section, OptionSpec specification, IConfigValidatorEventLogger configLogger)
+        /// <param name="config">The parent configuration.</param>
+        /// <param name="section">The parent section identifier.</param>
+        /// <param name="specification">The option specification to validate against.</param>
+        /// <param name="logger">Configuration validation event logger.</param>
+        public bool IsValid(Config config, string section, OptionSpec specification, IConfigValidatorEventLogger logger)
         {
             // prepare the result validation state
-            bool optionValid = true;
+            bool result = true;
 
             // validate general conditions
             int valueCount = GetObjectValues().Count;
             if(specification.IsMandatory && valueCount == 0)
             {
-                optionValid = false;
-                configLogger.NoValue(section, Identifier);
+                result = false;
+                logger.NoValue(section, Identifier);
             }
             if(specification.HasSingleValue && valueCount > 1)
             {
-                optionValid = false;
-                configLogger.TooManyValues(section, Identifier);
+                result = false;
+                logger.TooManyValues(section, Identifier);
             }
             if(!ValueType.Equals(specification.GetValueType()))
             {
-                optionValid = false;
-                configLogger.ValueTypeMismatch(
+                result = false;
+                logger.ValueTypeMismatch(
                     section,
                     Identifier,
                     specification.GetValueType(),
@@ -199,15 +199,15 @@ namespace Ini.Configuration
                 // only validate inner elements if there's no type mismatch
                 foreach(IElement element in Elements)
                 {
-                    if(!element.IsValid(config, section, specification, configLogger))
+                    if(!element.IsValid(config, section, specification, logger))
                     {
-                        optionValid = false;
+                        result = false;
                     }
                 }
             }
 
             // and return
-            return optionValid;
+            return result;
         }
 
         #endregion
@@ -254,31 +254,15 @@ namespace Ini.Configuration
         #endregion
 
         /// <summary>
-        /// Writes the option into the output.
+        /// Serializes this instance into the specified text writer.
         /// </summary>
-        /// <param name="writer">The writer to write to.</param>
-        /// <param name="options">The output options.</param>
-        /// <param name="sectionSpecification">The specification of section with the configuration block.</param>
+        /// <param name="writer">The writer.</param>
+        /// <param name="options">Serialization options.</param>
+        /// <param name="sectionSpecification">Section specification of the current configuration block.</param>
         /// <param name="config">The parent configuration.</param>
-        protected internal override void WriteTo(TextWriter writer, ConfigWriterOptions options, SectionSpec sectionSpecification, Config config)
+        internal override void SerializeSelf(TextWriter writer, ConfigWriterOptions options, SectionSpec sectionSpecification, Config config)
         {
-            writer.Write("{0} = ", Identifier);
-            var firstElement = true;
-
-            foreach (var element in Elements)
-            {
-                if (firstElement)
-                {
-                    firstElement = false;
-                }
-                else
-                {
-                    writer.Write(", ");
-                }
-
-                writer.Write(element.ToOutputString(config));
-            }
-
+            writer.Write(IniSyntax.SerializeOption(Identifier, Elements, config));
             writer.WriteLine(IniSyntax.SerializeComment(TrailingCommentary));
         }
 

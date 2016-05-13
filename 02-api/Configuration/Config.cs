@@ -327,7 +327,7 @@ namespace Ini.Configuration
             );
 
             // prepare the result validation state
-            bool configValid = true;
+            bool result = true;
 
             // validate the inner structure against the specification
             foreach(Section section in Items.Values.Where(item => item is Section))
@@ -339,16 +339,29 @@ namespace Ini.Configuration
                     logger.NoSectionSpecification(section.Identifier);
 
                     // and error status depends on the validation mode
-                    configValid = mode == ConfigValidationMode.Relaxed;
+                    result = mode == ConfigValidationMode.Relaxed;
                 }
                 else if(!section.IsValid(this, sectionSpecification, mode, logger))
                 {
-                    configValid = false;
+                    result = false;
+                }
+            }
+
+            // validate that the configuration contains all mandatory options
+            if(mode == ConfigValidationMode.Strict)
+            {
+                foreach(SectionSpec mandatorySection in Spec.Sections.Where(item => item.IsMandatory))
+                {
+                    if(!Contains(mandatorySection.Identifier))
+                    {
+                        logger.MissingMandatorySection(mandatorySection.Identifier);
+                        result = false;
+                    }
                 }
             }
 
             // and return
-            return configValid;
+            return result;
         }
 
         /// <summary>
@@ -417,34 +430,26 @@ namespace Ini.Configuration
 
         #region Writing configuration
 
-        internal void WriteTo(TextWriter writer, ConfigWriterOptions options, IConfigWriterEventLogger logger)
+        /// <summary>
+        /// Serializes this instance into the specified text writer.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="options">Serialization options.</param>
+        /// <param name="logger">Configuration writer event logger.</param>
+        internal void SerializeSelf(TextWriter writer, ConfigWriterOptions options, IConfigWriterEventLogger logger)
         {
-            // Check if the specification is required and present.
-            if (IsSchemaRequiredNotPresent(options))
+            if(options.IsSpecRequiredForSerialization() && (Spec == null))
             {
                 logger.NoSpecification();
                 throw new UndefinedSpecException();
             }
-
-            var specIdentifiers = Spec != null ? Spec.Sections.Select(item => item.Identifier) : null;
-            var specDictionary = Spec != null ? Spec.Sections.ToDictionary(item => item.Identifier) : null;
-
-            var items = Items.Values.GetOrderedItems(options.SectionSortOrder, specIdentifiers);
-
-            foreach(var item in items)
+            else
             {
-                item.WriteTo(writer, options, specDictionary.TryGetValue(item.Identifier), this);
+                foreach(ConfigBlockBase item in Items.ReorderBlocks(Spec.Sections, options.SectionSortOrder))
+                {
+                    item.SerializeSelf(writer, options, Spec.GetSection(item.Identifier), this);
+                }
             }
-        }
-
-        bool IsSchemaRequiredNotPresent(ConfigWriterOptions options)
-        {
-            var result =
-                ((options.OptionSortOrder == ConfigBlockSortOrder.Specification ||
-                options.SectionSortOrder == ConfigBlockSortOrder.Specification) &&
-                Spec == null);
-
-            return result;
         }
 
         #endregion

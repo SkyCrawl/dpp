@@ -254,13 +254,13 @@ namespace Ini
         }
 
         /// <summary>
-        /// Converts the specified enumerable of <see cref="IValue"/> objects into the string representation
+        /// Converts the specified enumerable of <see cref="IElement"/> objects into the string representation
         /// that can be deserialized back into the object representation using <see cref="ConfigParser"/>.
         /// </summary>
         /// <returns>The string.</returns>
         /// <param name="enumerable">The source enumerable.</param>
         /// <param name="config">The parent configuration.</param>
-        public static string JoinElements(IEnumerable<IValue> enumerable, Config config)
+        public static string JoinElements(IEnumerable<IElement> enumerable, Config config)
         {
             return string.Join(", ", enumerable.Select(item => item.ToOutputString(config)));
         }
@@ -280,6 +280,28 @@ namespace Ini
             {
                 return string.Format("{0} {1}", COMMENTARY_SEPARATOR, commentary);
             }
+        }
+
+        /// <summary>
+        /// Serializes the specified section header (encloses it in brackets).
+        /// </summary>
+        /// <returns>The serialized section identifier.</returns>
+        /// <param name="identifier">The section identifier.</param>
+        public static string SerializeSectionHeader(string identifier)
+        {
+            return '[' + identifier + ']';
+        }
+
+        /// <summary>
+        /// Serializes the specified option identifier and value.
+        /// </summary>
+        /// <returns>The serialized option.</returns>
+        /// <param name="identifier">The option's identifier.</param>
+        /// <param name="elements">The option's value elements.</param>
+        /// <param name="configuration">The parent configuration.</param>
+        public static string SerializeOption(string identifier, IEnumerable<IElement> elements, Config configuration)
+        {
+            return string.Format("{0} = {1}", identifier, JoinElements(elements, configuration));
         }
 
         #endregion

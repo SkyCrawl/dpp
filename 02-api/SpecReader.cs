@@ -19,7 +19,7 @@ namespace Ini
         /// <summary>
         /// The specification reader event logger.
         /// </summary>
-        protected ISpecReaderEventLogger specReaderEventLogger;
+        protected ISpecReaderEventLogger eventLogger;
 
         #endregion
 
@@ -32,17 +32,17 @@ namespace Ini
         /// <param name="specReaderOutput">Specification reader event logger output.</param>
         public SpecReader(TextWriter specReaderOutput = null)
         {
-            this.specReaderEventLogger = new SpecReaderEventLogger(specReaderOutput ?? Console.Out);
+            this.eventLogger = new SpecReaderEventLogger(specReaderOutput ?? Console.Out);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Ini.SpecReader"/> class, with
         /// user-defined logger.
         /// </summary>
-        /// <param name="specReaderEventLogger">Specification reader event logger.</param>
-        public SpecReader(ISpecReaderEventLogger specReaderEventLogger)
+        /// <param name="eventLogger">Specification reader event logger.</param>
+        public SpecReader(ISpecReaderEventLogger eventLogger)
         {
-            this.specReaderEventLogger = specReaderEventLogger ?? new SpecReaderEventLogger(Console.Out);
+            this.eventLogger = eventLogger ?? new SpecReaderEventLogger(Console.Out);
         }
 
         #endregion
@@ -55,7 +55,7 @@ namespace Ini
         /// <returns>The configuration specification read and parsed from the given path and encoding.</returns>
         /// <param name="filePath">The path to a file in YAML format.</param>
         /// <param name="encoding">The file encoding.</param>
-        /// <exception cref="Ini.Exceptions.MalformedSchemaException">If the schema is malformed.</exception>
+        /// <exception cref="MalformedSpecException">If the schema is malformed.</exception>
         public ConfigSpec LoadFromFile(string filePath, Encoding encoding = null)
         {
             if(encoding == null)
@@ -96,23 +96,22 @@ namespace Ini
         /// <returns>The configuration specification read and parsed from the given reader.</returns>
         /// <param name="origin">The specification's origin. Will be forwarded into the logger.</param>
         /// <param name="reader">The object to read YAML specification from.</param>
-        /// <exception cref="Ini.Exceptions.MalformedSchemaException">If the schema is malformed.</exception>
+        /// <exception cref="MalformedSpecException">If the schema is malformed.</exception>
         public ConfigSpec LoadFromText(string origin, TextReader reader)
         {
-            // prepare the YAML deserializer with custom typer resolving
+            // prepare the YAML deserializer that can resolve custom types
             var deserializer = new Deserializer();
             deserializer.TypeResolvers.Insert(0, new SpecTypeResolver());
 
             // and try to deserialize
             try
             {
-                specReaderEventLogger.NewSpecification(origin);
+                eventLogger.NewSpecification(origin);
                 return deserializer.Deserialize<ConfigSpec>(reader);
             }
             catch (Exception e)
             {
-                specReaderEventLogger.MalformedSpecification(e);
-                throw new MalformedSchemaException("Could not deserialize the schema.", e);
+                throw new MalformedSpecException("Unable to deserialize specification.", e);
             }
         }
 

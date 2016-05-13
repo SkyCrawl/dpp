@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Ini.Exceptions
 {
     /// <summary>
-    /// A configuration validation was called but its associated specification is invalid.
+    /// A specification related task required the configuration to be valid, but it was not.
     /// </summary>
     public class InvalidSpecException : Exception
     {

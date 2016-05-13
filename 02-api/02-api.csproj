@@ -69,7 +69,6 @@
     <Compile Include="Specification\SectionSpec.cs" />
     <Compile Include="Specification\ConfigSpec.cs" />
     <Compile Include="Exceptions\MalformedConfigException.cs" />
-    <Compile Include="Exceptions\MalformedSchemaException.cs" />
     <Compile Include="Util\LinkResolving\LinkNode.cs" />
     <Compile Include="Util\LinkResolving\LinkTarget.cs" />
     <Compile Include="Util\LinkResolving\LinkOrigin.cs" />
@@ -115,7 +114,7 @@
     <Compile Include="Util\ConfigValidationMode.cs" />
     <Compile Include="EventLoggers\BaseEventLogger.cs" />
     <Compile Include="IniSyntax.cs" />
-    <Compile Include="Util\WriteHelper.cs" />
+    <Compile Include="Exceptions\MalformedSpecException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

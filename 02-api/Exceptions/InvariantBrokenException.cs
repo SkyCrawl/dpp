@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Ini.Exceptions
 {
 	/// <summary>
-	/// A recent consumer-raised event broke an invariant of an observed internal data structure.
+	/// A recent consumer operation broke an invariant of an observed internal data structure.
 	/// </summary>
 	public class InvariantBrokenException : Exception
 	{

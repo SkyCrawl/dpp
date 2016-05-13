@@ -56,6 +56,16 @@ namespace Ini.EventLoggers
         }
 
         /// <summary>
+        /// Strict validation mode was applied and the configuration didn't contain the given mandatory section.
+        /// </summary>
+        /// <param name="identifier">The missing section's identifier.</param>
+        public void MissingMandatorySection(string identifier)
+        {
+            Writer.WriteLine(string.Format("ERROR: missing mandatory section '{0}'.", identifier));
+            Writer.WriteLine("\tHint: try relaxed validation mode.");
+        }
+
+        /// <summary>
         /// Specification for the given option was not found when validating configuration.
         /// </summary>
         /// <param name="section">The containing section's identifier.</param>
@@ -63,6 +73,17 @@ namespace Ini.EventLoggers
         public virtual void NoOptionSpecification(string section, string option)
         {
             Writer.WriteLine(string.Format("ERROR: validation of option '{0}' in section '{1}' was skipped as it wasn't found in the associated specification.", option, section));
+        }
+
+        /// <summary>
+        /// Strict validation mode was applied and the configuration didn't contain the given mandatory option.
+        /// </summary>
+        /// <param name="section">The missing option's section identifier.</param>
+        /// <param name="option">The missing option's identifier.</param>
+        public void MissingMandatoryOption(string section, string option)
+        {
+            Writer.WriteLine(string.Format("ERROR: missing mandatory option '{0}' in section '{1}'.", option, section));
+            Writer.WriteLine("\tHint: try relaxed validation mode.");
         }
 
         /// <summary>

@@ -6,6 +6,7 @@ using Ini.Configuration;
 using Ini.Specification;
 using Ini.EventLoggers;
 using Ini.Util;
+using Ini.Exceptions;
 
 namespace Ini
 {
@@ -26,7 +27,7 @@ namespace Ini
         /// <summary>
         /// The configuration reader event logger.
         /// </summary>
-        protected IConfigReaderEventLogger configEventLogger;
+        protected IConfigReaderEventLogger eventLogger;
 
         #endregion
 
@@ -42,19 +43,19 @@ namespace Ini
         public ConfigReader(IConfigParser parser = null, TextWriter specEventOutput = null, TextWriter configEventOutput = null)
         {
             this.parser = parser ?? new ConfigParser();
-            this.configEventLogger = new ConfigReaderEventLogger(configEventOutput, specEventOutput);
+            this.eventLogger = new ConfigReaderEventLogger(configEventOutput, specEventOutput);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Ini.ConfigReader"/> class, with
-        /// user-defined parser and loggers.
+        /// user-defined parser and logger.
         /// </summary>
         /// <param name="parser">The parser to use.</param>
-        /// <param name="configEventLogger">Configuration reader event logger.</param>
-        public ConfigReader(IConfigParser parser, IConfigReaderEventLogger configEventLogger)
+        /// <param name="eventLogger">Configuration reader event logger.</param>
+        public ConfigReader(IConfigParser parser, IConfigReaderEventLogger eventLogger)
         {
             this.parser = parser ?? new ConfigParser();
-            this.configEventLogger = configEventLogger ?? new ConfigReaderEventLogger(Console.Out);
+            this.eventLogger = eventLogger ?? new ConfigReaderEventLogger(Console.Out);
         }
 
         #endregion
@@ -118,13 +119,27 @@ namespace Ini
         /// <param name="reader">The given reader.</param>
         /// <param name="spec">The schema.</param>
         /// <param name="mode">The validation mode.</param>
-        /// <exception cref="Ini.Exceptions.UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
-        /// <exception cref="Ini.Exceptions.InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
-        /// <exception cref="Ini.Exceptions.MalformedConfigException">If the configuration's format is malformed.</exception>
+        /// <exception cref="UndefinedSpecException">If validation mode is strict and no specification is specified.</exception>
+        /// <exception cref="InvalidSpecException">If validation mode is strict and the specified specification is not valid.</exception>
+        /// <exception cref="MalformedConfigException">If the configuration's format is, somehow, malformed.</exception>
         public Config LoadFromText(string origin, TextReader reader, ConfigSpec spec, ConfigValidationMode mode = ConfigValidationMode.Strict)
         {
-            parser.Prepare(spec, configEventLogger);
-            return parser.Parse(reader, mode);
+            parser.Prepare(spec, eventLogger);
+            try
+            {
+                return parser.Parse(reader, mode);
+            }
+            catch (Exception e)
+            {
+                if((e is UndefinedSpecException) || (e is InvalidSpecException))
+                {
+                    throw e; 
+                }
+                else
+                {
+                    throw new MalformedConfigException("Unable to deserialize configuration.", e);
+                }
+            }
         }
 
         /// <summary>
@@ -139,7 +154,7 @@ namespace Ini
         /// <param name="mode">The validation mode.</param>
         public bool TryLoadFromText(string origin, TextReader reader, out Config configuration, ConfigSpec spec, ConfigValidationMode mode = ConfigValidationMode.Strict)
         {
-            parser.Prepare(spec, configEventLogger);
+            parser.Prepare(spec, eventLogger);
             try
             {
                 configuration = parser.Parse(reader, mode);

@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Ini.Exceptions
 {
 	/// <summary>
-	/// A configuration writing operation was called but the configuration was invalid.
+	/// A configuration related task required the configuration to be valid, but it was not.
 	/// </summary>
 	public class InvalidConfigException : Exception
 	{

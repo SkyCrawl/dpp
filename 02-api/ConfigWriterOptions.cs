@@ -31,7 +31,7 @@ namespace Ini
 
         /// <summary>
         /// Gets or sets a value indicating whether to validate the configuration
-        /// by its associated specification (if defined) before writing it. The
+        /// against its associated specification (if defined) before writing it. The
         /// specification will also be validated. If the configuration is found
         /// to be invalid, it will NOT be written.
         /// </summary>
@@ -58,6 +58,19 @@ namespace Ini
         /// as defined by the original order.
         /// </summary>
         public ConfigBlockSortOrder OptionSortOrder { get; set; }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Determines whether an associated specification is required for the configuration's serialization.
+        /// </summary>
+        /// <returns><c>true</c> if specification is required for serialization of the configuration; otherwise, <c>false</c>.</returns>
+        public bool IsSpecRequiredForSerialization()
+        {
+            return (OptionSortOrder == ConfigBlockSortOrder.Specification) || (SectionSortOrder == ConfigBlockSortOrder.Specification);
+        }
 
         #endregion
     }

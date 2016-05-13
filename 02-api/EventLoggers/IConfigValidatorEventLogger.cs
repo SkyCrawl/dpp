@@ -30,11 +30,24 @@ namespace Ini.EventLoggers
         void NoSectionSpecification(string identifier);
 
         /// <summary>
+        /// Strict validation mode was applied and the configuration didn't contain the given mandatory section.
+        /// </summary>
+        /// <param name="identifier">The missing section's identifier.</param>
+        void MissingMandatorySection(string identifier);
+
+        /// <summary>
         /// Specification for the given option was not found when validating configuration.
         /// </summary>
         /// <param name="section">The containing section's identifier.</param>
         /// <param name="option">The involved option's identifier.</param>
         void NoOptionSpecification(string section, string option);
+
+        /// <summary>
+        /// Strict validation mode was applied and the configuration didn't contain the given mandatory option.
+        /// </summary>
+        /// <param name="section">The missing option's section identifier.</param>
+        /// <param name="option">The missing option's identifier.</param>
+        void MissingMandatoryOption(string section, string option);
 
         /// <summary>
         /// The given option's value type does not conform to the specification.

@@ -264,8 +264,8 @@ namespace Ini.Configuration
         /// <param name="config">The parent configuration object.</param>
         /// <param name="sectionSpec">The section specification.</param>
         /// <param name="mode">Validation mode to use.</param>
-        /// <param name="configLogger">Configuration validation event logger.</param>
-        public bool IsValid(Config config, SectionSpec sectionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger configLogger)
+        /// <param name="logger">Configuration validation event logger.</param>
+        public bool IsValid(Config config, SectionSpec sectionSpec, ConfigValidationMode mode, IConfigValidatorEventLogger logger)
         {
             // prepare the result validation state
             bool result = true;
@@ -277,14 +277,27 @@ namespace Ini.Configuration
                 if(optionSpec == null)
                 {
                     // okay, that's something we should know about
-                    configLogger.NoOptionSpecification(sectionSpec.Identifier, option.Identifier);
+                    logger.NoOptionSpecification(sectionSpec.Identifier, option.Identifier);
 
                     // and error status depends on the validation mode
                     result = mode == ConfigValidationMode.Relaxed;
                 }
-                else if(!option.IsValid(config, Identifier, optionSpec, configLogger))
+                else if(!option.IsValid(config, Identifier, optionSpec, logger))
                 {
                     result = false;
+                }
+            }
+
+            // validate that the configuration contains all mandatory options
+            if(mode == ConfigValidationMode.Strict)
+            {
+                foreach(OptionSpec mandatoryOption in sectionSpec.Options.Where(item => item.IsMandatory))
+                {
+                    if(!Contains(mandatoryOption.Identifier))
+                    {
+                        logger.MissingMandatoryOption(sectionSpec.Identifier, mandatoryOption.Identifier);
+                        result = false;
+                    }
                 }
             }
 
@@ -335,55 +348,23 @@ namespace Ini.Configuration
         #region ConfigBlockBase Members
 
         /// <summary>
-        /// Writes the section into the output.
+        /// Serializes this instance into the specified text writer.
         /// </summary>
-        /// <param name="writer">The writer to write to.</param>
-        /// <param name="options">The output options.</param>
-        /// <param name="sectionSpecification">The specification of section with the configuration block.</param>
+        /// <param name="writer">The writer.</param>
+        /// <param name="options">Serialization options.</param>
+        /// <param name="sectionSpecification">Section specification of the current configuration block.</param>
         /// <param name="config">The parent configuration.</param>
-        protected internal override void WriteTo(TextWriter writer, ConfigWriterOptions options, SectionSpec sectionSpecification, Config config)
+        internal override void SerializeSelf(TextWriter writer, ConfigWriterOptions options, SectionSpec sectionSpecification, Config config)
         {
-            writer.Write("[{0}]", Identifier);
+            // first serialize the header
+            writer.Write(IniSyntax.SerializeSectionHeader(Identifier));
+            writer.Write(' ');
             writer.WriteLine(IniSyntax.SerializeComment(TrailingCommentary));
 
-            var optionIdentifiers = sectionSpecification != null ? sectionSpecification.Options.Select(item => item.Identifier) : null;
-
-            var items = Items.Values.GetOrderedItems(options.OptionSortOrder, optionIdentifiers);
-
-            foreach(var item in items)
+            // and then inner options
+            foreach(ConfigBlockBase item in Items.ReorderBlocks(sectionSpecification.Options, options.SectionSortOrder))
             {
-                item.WriteTo(writer, options, sectionSpecification, config);
-            }
-        }
-
-        IEnumerable<ConfigBlockBase> GetOrderedItems(ConfigBlockSortOrder sortOrder, SectionSpec spec)
-        {
-            switch (sortOrder)
-            {
-                case ConfigBlockSortOrder.Ascending:
-                    return Items.OrderBy(item => item.Key).Select(item => item.Value);
-                case ConfigBlockSortOrder.Descending:
-                    return Items.OrderByDescending(item => item.Key).Select(item => item.Value);
-                case ConfigBlockSortOrder.Insertion:
-                    return Items.Select(item => item.Value);
-                case ConfigBlockSortOrder.Specification:
-                default:
-                    var result = new List<ConfigBlockBase>();
-                    var itemsToWrite = new Dictionary<string, ConfigBlockBase>(Items);
-
-                    foreach (var optionSpec in spec.Options)
-                    {
-                        ConfigBlockBase option;
-                        if (itemsToWrite.TryGetValue(optionSpec.Identifier, out option))
-                        {
-                            itemsToWrite.Remove(optionSpec.Identifier);
-                            result.Add(option);
-                        }
-                    }
-
-                    result.AddRange(itemsToWrite.Values);
-
-                    return result;
+                item.SerializeSelf(writer, options, sectionSpecification, config);
             }
         }
 

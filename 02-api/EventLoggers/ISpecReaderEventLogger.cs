@@ -16,11 +16,5 @@ namespace Ini.EventLoggers
         /// </summary>
         /// <param name="specOrigin">Origin of the newly parsed specification.</param>
         void NewSpecification(string specOrigin);
-
-        /// <summary>
-        /// A general parsing/format error has occurred.
-        /// </summary>
-        /// <param name="e">The exception that triggered the event.</param>
-        void MalformedSpecification(Exception e);
     }
 }

@@ -64,13 +64,13 @@ namespace Ini.Configuration
         #region ConfigBlockBase Members
 
         /// <summary>
-        /// Writes the commentary into the output.
+        /// Serializes this instance into the specified text writer.
         /// </summary>
-        /// <param name="writer">The writer to write to.</param>
-        /// <param name="options">The output options.</param>
-        /// <param name="sectionSpecification">The specification of section with the configuration block.</param>
+        /// <param name="writer">The writer.</param>
+        /// <param name="options">Serialization options.</param>
+        /// <param name="sectionSpecification">Section specification of the current configuration block.</param>
         /// <param name="config">The parent configuration.</param>
-        protected internal override void WriteTo(TextWriter writer, ConfigWriterOptions options, SectionSpec sectionSpecification, Config config)
+        internal override void SerializeSelf(TextWriter writer, ConfigWriterOptions options, SectionSpec sectionSpecification, Config config)
         {
             foreach(var line in Lines)
             {
