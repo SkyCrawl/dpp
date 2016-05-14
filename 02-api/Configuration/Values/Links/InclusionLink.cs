@@ -165,11 +165,11 @@ namespace Ini.Configuration.Values.Links
         {
             if (IsTargetDifferentFromInnerValues(config))
             {
-                return IniSyntax.ConstructLink(Target);
+                return IniSyntax.SerializeLink(Target);
             }
             else
             {
-                return IniSyntax.JoinElements(Values, config);
+                return IniSyntax.SerializeElements(Values, config);
             }
         }
 

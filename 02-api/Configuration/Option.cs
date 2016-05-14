@@ -263,7 +263,7 @@ namespace Ini.Configuration
         internal override void SerializeSelf(TextWriter writer, ConfigWriterOptions options, SectionSpec sectionSpecification, Config config)
         {
             writer.Write(IniSyntax.SerializeOption(Identifier, Elements, config));
-            writer.WriteLine(IniSyntax.SerializeComment(TrailingCommentary));
+            writer.WriteLine(IniSyntax.SerializeCommentary(TrailingCommentary));
         }
 
         #region IEnumerable implementation

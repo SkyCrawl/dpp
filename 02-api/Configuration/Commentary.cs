@@ -74,7 +74,7 @@ namespace Ini.Configuration
         {
             foreach(var line in Lines)
             {
-                writer.WriteLine(IniSyntax.SerializeComment(line));
+                writer.WriteLine(IniSyntax.SerializeCommentary(line));
             }
         }
 

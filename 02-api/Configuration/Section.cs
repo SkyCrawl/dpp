@@ -359,7 +359,7 @@ namespace Ini.Configuration
             // first serialize the header
             writer.Write(IniSyntax.SerializeSectionHeader(Identifier));
             writer.Write(' ');
-            writer.WriteLine(IniSyntax.SerializeComment(TrailingCommentary));
+            writer.WriteLine(IniSyntax.SerializeCommentary(TrailingCommentary));
 
             // and then inner options
             foreach(ConfigBlockBase item in Items.ReorderBlocks(sectionSpecification.Options, options.SectionSortOrder))
