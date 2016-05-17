@@ -91,12 +91,12 @@ namespace Ini
         #region Deserialization Helpers
 
         /// <summary>
-        /// Extracts section identifier from the input line and returns it.
+        /// Extracts section identifier from the input line (section header) and returns it.
         /// </summary>
         /// <returns>The extracted identifier.</returns>
         /// <param name="line">The input line.</param>
         /// <exception cref="ArgumentException">If the input line doesn't match a section header.</exception>
-        public static string ExtractIdentifierFromSectionHeader(string line)
+        public static string ExtractSectionId(string line)
         {
             if(LineMatches(line, LineContent.SECTION_HEADER))
             {
@@ -116,7 +116,7 @@ namespace Ini
         /// <param name="separator">The extracted separator.</param>
         /// <param name="value">The extracted value.</param>
         /// <exception cref="ArgumentException">If the input line doesn't match option syntax or it defines an empty identifier.</exception>
-        public static void ExtractComponentsFromOption(string line, out string identifier, out string separator, out string value)
+        public static void ExtractOptionComponents(string line, out string identifier, out string separator, out string value)
         {
             line = TrimWhitespaces(line);
             Match match = Regex.Match(line, LINE_REGEX_OPTION);
@@ -190,8 +190,8 @@ namespace Ini
         /// </summary>
         /// <returns>The line's prefix, up to the start of the commentary.</returns>
         /// <param name="line">The input line.</param>
-        /// <param name="commentary">The extracted trailing commentary.</param>
-        public static string ExtractAndRemoveTrailingCommentary(string line, out string commentary)
+        /// <param name="commentary">The extracted trailing commentary, if any.</param>
+        public static string ExtractAndRemoveCommentary(string line, out string commentary)
         {
             // match the first semicolon that is not preceded by an escape sequence
             Match match = Regex.Match(line, UnescapedTokenRegex(COMMENTARY_SEPARATOR));

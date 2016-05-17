@@ -96,7 +96,7 @@ namespace Ini
             public LineInfo(string line)
             {
                 string trailingCommentary;
-                this.Line = IniSyntax.TrimWhitespaces(IniSyntax.ExtractAndRemoveTrailingCommentary(line, out trailingCommentary));
+                this.Line = IniSyntax.TrimWhitespaces(IniSyntax.ExtractAndRemoveCommentary(line, out trailingCommentary));
                 this.TrailingCommentary = trailingCommentary;
                 this.IsSection = IniSyntax.LineMatches(Line, Ini.IniSyntax.LineContent.SECTION_HEADER);
             }
@@ -426,7 +426,7 @@ namespace Ini
         /// <param name="lineInfo">Information about the current line.</param>
         protected void ParseSectionHeader(ParserContext context, LineInfo lineInfo)
         {
-            string identifier = IniSyntax.ExtractIdentifierFromSectionHeader(lineInfo.Line);
+            string identifier = IniSyntax.ExtractSectionId(lineInfo.Line);
             SectionSpec sectionSpec = specification.GetSection(identifier);
             if(string.IsNullOrEmpty(identifier))
             {
@@ -462,7 +462,7 @@ namespace Ini
         {
             // extract components, throwing exceptions if the syntax doesn't match
             string identifier, valueSeparator, value;
-            IniSyntax.ExtractComponentsFromOption(lineInfo.Line, out identifier, out valueSeparator, out value);
+            IniSyntax.ExtractOptionComponents(lineInfo.Line, out identifier, out valueSeparator, out value);
 
             // check subsequent preconditions
             if(context.CurrentSection.Contains(identifier))
