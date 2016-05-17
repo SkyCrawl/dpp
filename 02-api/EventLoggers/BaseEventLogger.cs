@@ -12,6 +12,15 @@ namespace Ini.EventLoggers
     /// </summary>
     public abstract class BaseEventLogger
     {
+        #region Consts
+
+        /// <summary>
+        /// The string used to separate main sections of the log.
+        /// </summary>
+        protected const string LOG_SEPARATOR = "-----";
+
+        #endregion
+
         #region Properties
 
         /// <summary>

@@ -9,11 +9,11 @@ using Ini.Specification;
 
 namespace Ini.Util
 {
-	/// <summary>
-	/// This library's proprietary extensions. Nah, just kidding...
-	/// </summary>
-	public static class Extensions
-	{
+    /// <summary>
+    /// This library's proprietary extensions. Nah, just kidding...
+    /// </summary>
+    public static class Extensions
+    {
         /// <summary>
         /// Returns value from a dictionary for a specified key. If the dictionary does not contain the key, returns default value.
         /// </summary>

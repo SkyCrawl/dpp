@@ -11,14 +11,9 @@ namespace Ini.EventLoggers
     public interface IConfigWriterEventLogger
     {
         /// <summary>
-        /// Logger for specification validation.
-        /// </summary>
-        ISpecValidatorEventLogger SpecValidationLogger { get; }
-
-        /// <summary>
         /// Logger for configuration validation.
         /// </summary>
-        IConfigValidatorEventLogger ConfigValidationLogger { get; }
+        IConfigValidatorEventLogger ConfigValidatiorLogger { get; }
 
         /// <summary>
         /// The task's options instructed to use a specification for writing, but the configuration didn't have an associated specification.

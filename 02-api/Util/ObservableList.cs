@@ -10,10 +10,14 @@ namespace Ini.Util
     /// </summary>
     public class ObservableList<TValue> : IList<TValue>, INotifyCollectionChanged
     {
+        #region Fields
+
         /// <summary>
         /// The inner list.
         /// </summary>
         protected List<TValue> list;
+
+        #endregion
 
         #region INotifyCollectionChanged implementation
 
@@ -34,6 +38,23 @@ namespace Ini.Util
         {
             this.list = new List<TValue>();
             this.CollectionChanged = eventHandler;
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <Docs>The items to add to the current collection.</Docs>
+        /// <para>Adds multiple items to the current collection.</para>
+        /// <summary>
+        /// Add the specified items to the collection.
+        /// </summary>
+        /// <param name="items">The items.</param>
+        /// <exception cref="System.NotSupportedException">The current collection is read-only.</exception>
+        public void AddRange(IEnumerable<TValue> items)
+        {
+            CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, new List<TValue>(items)));
+            list.AddRange(items);
         }
 
         #endregion
@@ -105,19 +126,6 @@ namespace Ini.Util
         {
             CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
             list.Add(item);
-        }
-
-        /// <Docs>The items to add to the current collection.</Docs>
-        /// <para>Adds multiple items to the current collection.</para>
-        /// <summary>
-        /// Add the specified items to the collection.
-        /// </summary>
-        /// <param name="items">The items.</param>
-        /// <exception cref="System.NotSupportedException">The current collection is read-only.</exception>
-        public void AddRange(IEnumerable<TValue> items)
-        {
-            CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, new List<TValue>(items)));
-            list.AddRange(items);
         }
 
         /// <summary>

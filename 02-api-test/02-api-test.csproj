@@ -34,11 +34,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IntegrationTests\TestReader.cs" />
+    <Compile Include="IntegrationTests\TestSpecification.cs" />
+    <Compile Include="IntegrationTests\TestWriter.cs" />
     <Compile Include="TestOption.cs" />
     <Compile Include="TestSpec.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <None Include="Examples\ValidConfiguration.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Examples\config.yml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

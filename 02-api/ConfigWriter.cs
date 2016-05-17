@@ -29,11 +29,12 @@ namespace Ini
         /// Initializes a new instance of the <see cref="Ini.ConfigWriter"/> class, with
         /// user-defined logger output.
         /// </summary>
-        /// <param name="specValidatorOutput">Specification validation event logger output.</param>
         /// <param name="configWriterOutput">Configuration writer event logger output.</param>
-        public ConfigWriter(TextWriter specValidatorOutput = null, TextWriter configWriterOutput = null)
+        /// <param name="configValidatiorOutput">Configuration validation event logger output.</param>
+        /// <param name="specValidatorOutput">Specification validation event logger output.</param>
+        public ConfigWriter(TextWriter configWriterOutput = null, TextWriter configValidatiorOutput = null, TextWriter specValidatorOutput = null)
         {
-            this.eventLogger = new ConfigWriterEventLogger(configWriterOutput ?? Console.Out, specValidatorOutput);
+            this.eventLogger = new ConfigWriterEventLogger(configWriterOutput, configValidatiorOutput, specValidatorOutput);
         }
 
         /// <summary>
@@ -86,7 +87,7 @@ namespace Ini
         {
             // first check validity of both specification and configuration, if defined and required
             options = options ?? ConfigWriterOptions.Default;
-            if(options.Validate && !configuration.IsValid(options.ValidationMode, eventLogger.ConfigValidationLogger))
+            if(options.Validate && !configuration.IsValid(options.ValidationMode, eventLogger.ConfigValidatiorLogger))
             {
                 eventLogger.InvalidConfiguration();
                 throw new InvalidConfigException();

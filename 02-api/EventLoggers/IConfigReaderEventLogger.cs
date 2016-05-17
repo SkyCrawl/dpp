@@ -14,7 +14,7 @@ namespace Ini.EventLoggers
         /// <summary>
         /// Logger for specification validation.
         /// </summary>
-        ISpecValidatorEventLogger SpecValidationLogger { get; }
+        ISpecValidatorEventLogger SpecValidatiorLogger { get; }
 
         /// <summary>
         /// A new configuration parsing task has commenced.

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Ini.Properties;
 
 namespace Ini.EventLoggers
 {
@@ -30,7 +31,7 @@ namespace Ini.EventLoggers
         /// <param name="section">Containing section's identifier.</param>
         public virtual void DuplicateSection(string section)
         {
-            Writer.WriteLine(string.Format("ERROR: duplicate section '{0}'.", section));
+            Writer.WriteLine(Resources.SpecValidationDuplicateSection, section);
         }
 
         /// <summary>
@@ -40,17 +41,17 @@ namespace Ini.EventLoggers
         /// <param name="option">The involved option's identifier.</param>
         public virtual void DuplicateOption(string section, string option)
         {
-            Writer.WriteLine(string.Format("ERROR: duplicate option '{0}' in section '{1}'.", option, section));
+            Writer.WriteLine(Resources.SpecValidationDuplicateOption, option, section);
         }
 
         /// <summary>
-        /// The given option is mandatory but it doesn't define any default value.
+        /// The given option is optional but it doesn't define any default value.
         /// </summary>
         /// <param name="section">The containing section's identifier.</param>
         /// <param name="option">The involved option's identifier.</param>
         public virtual void NoValue(string section, string option)
         {
-            Writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' is mandatory but it doesn't define any default value.", option, section));
+            Writer.WriteLine(Resources.SpecValidationNoValue, option, section);
         }
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace Ini.EventLoggers
         /// <param name="option">The involved option's identifier.</param>
         public virtual void TooManyValues(string section, string option)
         {
-            Writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' is declared as single-value but instead it defines multiple default values.", option, section));
+            Writer.WriteLine(Resources.SpecValidationTooManyValues, option, section);
         }
 
         /// <summary>
@@ -70,7 +71,7 @@ namespace Ini.EventLoggers
         /// <param name="option">The involved option's identifier.</param>
         public virtual void NoEnumValues(string section, string option)
         {
-            Writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' doesn't define enough enumeration values.", option, section));
+            Writer.WriteLine(Resources.SpecValidationNoEnumValues, option, section);
         }
 
         /// <summary>
@@ -81,7 +82,7 @@ namespace Ini.EventLoggers
         /// <param name="value">The affected value.</param>
         public virtual void ValueNotAllowed(string section, string option, object value)
         {
-            Writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' contains a default value ('{2}') that is not explicitly allowed.", option, section, value));
+            Writer.WriteLine(Resources.SpecValidationValueNotAllowed, option, section, value);
         }
 
         /// <summary>
@@ -92,7 +93,7 @@ namespace Ini.EventLoggers
         /// <param name="value">The affected value.</param>
         public virtual void ValueOutOfRange(string section, string option, object value)
         {
-            Writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' contains a default value ('{2}') that is out of range.", option, section, value));
+            Writer.WriteLine(Resources.SpecValidationValueOutOfRange, option, section, value);
         }
 
         #endregion

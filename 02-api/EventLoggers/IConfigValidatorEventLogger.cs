@@ -11,7 +11,7 @@ namespace Ini.EventLoggers
         /// <summary>
         /// The logger used for spec validation.
         /// </summary>
-        ISpecValidatorEventLogger SpecValidationLogger { get; }
+        ISpecValidatorEventLogger SpecValidatiorLogger { get; }
 
         /// <summary>
         /// Configuration can not be validated without a specification.

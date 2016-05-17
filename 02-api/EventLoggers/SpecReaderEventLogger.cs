@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using Ini.Properties;
 
 namespace Ini.EventLoggers
 {
@@ -32,11 +33,11 @@ namespace Ini.EventLoggers
         /// <param name="specOrigin">Spec origin.</param>
         public virtual void NewSpecification(string specOrigin)
         {
-            Writer.WriteLine(new String('-', 5));
-            Writer.WriteLine("...Commencing new specification parsing task.");
+            Writer.WriteLine(LOG_SEPARATOR);
+            Writer.WriteLine(Resources.SpecReaderNewSpecification);
             if(specOrigin != null)
             {
-                Writer.WriteLine("\tOrigin: " + specOrigin);
+                Writer.WriteLine(Resources.ReaderOrigin, specOrigin);
             }
         }
 

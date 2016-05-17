@@ -342,7 +342,7 @@ namespace Ini
             {
                 // we need a defined and valid specification
                 config.ThrowIfSpecUndefinedOrInvalid(
-                    eventLogger.SpecValidationLogger,
+                    eventLogger.SpecValidatiorLogger,
                     () => eventLogger.NoSpecification(),
                     () => eventLogger.InvalidSpecification()
                 );

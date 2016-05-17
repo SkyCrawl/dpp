@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Ini.Util;
 using System.IO;
 using Ini.Configuration.Base;
+using Ini.Properties;
 
 namespace Ini.EventLoggers
 {
@@ -21,7 +22,22 @@ namespace Ini.EventLoggers
         public ConfigReaderEventLogger(TextWriter writer, TextWriter specValidationWriter = null)
             : base(writer)
         {
-            SpecValidationLogger = new SpecValidatorEventLogger(specValidationWriter ?? writer);
+            SpecValidatiorLogger = CreateSpecValidatiorLogger(specValidationWriter ?? writer);
+        }
+
+        #endregion
+
+        #region Protected Methods
+
+        /// <summary>
+        /// Creates the inner instance of the <see cref="ISpecValidatorEventLogger"/>.
+        /// </summary>
+        /// <param name="specValidationWriter">Output stream for specification validation events.</param>
+        /// <returns></returns>
+        protected virtual ISpecValidatorEventLogger CreateSpecValidatiorLogger(TextWriter specValidationWriter)
+        {
+            var result = new SpecValidatorEventLogger(specValidationWriter);
+            return result;
         }
 
         #endregion
@@ -32,7 +48,7 @@ namespace Ini.EventLoggers
         /// Logger for specification validation.
         /// </summary>
         /// <value>The specification validation logger.</value>
-        public ISpecValidatorEventLogger SpecValidationLogger { get; private set; }
+        public ISpecValidatorEventLogger SpecValidatiorLogger { get; private set; }
 
         /// <summary>
         /// A new configuration parsing task has commenced.
@@ -42,22 +58,21 @@ namespace Ini.EventLoggers
         /// <param name="mode">Validation mode applied to the parsing task.</param>
         public virtual void NewConfig(string configOrigin, string schemaOrigin = null, ConfigValidationMode mode = ConfigValidationMode.Strict)
         {
-            Writer.WriteLine(new String('-', 5));
-            Writer.WriteLine("...Commencing new configuration parsing task.");
-            if(configOrigin != null)
+            Writer.WriteLine(LOG_SEPARATOR);
+            Writer.WriteLine(Resources.ConfigReaderNewConfigStart);
+            if (configOrigin != null)
             {
-                Writer.WriteLine("\tOrigin: " + configOrigin);
+                Writer.WriteLine(Resources.ReaderOrigin, configOrigin);
             }
-            if(schemaOrigin != null)
+            if (schemaOrigin != null)
             {
-                Writer.WriteLine("...Configuration validated against a specification.");
-                Writer.WriteLine("\tOrigin: " + schemaOrigin);
+                Writer.WriteLine(Resources.ConfigReaderConfigValidated, schemaOrigin);
             }
             else
             {
-                Writer.WriteLine("...Configuration not validated.");
+                Writer.WriteLine(Resources.ConfigReaderConfigNotValidated);
             }
-            Writer.WriteLine("...Validation mode: " + mode.ToString());
+            Writer.WriteLine(Resources.ConfigReaderValidationMode, mode.ToString());
         }
 
         /// <summary>
@@ -65,7 +80,7 @@ namespace Ini.EventLoggers
         /// </summary>
         public virtual void NoSpecification()
         {
-            Writer.WriteLine("ERROR: strict validation mode was applied but no specification has been specified.");
+            Writer.WriteLine(Resources.ConfigReaderNoSpecification);
         }
 
         /// <summary>
@@ -73,7 +88,7 @@ namespace Ini.EventLoggers
         /// </summary>
         public virtual void InvalidSpecification()
         {
-            Writer.WriteLine("ERROR: strict validation mode was applied but the received specification was not valid.");
+            Writer.WriteLine(Resources.ConfigReaderInvalidSpecification);
         }
 
         /// <summary>
@@ -83,8 +98,7 @@ namespace Ini.EventLoggers
         /// <param name="line">The line.</param>
         public virtual void UnknownLineSyntax(int lineNumber, string line)
         {
-            Writer.WriteLine(string.Format("Line {0}: unknown syntax. Content:", lineNumber));
-            Writer.WriteLine("\t" + line);
+            Writer.WriteLine(Resources.ConfigReaderUnknownLineSyntax, lineNumber, line);
         }
 
         /// <summary>
@@ -94,7 +108,7 @@ namespace Ini.EventLoggers
         /// <param name="identifier">The duplicate section identifier.</param>
         public virtual void DuplicateSection(int lineNumber, string identifier)
         {
-            Writer.WriteLine(string.Format("Line {0}: duplicate section ('{1}').", lineNumber, identifier));
+            Writer.WriteLine(Resources.ConfigReaderDuplicateSection, lineNumber, identifier);
         }
 
         /// <summary>
@@ -105,7 +119,7 @@ namespace Ini.EventLoggers
         /// <param name="option">The duplicate option identifier.</param>
         public virtual void DuplicateOption(int lineNumber, string section, string option)
         {
-            Writer.WriteLine(string.Format("Line {0}: duplicate option '{1}' in section '{2}'.", lineNumber, option, section));
+            Writer.WriteLine(Resources.ConfigReaderDuplicateOption, lineNumber, option, section);
         }
 
         /// <summary>
@@ -116,7 +130,7 @@ namespace Ini.EventLoggers
         /// <param name="identifier">The missing section identifier.</param>
         public virtual void NoSectionSpecification(int lineNumber, string identifier)
         {
-            Writer.WriteLine(string.Format("Line {0}: specification is missing definition for section '{1}'.", lineNumber, identifier));
+            Writer.WriteLine(Resources.ConfigReaderNoSectionSpecification, lineNumber, identifier);
         }
 
         /// <summary>
@@ -128,7 +142,7 @@ namespace Ini.EventLoggers
         /// <param name="option">The option's identifier.</param>
         public virtual void NoOptionSpecification(int lineNumber, string section, string option)
         {
-            Writer.WriteLine(string.Format("Line {0}: specification is missing definition for option '{1}' in section '{2}'.", lineNumber, option, section));
+            Writer.WriteLine(Resources.ConfigReaderNoOptionSpecification, lineNumber, option, section);
         }
 
         /// <summary>
@@ -140,8 +154,7 @@ namespace Ini.EventLoggers
         /// <param name="link">The incomplete link.</param>
         public virtual void IncompleteLinkTarget(int lineNumber, string section, string option, string link)
         {
-            Writer.WriteLine(string.Format("Line {0}: link specifies too few target components in section '{1}' and option '{2}'. The link:", lineNumber, section, option));
-            Writer.WriteLine("\t" + link);
+            Writer.WriteLine(Resources.ConfigReaderIncompleteLinkTarget, lineNumber, section, option, link);
         }
 
         /// <summary>
@@ -154,8 +167,7 @@ namespace Ini.EventLoggers
         /// <param name="link">The confusing link.</param>
         public virtual void ConfusingLinkTarget(int lineNumber, string section, string option, string link)
         {
-            Writer.WriteLine(string.Format("Line {0}: link specifies too many target components in section '{1}' and option '{2}'. The link:", lineNumber, section, option));
-            Writer.WriteLine("\t" + link);
+            Writer.WriteLine(Resources.ConfigReaderConfusingLinkTarget, lineNumber, section, option, link);
         }
 
         /// <summary>
@@ -167,8 +179,7 @@ namespace Ini.EventLoggers
         /// <param name="link">The confusing link.</param>
         public virtual void InvalidLinkTarget(int lineNumber, string section, string option, ILink link)
         {
-            Writer.WriteLine(string.Format("Line {0}: link target (section '{1}' and option '{2}') not found.", lineNumber, link.Target.Section, link.Target.Option));
-            Writer.WriteLine(string.Format("\tLink defined in section '{0}' and option '{1}'.", section, option));
+            Writer.WriteLine(Resources.ConfigReaderInvalidLinkTarget, lineNumber, link.Target.Section, link.Target.Option, section, option);
         }
 
         #endregion

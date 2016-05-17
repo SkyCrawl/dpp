@@ -23,7 +23,7 @@ namespace Ini.EventLoggers
         void DuplicateOption(string section, string option);
 
         /// <summary>
-        /// The given option is mandatory but it doesn't define any default value.
+        /// The given option is optional but it doesn't define any default value.
         /// </summary>
         /// <param name="section">The containing section's identifier.</param>
         /// <param name="option">The involved option's identifier.</param>

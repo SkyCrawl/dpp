@@ -54,6 +54,11 @@
     <Compile Include="Configuration\Option.cs" />
     <Compile Include="Configuration\Section.cs" />
     <Compile Include="Configuration\Commentary.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Util\ConfigBlockSortOrder.cs" />
     <Compile Include="Exceptions\InvariantBrokenException.cs" />
     <Compile Include="ConfigWriterOptions.cs" />
@@ -128,7 +133,12 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup />
   <ProjectExtensions>
     <MonoDevelop>

@@ -321,7 +321,7 @@ namespace Ini.Configuration
         {
             // verify the associated specification
             ThrowIfSpecUndefinedOrInvalid(
-                logger.SpecValidationLogger,
+                logger.SpecValidatiorLogger,
                 () => logger.NoSpecification(),
                 () => logger.InvalidSpecification()
             );

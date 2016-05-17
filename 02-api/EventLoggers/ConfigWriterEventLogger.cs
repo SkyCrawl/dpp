@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Ini.Configuration.Base;
+using Ini.Properties;
 
 namespace Ini.EventLoggers
 {
@@ -10,35 +11,34 @@ namespace Ini.EventLoggers
     /// </summary>
     public class ConfigWriterEventLogger : BaseEventLogger, IConfigWriterEventLogger
     {
-        #region Properties
-
-        /// <summary>
-        /// Logger for specification validation.
-        /// </summary>
-        /// <value>The spec validation logger.</value>
-        public ISpecValidatorEventLogger SpecValidationLogger { get; private set; }
-
-        /// <summary>
-        /// Logger for configuration validation.
-        /// </summary>
-        /// <value>The config validation logger.</value>
-        public IConfigValidatorEventLogger ConfigValidationLogger { get; private set; }
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigWriterEventLogger"/> class.
         /// </summary>
         /// <param name="writer">Output stream for writing events.</param>
-        /// <param name="specValidationWriter">Output stream for specification validation events.</param>
         /// <param name="configValidationWriter">Output stream for configuration validation events.</param>
-        public ConfigWriterEventLogger(TextWriter writer, TextWriter specValidationWriter = null, TextWriter configValidationWriter = null)
+        /// <param name="specValidationWriter">Output stream for specification validation events.</param>
+        public ConfigWriterEventLogger(TextWriter writer, TextWriter configValidationWriter = null, TextWriter specValidationWriter = null)
             : base(writer)
         {
-            SpecValidationLogger = new SpecValidatorEventLogger(specValidationWriter ?? writer);
-            ConfigValidationLogger = new ConfigValidatorEventLogger(configValidationWriter ?? writer, specValidationWriter ?? writer);
+            ConfigValidatiorLogger = CreateValidatiorLogger(configValidationWriter ?? writer, specValidationWriter);
+        }
+
+        #endregion
+
+        #region Protected Methods
+
+        /// <summary>
+        /// Creates the inner instance of the <see cref="IConfigValidatorEventLogger"/>.
+        /// </summary>
+        /// <param name="configValidationWriter">Output stream for configuration validation events.</param>
+        /// <param name="specValidationWriter">Output stream for specification validation events.</param>
+        /// <returns></returns>
+        protected virtual IConfigValidatorEventLogger CreateValidatiorLogger(TextWriter configValidationWriter, TextWriter specValidationWriter)
+        {
+            var result = new ConfigValidatorEventLogger(configValidationWriter, specValidationWriter);
+            return result;
         }
 
         #endregion
@@ -46,12 +46,17 @@ namespace Ini.EventLoggers
         #region IConfigWriterEventLogger Members
 
         /// <summary>
+        /// Logger for configuration validation.
+        /// </summary>
+        /// <value>The config validation logger.</value>
+        public IConfigValidatorEventLogger ConfigValidatiorLogger { get; private set; }
+
+        /// <summary>
         /// The task's options instructed to use a specification for writing, but the configuration didn't have an associated specification.
         /// </summary>
         public void NoSpecification()
         {
-            Writer.WriteLine("ERROR: no specification to use. Stopping...");
-            Writer.WriteLine("\tHint: either associate the configuration with a specification or try again with different options.");
+            Writer.WriteLine(Resources.WriterNoSpecification);
         }
 
         /// <summary>
@@ -59,8 +64,7 @@ namespace Ini.EventLoggers
         /// </summary>
         public void InvalidConfiguration()
         {
-            Writer.WriteLine("ERROR: invalid configuration. Stopping...");
-            Writer.WriteLine("\tHint: either correct the configuration or try again with validation disabled.");
+            Writer.WriteLine(Resources.WriterInvalidConfiguration);
         }
 
         #endregion

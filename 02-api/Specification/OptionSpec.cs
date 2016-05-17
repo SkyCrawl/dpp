@@ -94,7 +94,7 @@ namespace Ini.Specification
         public override bool IsValid(string sectionIdentifier, ISpecValidatorEventLogger eventLogger)
         {
             bool result = true;
-            if(IsMandatory && DefaultValues.Count == 0)
+            if(!IsMandatory && DefaultValues.Count == 0)
             {
                 result = false;
                 eventLogger.NoValue(sectionIdentifier, Identifier);

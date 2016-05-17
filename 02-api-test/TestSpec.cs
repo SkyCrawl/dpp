@@ -14,8 +14,8 @@ namespace ApiTest
         [Test()]
         public void TestSpecSerialization()
         {
-			var reader = new SpecReader();
-			reader.LoadFromFile("Examples\\config.yml");
+            var reader = new SpecReader();
+            reader.LoadFromFile("Examples\\config.yml");
         }
     }
 }

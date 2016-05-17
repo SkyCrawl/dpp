@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Ini.Properties;
 
 namespace Ini.EventLoggers
 {
@@ -16,9 +17,24 @@ namespace Ini.EventLoggers
         /// <param name="writer">Output stream for configuration validation events.</param>
         /// <param name="specValidationWriter">Output stream for specification validation events.</param>
         public ConfigValidatorEventLogger(TextWriter writer, TextWriter specValidationWriter = null)
-            : base (writer)
+            : base(writer)
         {
-            SpecValidationLogger = new SpecValidatorEventLogger(specValidationWriter ?? writer);
+            SpecValidatiorLogger = CreateSpecValidatiorLogger(specValidationWriter ?? writer);
+        }
+
+        #endregion
+
+        #region Protected Methods
+
+        /// <summary>
+        /// Creates the inner instance of the <see cref="ISpecValidatorEventLogger"/>.
+        /// </summary>
+        /// <param name="specValidationWriter">Output stream for specification validation events.</param>
+        /// <returns></returns>
+        protected ISpecValidatorEventLogger CreateSpecValidatiorLogger(TextWriter specValidationWriter)
+        {
+            var result = new SpecValidatorEventLogger(specValidationWriter);
+            return result;
         }
 
         #endregion
@@ -28,14 +44,14 @@ namespace Ini.EventLoggers
         /// <summary>
         /// The logger used for spec validation.
         /// </summary>
-        public ISpecValidatorEventLogger SpecValidationLogger { get; private set; }
+        public ISpecValidatorEventLogger SpecValidatiorLogger { get; private set; }
 
         /// <summary>
         /// Configuration can not be validated without a specification.
         /// </summary>
         public virtual void NoSpecification()
         {
-            Writer.WriteLine("ERROR: configuration can not be validated because it isn't associated to a specification.");
+            Writer.WriteLine(Resources.ConfigValidationNoSpecification);
         }
 
         /// <summary>
@@ -43,7 +59,7 @@ namespace Ini.EventLoggers
         /// </summary>
         public virtual void InvalidSpecification()
         {
-            Writer.WriteLine("ERROR: configuration can not be validated because its associated specification is not valid.");
+            Writer.WriteLine(Resources.ConfigValidationInvalidSpecification);
         }
 
         /// <summary>
@@ -52,7 +68,7 @@ namespace Ini.EventLoggers
         /// <param name="identifier">The section's identifier.</param>
         public virtual void NoSectionSpecification(string identifier)
         {
-            Writer.WriteLine(string.Format("ERROR: validation of section '{0}' was skipped as it wasn't found in the associated specification.", identifier));
+            Writer.WriteLine(Resources.ConfigValidationNoSectionSpecification, identifier);
         }
 
         /// <summary>
@@ -61,8 +77,7 @@ namespace Ini.EventLoggers
         /// <param name="identifier">The missing section's identifier.</param>
         public void MissingMandatorySection(string identifier)
         {
-            Writer.WriteLine(string.Format("ERROR: missing mandatory section '{0}'.", identifier));
-            Writer.WriteLine("\tHint: try relaxed validation mode.");
+            Writer.WriteLine(Resources.ConfigValidationMissingMandatorySection, identifier);
         }
 
         /// <summary>
@@ -72,7 +87,7 @@ namespace Ini.EventLoggers
         /// <param name="option">The involved option's identifier.</param>
         public virtual void NoOptionSpecification(string section, string option)
         {
-            Writer.WriteLine(string.Format("ERROR: validation of option '{0}' in section '{1}' was skipped as it wasn't found in the associated specification.", option, section));
+            Writer.WriteLine(Resources.ConfigValidationNoOptionSpecification, option, section);
         }
 
         /// <summary>
@@ -82,8 +97,7 @@ namespace Ini.EventLoggers
         /// <param name="option">The missing option's identifier.</param>
         public void MissingMandatoryOption(string section, string option)
         {
-            Writer.WriteLine(string.Format("ERROR: missing mandatory option '{0}' in section '{1}'.", option, section));
-            Writer.WriteLine("\tHint: try relaxed validation mode.");
+            Writer.WriteLine(Resources.ConfigValidationMissingMandatoryOption, option, section);
         }
 
         /// <summary>
@@ -95,7 +109,7 @@ namespace Ini.EventLoggers
         /// <param name="typeOption">The option's value type.</param>
         public virtual void ValueTypeMismatch(string section, string option, Type typeSpec, Type typeOption)
         {
-            Writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' is of type '{2}'. Expected: '{3}'.", option, section, typeOption.FullName, typeSpec.FullName));
+            Writer.WriteLine(Resources.ConfigValidationValueTypeMismatch, option, section, typeOption.FullName, typeSpec.FullName);
         }
 
         /// <summary>
@@ -105,7 +119,7 @@ namespace Ini.EventLoggers
         /// <param name="option">The involved option's identifier.</param>
         public virtual void NoValue(string section, string option)
         {
-            Writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' is mandatory but it doesn't contain a value.", option, section));
+            Writer.WriteLine(Resources.ConfigValidationNoValue, option, section);
         }
 
         /// <summary>
@@ -115,7 +129,7 @@ namespace Ini.EventLoggers
         /// <param name="option">The involved option's identifier.</param>
         public virtual void TooManyValues(string section, string option)
         {
-            Writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' is declared as single-value but instead it contains multiple values.", option, section));
+            Writer.WriteLine(Resources.ConfigValidationTooManyValues, option, section);
         }
 
         /// <summary>
@@ -126,7 +140,7 @@ namespace Ini.EventLoggers
         /// <param name="link">The affected link.</param>
         public virtual void LinkInconsistent(string section, string option, Ini.Configuration.Base.ILink link)
         {
-            Writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' contains a link that references a removed option '{2}' or section '{3}'.", option, section, link.Target.Option, link.Target.Section));
+            Writer.WriteLine(Resources.ConfigValidationLinkInconsistent, option, section, link.Target.Option, link.Target.Section);
         }
 
         /// <summary>
@@ -137,7 +151,7 @@ namespace Ini.EventLoggers
         /// <param name="value">The affected value.</param>
         public virtual void ValueNotAllowed(string section, string option, Ini.Configuration.Base.IValue value)
         {
-            Writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' contains a value that is not explicitly allowed ('{2}').", option, section, value.ToString()));
+            Writer.WriteLine(Resources.ConfigValidationValueNotAllowed, option, section, value.ToString());
         }
 
         /// <summary>
@@ -148,7 +162,7 @@ namespace Ini.EventLoggers
         /// <param name="value">The affected value.</param>
         public virtual void ValueOutOfRange(string section, string option, Ini.Configuration.Base.IValue value)
         {
-            Writer.WriteLine(string.Format("ERROR: option '{0}' in section '{1}' contains a value that is out of range ('{2}').", option, section, value.ToString()));
+            Writer.WriteLine(Resources.ConfigValidationValueOutOfRange, option, section, value.ToString());
         }
 
         #endregion
