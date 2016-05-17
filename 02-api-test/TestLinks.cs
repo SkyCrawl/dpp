@@ -18,7 +18,7 @@ namespace apitest
 		Config config;
 		Section section;
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void Init()
 		{
 			config = new Config();
@@ -26,7 +26,7 @@ namespace apitest
 			config.Add(section);
 		}
 
-		[Test, ExpectedException(typeof(LinkCycleException))]
+		[Test]
 		public void TestLinkCycleDetected()
 		{
 			section.Clear();
@@ -51,7 +51,7 @@ namespace apitest
 			resolver.AddLink(new LinkNode(link1, new LinkOrigin(section.Identifier, option1.Identifier)));
 			resolver.AddLink(new LinkNode(link2, new LinkOrigin(section.Identifier, option2.Identifier)));
 			resolver.AddLink(new LinkNode(link3, new LinkOrigin(section.Identifier, option3.Identifier)));
-			resolver.ResolveLinks(config, new ConfigReaderEventLogger(Console.Out));
+			Assert.Throws(typeof(LinkCycleException), () => resolver.ResolveLinks(config, new ConfigReaderEventLogger(Console.Out)));
 		}
 
 		[Test]

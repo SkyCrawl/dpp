@@ -18,7 +18,7 @@ namespace apitest
 		ConfigReader reader;
 		ConfigWriter writer;
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void Init()
 		{
 			reader = new ConfigReader();

@@ -17,7 +17,7 @@ namespace apitest
 		ConfigReader reader;
 		ConfigValidatorEventLogger validationEventLogger;
 
-        [TestFixtureSetUp]
+		[OneTimeSetUp]
         public void Init()
         {
 			reader = new ConfigReader();

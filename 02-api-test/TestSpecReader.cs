@@ -16,7 +16,7 @@ namespace apitest
         ISpecValidatorEventLogger validationLogger;
 		SpecReader reader;
 
-        [TestFixtureSetUp]
+		[OneTimeSetUp]
         public void Init()
         {
             readerLogger = new SpecReaderEventLogger(Console.Out);

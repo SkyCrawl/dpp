@@ -12,17 +12,11 @@ namespace apitest
 	[TestFixture]
 	public class TestConfigStructure
 	{
-		/*
-		 * HELPFUL LINKS:
-		 * - http://www.nunit.org/index.php?p=attributes&r=2.6.4
-		 * - http://www.nunit.org/index.php?p=constraintModel&r=2.6.4
-		 */
-
 		Config config;
 		Section section;
 		Option option;
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void Init()
 		{
 			config = new Config();
@@ -30,43 +24,66 @@ namespace apitest
 			option = new Option("option", typeof(bool));
 		}
 
-		[Test, ExpectedException(typeof(InvariantBrokenException))]
+		[Test]
 		public void TestConfigIdentifierMapping()
 		{
-			config.Items.Add(new KeyValuePair<string, ConfigBlockBase>("incorrect-identifier", new Commentary(null)));
-		}
-
-		[Test, ExpectedException(typeof(InvariantBrokenException))]
-		public void TestConfigTypeBinding()
-		{
-			config.Items.Add("option", new Option("option", typeof(bool)));
-		}
-
-		[Test, ExpectedException(typeof(InvariantBrokenException))]
-		public void TestSectionIdentifierMapping()
-		{
-			section.Items.Add(new KeyValuePair<string, ConfigBlockBase>("incorrect-identifier", new Commentary(null)));
-		}
-
-		[Test, ExpectedException(typeof(InvariantBrokenException))]
-		public void TestSectionTypeBinding()
-		{
-			section.Items.Add(section.Identifier, section);
-		}
-
-		[Test, ExpectedException(typeof(InvariantBrokenException))]
-		public void TestOptionTypeBinding()
-		{
-			option.Elements.Add(new StringValue("The internal observer should throw an exception because we're trying to add a value of a different type."));
+			Assert.Throws(typeof(InvariantBrokenException), () => 
+				config.Items.Add(new KeyValuePair<string, ConfigBlockBase>("incorrect-identifier", new Commentary(null))));
 		}
 
 		[Test]
-		[TestCase(TestName = "TestConversionToSingleValue (success)")]
-		[TestCase(TestName = "TestConversionToSingleValue (failure)", ExpectedException = typeof(InvalidOperationException))]
-		public void TestSingleElementConversion()
+		public void TestConfigTypeBinding()
+		{
+			Assert.Throws(typeof(InvariantBrokenException), () => 
+				config.Items.Add("option", new Option("option", typeof(bool))));
+		}
+
+		[Test]
+		public void TestSectionIdentifierMapping()
+		{
+			Assert.Throws(
+				typeof(InvariantBrokenException),
+				() => 
+				section.Items.Add(new KeyValuePair<string, ConfigBlockBase>(
+					"incorrect-identifier",
+					new Commentary(null))));
+		}
+
+		[Test]
+		public void TestSectionTypeBinding()
+		{
+			Assert.Throws(
+				typeof(InvariantBrokenException),
+				() => 
+				section.Items.Add(section.Identifier, section));
+		}
+
+		[Test]
+		public void TestOptionTypeBinding()
+		{
+			Assert.Throws(
+				typeof(InvariantBrokenException),
+				() => 
+				option.Elements.Add(new StringValue("The internal observer should throw an exception because we're trying to add a value of a different type.")));
+		}
+
+		[Test, Order(1)]
+		public void TestSingleElementConversionSuccess()
 		{
 			option.Elements.Add(new BoolValue(true));
 			option.GetObjectValues().Single<IValue>();
+		}
+
+		[Test, Order(2)]
+		public void TestSingleElementConversionFailure()
+		{
+			Assert.Throws(
+				typeof(InvalidOperationException),
+				() =>
+				{
+					option.Elements.Add(new BoolValue(true));
+					option.GetObjectValues().Single<IValue>();
+				});
 		}
 
 		[Test]
