@@ -322,7 +322,14 @@ namespace Ini.Configuration
                 case NotifyCollectionChangedAction.Replace:
                 foreach(KeyValuePair<string, ConfigBlockBase> entry in e.NewItems)
                     {
-                        if(entry.Value is Section)
+                        if(entry.Key != entry.Value.Identifier)
+                        {
+                            throw new InvariantBrokenException(string.Format(
+                                "Configuration block must be mapped to its identifier. Got: '{0}'. Expected: '{1}'.",
+                                entry.Key,
+                                entry.Value.Identifier));
+                        }
+                        else if(entry.Value is Section)
                         {
                             throw new InvariantBrokenException(string.Format(
                                 "'{0}' can not contain instances of '{1}'.",
