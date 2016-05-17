@@ -9,28 +9,37 @@ using Ini.EventLoggers;
 using Ini.Util;
 using NUnit.Framework;
 
-namespace apitest.IntegrationTests
+namespace apitest
 {
     [TestFixture]
-    public class TestReader
+    public class TestConfigReader
     {
-        IConfigValidatorEventLogger validatorLogger;
+		ConfigReader reader;
+		ConfigValidatorEventLogger validationEventLogger;
 
         [TestFixtureSetUp]
         public void Init()
         {
-            validatorLogger = new ConfigValidatorEventLogger(Console.Out);
+			reader = new ConfigReader();
+			validationEventLogger = new ConfigValidatorEventLogger(Console.Out);
         }
 
         [Test]
-        public void TestNoSpec()
+        public void TestStrictMode()
         {
             Config config;
-            var reader = new ConfigReader();
             var loadSuccess = reader.TryLoadFromFile("Examples\\ValidConfiguration.ini", out config, null, ConfigValidationMode.Relaxed, Encoding.UTF8);
 
             Assert.IsTrue(loadSuccess);
-            Assert.IsTrue(config.IsValid(ConfigValidationMode.Relaxed, validatorLogger));
+			Assert.IsTrue(config.IsValid(ConfigValidationMode.Relaxed, validationEventLogger));
         }
+
+		[Test]
+		public void TestStrictMode()
+		{
+			// TODO:
+		}
+
+		// TODO: test the main exceptions, reading and validation errors
     }
 }

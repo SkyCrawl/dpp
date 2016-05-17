@@ -7,32 +7,31 @@ using Ini;
 using Ini.EventLoggers;
 using NUnit.Framework;
 
-namespace apitest.IntegrationTests
+namespace apitest
 {
     [TestFixture]
-    public class TestSpecification
+    public class TestSpecReader
     {
-        SpecReader reader;
         ISpecReaderEventLogger readerLogger;
         ISpecValidatorEventLogger validationLogger;
+		SpecReader reader;
 
         [TestFixtureSetUp]
         public void Init()
         {
             readerLogger = new SpecReaderEventLogger(Console.Out);
             validationLogger = new SpecValidatorEventLogger(Console.Out);
-
             reader = new SpecReader(readerLogger);
         }
 
         [Test()]
-        public void TestSpecDeserialization()
+        public void TestDeserialization()
         {
             var spec = reader.LoadFromFile("Examples\\config.yml");
 
             Assert.IsTrue(spec.IsValid(validationLogger));
         }
 
-        // TODO: Test all reading and validation errors
+		// TODO: test reading and validation errors
     }
 }

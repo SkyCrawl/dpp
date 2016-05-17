@@ -6,7 +6,7 @@ using Ini.Exceptions;
 using Ini.Configuration.Values;
 using Ini.Configuration.Base;
 
-namespace ApiTest
+namespace apitest
 {
 	/*
 	 * HELPFUL LINKS:

@@ -34,11 +34,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IntegrationTests\TestReader.cs" />
-    <Compile Include="IntegrationTests\TestSpecification.cs" />
-    <Compile Include="IntegrationTests\TestWriter.cs" />
     <Compile Include="TestOption.cs" />
-    <Compile Include="TestSpec.cs" />
+    <Compile Include="TestLinks.cs" />
+    <Compile Include="TestConfigReader.cs" />
+    <Compile Include="TestConfigWriter.cs" />
+    <Compile Include="TestSpecReader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
