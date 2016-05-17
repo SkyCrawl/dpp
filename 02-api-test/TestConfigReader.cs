@@ -25,7 +25,7 @@ namespace apitest
         }
 
         [Test]
-        public void TestStrictMode()
+        public void TestRelaxedMode()
         {
             Config config;
             var loadSuccess = reader.TryLoadFromFile("Examples\\ValidConfiguration.ini", out config, null, ConfigValidationMode.Relaxed, Encoding.UTF8);

@@ -34,12 +34,12 @@ namespace apitest
 			Assert.IsTrue(loadSuccess);
 
 			// serialize it
-			TextWriter serialized = StringWriter();
+			TextWriter serialized = new StringWriter();
 			writer.WriteToText(serialized, firstConfig, null);
 
 			// try to deserialize back
 			Config secondConfig;
-			loadSuccess = reader.TryLoadFromFile("Examples\\ValidConfiguration.ini", out firstConfig, null, ConfigValidationMode.Relaxed, Encoding.UTF8);
+			loadSuccess = reader.TryLoadFromFile("Examples\\ValidConfiguration.ini", out secondConfig, null, ConfigValidationMode.Relaxed, Encoding.UTF8);
 			Assert.IsTrue(loadSuccess);
 
 			// and test that they're equal
