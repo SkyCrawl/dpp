@@ -582,7 +582,7 @@ namespace Ini
             {
                 ValueStub newStub = new ValueStub(option.ValueType, element);
 
-                // register it and notify derrived classes
+                // register it and notify derived classes
                 option.Elements.Add(newStub);
                 OnValueStubRegistered(newStub);
             }

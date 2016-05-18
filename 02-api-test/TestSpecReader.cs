@@ -18,7 +18,7 @@ namespace Ini.Test
 
         SpecReader reader;
 
-		[TestFixtureSetUp]
+        [SetUp]
         public void Init()
         {
             specReaderLogger = Substitute.For<ISpecReaderEventLogger>();
@@ -36,6 +36,19 @@ namespace Ini.Test
             Assert.IsTrue(spec.IsValid(specValidationLogger));
         }
 
-        // TODO: test reading and validation errors
+        [Test]
+        public void TestInvalidSpec()
+        {
+            var spec = reader.LoadFromFile(Files.InvalidYamlSpec);
+
+            Assert.IsFalse(spec.IsValid(specValidationLogger));
+            specValidationLogger.Received().DuplicateSection("Sekce 1");
+            specValidationLogger.Received().DuplicateOption("Sekce 1", "Option 1");
+            specValidationLogger.Received().NoValue("Other", "bool2");
+            specValidationLogger.Received().TooManyValues("Other", "bool1");
+            specValidationLogger.Received().NoEnumValues("Enums", "The Option");
+            specValidationLogger.Received().ValueNotAllowed("Enums", "The Option 2", "Value4");
+            specValidationLogger.Received().ValueOutOfRange("Cisla", "cele", -1L);
+        }
     }
 }

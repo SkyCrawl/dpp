@@ -10,9 +10,10 @@ namespace Ini.Test
 {
     internal static class Files
     {
-		static internal readonly string YamlSpec = Path.Combine(AssemblyDirectory, "Examples" + Path.DirectorySeparatorChar + "Specification.yml");
-		static internal readonly string StrictConfig = Path.Combine(AssemblyDirectory, "Examples" + Path.DirectorySeparatorChar + "StrictConfiguration.ini");
-		static internal readonly string RelaxedConfig = Path.Combine(AssemblyDirectory, "Examples" + Path.DirectorySeparatorChar + "RelaxedConfiguration.ini");
+        static internal readonly string YamlSpec = Path.Combine(AssemblyDirectory, "Examples", "Specification.yml");
+        static internal readonly string InvalidYamlSpec = Path.Combine(AssemblyDirectory, "Examples", "InvalidSpecification.yml");
+        static internal readonly string StrictConfig = Path.Combine(AssemblyDirectory, "Examples", "StrictConfiguration.ini");
+        static internal readonly string RelaxedConfig = Path.Combine(AssemblyDirectory, "Examples", "RelaxedConfiguration.ini");
 
         static string AssemblyDirectory
         {

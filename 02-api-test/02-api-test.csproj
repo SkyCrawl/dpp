@@ -51,6 +51,9 @@
     <None Include="Examples\RelaxedConfiguration.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Examples\InvalidSpecification.yml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Examples\StrictConfiguration.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

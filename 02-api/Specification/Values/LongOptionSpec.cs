@@ -50,7 +50,7 @@ namespace Ini.Specification.Values
         public override bool IsValid(string sectionIdentifier, ISpecValidatorEventLogger eventLogger)
         {
             bool result = base.IsValid(sectionIdentifier, eventLogger);
-            foreach(double value in DefaultValues)
+            foreach(var value in DefaultValues)
             {
                 if((value < MinValue) || (value > MaxValue))
                 {
