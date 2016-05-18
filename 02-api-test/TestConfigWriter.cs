@@ -12,38 +12,44 @@ using System.IO;
 
 namespace apitest
 {
-	[TestFixture]
-	public class TestConfigWriter
-	{
-		ConfigReader reader;
-		ConfigWriter writer;
+    [TestFixture]
+    public class TestConfigWriter
+    {
+        ConfigReader reader;
+        ConfigWriter writer;
 
-		[OneTimeSetUp]
-		public void Init()
-		{
-			reader = new ConfigReader();
-			writer = new ConfigWriter();
-		}
+        [OneTimeSetUp]
+        public void Init()
+        {
+            reader = new ConfigReader();
+            writer = new ConfigWriter();
+        }
 
-		[Test]
-		public void TestChainedIO()
-		{
-			// load the first config
-			Config firstConfig;
-			var loadSuccess = reader.TryLoadFromFile("Examples\\ValidConfiguration.ini", out firstConfig, null, ConfigValidationMode.Relaxed, Encoding.UTF8);
-			Assert.IsTrue(loadSuccess);
+        [Test]
+        public void TestChainedIO()
+        {
+            // load the first config
+            Config firstConfig;
+            var loadSuccess = reader.TryLoadFromFile(Files.StrictConfig, out firstConfig, null, ConfigValidationMode.Relaxed, Encoding.UTF8);
+            Assert.IsTrue(loadSuccess);
 
-			// serialize it
-			TextWriter serialized = new StringWriter();
-			writer.WriteToText(serialized, firstConfig, null);
+            // serialize it
+            TextWriter serialized = new StringWriter();
+            writer.WriteToText(serialized, firstConfig, null);
 
-			// try to deserialize back
-			Config secondConfig;
-			loadSuccess = reader.TryLoadFromFile("Examples\\ValidConfiguration.ini", out secondConfig, null, ConfigValidationMode.Relaxed, Encoding.UTF8);
-			Assert.IsTrue(loadSuccess);
+            // try to deserialize back
+            Config secondConfig;
+            loadSuccess = reader.TryLoadFromFile(Files.StrictConfig, out secondConfig, null, ConfigValidationMode.Relaxed, Encoding.UTF8);
+            Assert.IsTrue(loadSuccess);
 
-			// and test that they're equal
-			Assert.IsTrue(firstConfig.Equals(secondConfig));
-		}
-	}
+            // and test that they're equal
+            Assert.IsTrue(firstConfig.Equals(secondConfig));
+        }
+
+        [Test]
+        public void TestDefaultConfig()
+        {
+            
+        }
+    }
 }

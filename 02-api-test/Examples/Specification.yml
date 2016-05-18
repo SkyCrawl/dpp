@@ -1,0 +1,106 @@
+sections:
+- identifier: Sekce 1
+  mandatory: true
+  description: the purpose of Sekce 1
+  options:
+  - !String
+    identifier: Option 1
+    mandatory: true
+    description: volba 'Option 1' ma hodnotu 'value 1'
+    single_value: true
+  - !String
+    identifier: oPtion 1
+    mandatory: true
+    description: volba 'oPtion 1' ma hodnotu ' value 2   ', 'oPtion 1' a 'Option 1' jsou ruzne volby
+    single_value: true
+- identifier: $Sekce::podsekce
+  mandatory: true
+  description: the purpose of $Sekce::podsekce
+  options:
+  - !String
+    identifier: Option 2
+    mandatory: true
+    description: volba 'Option 2' je seznam hodnot 'value 1', 'value 2' a 'value 3'
+    single_value: false
+  - !String
+    identifier: Option 3
+    mandatory: true
+    description: volba 'Option 3' je seznam hodnot 'value 1' a 'value 1'
+    single_value: false
+  - !String
+    identifier: Option 4
+    mandatory: true
+    description: volba 'Option 4' je seznam hodnot 'v1', 'value 1', 'value 1', 'v2'
+    single_value: false
+  - !String
+    identifier: Option 5
+    mandatory: true
+    description: volba 'Option 5' je seznam hodnot 'v1' a 'v2:v3', nebo 'v1, v2' a 'v3' podle zvoleneho oddelovace
+    single_value: false
+- identifier: Cisla
+  mandatory: true
+  description: the purpose of Sekce1
+  options:
+  - !Signed
+    identifier: cele
+    mandatory: true
+    single_value: true
+  - !Unsigned
+    identifier: cele_bin
+    mandatory: true
+    single_value: true
+  - !Unsigned
+    identifier: cele_hex
+    mandatory: true
+    single_value: false
+  - !Unsigned
+    identifier: cele_oct
+    mandatory: true
+    single_value: true
+  - !Float
+    identifier: float1
+    mandatory: true
+    single_value: true
+  - !Float
+    identifier: float2
+    mandatory: true
+    single_value: true
+  - !Float
+    identifier: float3
+    mandatory: true
+    single_value: true
+  - !Float
+    identifier: float4
+    mandatory: true
+    single_value: true
+- identifier: Other
+  mandatory: true
+  description: the purpose of Other
+  options:
+  - !Boolean
+    identifier: bool1
+    mandatory: true
+    single_value: true
+  - !Boolean
+    identifier: bool2
+    mandatory: true
+    single_value: true
+  - !Boolean
+    identifier: bool3
+    mandatory: true
+    single_value: true
+- identifier: Enums
+  mandatory: false
+  description: the purpose of Enums
+  options:
+  - !Enum
+    identifier: The Option
+    mandatory: false
+    description: the purpose of Option 3
+    single_value: false
+    default_values:
+    - Value1
+    allowed_values:
+    - Value1
+    - Value2
+    - Value3

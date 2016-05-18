@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Ini;
 using Ini.EventLoggers;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace apitest
@@ -12,26 +13,29 @@ namespace apitest
     [TestFixture]
     public class TestSpecReader
     {
-        ISpecReaderEventLogger readerLogger;
-        ISpecValidatorEventLogger validationLogger;
-		SpecReader reader;
+        ISpecReaderEventLogger specReaderLogger;
+        ISpecValidatorEventLogger specValidationLogger;
 
-		[OneTimeSetUp]
+        SpecReader reader;
+
+        [OneTimeSetUp]
         public void Init()
         {
-            readerLogger = new SpecReaderEventLogger(Console.Out);
-            validationLogger = new SpecValidatorEventLogger(Console.Out);
-            reader = new SpecReader(readerLogger);
+            specReaderLogger = Substitute.For<ISpecReaderEventLogger>();
+            specValidationLogger = Substitute.For<ISpecValidatorEventLogger>();
+
+            reader = new SpecReader(specReaderLogger);
         }
 
-        [Test()]
+        [Test]
         public void TestDeserialization()
         {
-            var spec = reader.LoadFromFile("Examples\\config.yml");
+            var spec = reader.LoadFromFile(Files.YamlSpec);
 
-            Assert.IsTrue(spec.IsValid(validationLogger));
+            specReaderLogger.Received().NewSpecification(Files.YamlSpec);
+            Assert.IsTrue(spec.IsValid(specValidationLogger));
         }
 
-		// TODO: test reading and validation errors
+        // TODO: test reading and validation errors
     }
 }

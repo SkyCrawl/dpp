@@ -7,6 +7,7 @@ using Ini;
 using Ini.Configuration;
 using Ini.EventLoggers;
 using Ini.Util;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace apitest
@@ -14,32 +15,42 @@ namespace apitest
     [TestFixture]
     public class TestConfigReader
     {
-		ConfigReader reader;
-		ConfigValidatorEventLogger validationEventLogger;
+        ConfigReader configReader;
+        SpecReader specReader;
 
-		[OneTimeSetUp]
+        IConfigValidatorEventLogger configValidationLogger;
+
+        [OneTimeSetUp]
         public void Init()
         {
-			reader = new ConfigReader();
-			validationEventLogger = new ConfigValidatorEventLogger(Console.Out);
+            configValidationLogger = Substitute.For<IConfigValidatorEventLogger>();
+
+            var specValidationLogger = Substitute.For<ISpecValidatorEventLogger>();
+            var configReaderLogger = Substitute.For<IConfigReaderEventLogger>();
+            configReaderLogger.SpecValidatiorLogger.Returns(specValidationLogger);
+
+            var specReaderLogger = Substitute.For<ISpecReaderEventLogger>();
+
+            configReader = new ConfigReader(null, configReaderLogger);
+            specReader = new SpecReader(specReaderLogger);
+        }
+
+        [Test]
+        public void TestStrictMode()
+        {
+            Config config;
+            var spec = specReader.LoadFromFile(Files.YamlSpec);
+            var loadSuccess = configReader.TryLoadFromFile(Files.StrictConfig, out config, spec, ConfigValidationMode.Strict, Encoding.UTF8);
+
+            Assert.IsTrue(loadSuccess);
+            Assert.IsTrue(config.IsValid(ConfigValidationMode.Strict, configValidationLogger));
         }
 
         [Test]
         public void TestRelaxedMode()
         {
-            Config config;
-            var loadSuccess = reader.TryLoadFromFile("Examples\\ValidConfiguration.ini", out config, null, ConfigValidationMode.Relaxed, Encoding.UTF8);
-
-            Assert.IsTrue(loadSuccess);
-			Assert.IsTrue(config.IsValid(ConfigValidationMode.Relaxed, validationEventLogger));
         }
 
-		[Test]
-		public void TestStrictMode()
-		{
-			// TODO:
-		}
-
-		// TODO: test the main exceptions, reading and validation errors
+        // TODO: test the main exceptions, reading and validation errors
     }
 }
