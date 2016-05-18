@@ -51,7 +51,7 @@ namespace Ini.Configuration.Values
         /// <returns>The element converted to a string.</returns>
         public override string ToOutputString(Config config)
         {
-            return this.Value.ToString();
+            return this.Value.ToString(CultureInfo.InvariantCulture);
         }
 
         #endregion
