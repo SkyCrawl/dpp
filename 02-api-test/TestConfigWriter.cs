@@ -95,20 +95,56 @@ namespace Ini.Test
         }
 
         [Test]
+        public void TestSorting()
+        {
+            // Load correct sorted result
+            var correctConfigString = LoadFileToString(Files.SortedConfig);
+
+            // Load specification and unsorted configuration
+            ConfigSpec specification = specReader.LoadFromFile(Files.YamlSpec);
+            Config config = configReader.LoadFromFile(Files.UnsortedConfig, specification, ConfigValidationMode.Strict, Encoding.UTF8);
+
+            using (var writer = new StringWriter())
+            {
+                var options = new ConfigWriterOptions
+                { 
+                    Validate = false, 
+                    SectionSortOrder = ConfigBlockSortOrder.Ascending, 
+                    OptionSortOrder = ConfigBlockSortOrder.Specification
+                };
+
+                configWriter.WriteToText(writer, config, options);
+                var configString = writer.ToString();
+
+                Assert.AreEqual(configString, correctConfigString);
+            }
+        }
+
+        [Test]
         public void TestDefaultConfiguration()
         {
+            // Load correct default configuration as string
+            var correctConfigString = LoadFileToString(Files.DefaultConfig);
+
+            // Load specification and create default configuration
             var specification = specReader.LoadFromFile(Files.YamlSpec);
             var config = specification.CreateConfigStub(specValidationLogger);
 
-            using (var reader = new StreamReader(Files.DefaultConfig, Encoding.UTF8))
+            // Serialize default configuration and compare results.
             using (var writer = new StringWriter())
             {
-                var correctConfigString = reader.ReadToEnd();
-
                 configWriter.WriteToText(writer, config, new ConfigWriterOptions { Validate = false });
                 var configString = writer.ToString();
 
                 Assert.AreEqual(configString, correctConfigString);
+            }
+        }
+
+        string LoadFileToString(string fileName)
+        {
+            using (var reader = new StreamReader(fileName, Encoding.UTF8))
+            {
+                return reader.ReadToEnd();
             }
         }
     }

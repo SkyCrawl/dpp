@@ -84,6 +84,11 @@ namespace Ini
             public string TrailingCommentary { get; private set; }
 
             /// <summary>
+            /// The position of the trailign commentary extracted from <see cref="Line"/>.
+            /// </summary>
+            public int TrailingCommantaryPosition { get; private set; }
+
+            /// <summary>
             /// Determines whether <see cref="Line"/> represents a section header.
             /// </summary>
             /// <value><c>true</c> if line is a section header; otherwise, <c>false</c>.</value>
@@ -96,8 +101,11 @@ namespace Ini
             public LineInfo(string line)
             {
                 string trailingCommentary;
-                this.Line = IniSyntax.ExtractAndRemoveCommentary(line, out trailingCommentary);
+                int trailingCommentaryPosition;
+
+                this.Line = IniSyntax.ExtractAndRemoveCommentary(line, out trailingCommentary, out trailingCommentaryPosition);
                 this.TrailingCommentary = trailingCommentary;
+                this.TrailingCommantaryPosition = trailingCommentaryPosition;
                 this.IsSection = IniSyntax.LineMatches(Line, Ini.IniSyntax.LineContent.SECTION_HEADER);
             }
         }
@@ -447,7 +455,7 @@ namespace Ini
             }
             else
             {
-                Section newSection = new Section(identifier, lineInfo.TrailingCommentary);
+                Section newSection = new Section(identifier, lineInfo.TrailingCommentary, lineInfo.TrailingCommantaryPosition);
                 config.Add(newSection);
                 context.CurrentSection = newSection;
             }
@@ -492,7 +500,7 @@ namespace Ini
                 }
 
                 // now we can create and register a new option, and parse the value
-                Option newOption = new Option(identifier, optionType, lineInfo.TrailingCommentary);
+                Option newOption = new Option(identifier, optionType, lineInfo.TrailingCommentary, lineInfo.TrailingCommantaryPosition);
                 context.CurrentSection.Add(newOption);
 
                 // and parse all elements of the option

@@ -452,8 +452,19 @@ namespace Ini.Configuration
             }
             else
             {
+                var firstSection = true;
+
                 foreach(ConfigBlockBase item in Items.ReorderBlocks(Spec == null ? null : Spec.Sections, options.SectionSortOrder))
                 {
+                    if (firstSection)
+                    {
+                        firstSection = false;
+                    }
+                    else
+                    {
+                        writer.WriteLine();
+                    }
+
                     item.SerializeSelf(writer, options, Spec == null ? null : Spec.GetSection(item.Identifier), this);
                 }
             }

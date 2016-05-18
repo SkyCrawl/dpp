@@ -28,6 +28,11 @@ namespace Ini.Configuration
         public string TrailingCommentary { get; set; }
 
         /// <summary>
+        /// The position of the trailing commentary.
+        /// </summary>
+        public int TrailingCommentaryPosition { get; set; }
+
+        /// <summary>
         /// Gets the count of underlying options.
         /// </summary>
         /// <value>The count sections.</value>
@@ -47,11 +52,14 @@ namespace Ini.Configuration
         /// <summary>
         /// Initializes a new instance of the <see cref="Section"/> class.
         /// </summary>
-        public Section(string identifier, string commentary = null) : base(identifier)
+        public Section(string identifier, string commentary = null, int commentaryPosition = 0)
+            : base(identifier)
         {
-            this.TrailingCommentary = commentary;
-            this.OptionCount = 0;
-            this.Items = new ObservableInsertionDictionary<string, ConfigBlockBase>(new NotifyCollectionChangedEventHandler(OnContentChanged));
+            TrailingCommentary = commentary;
+            TrailingCommentaryPosition = commentaryPosition;
+
+            OptionCount = 0;
+            Items = new ObservableInsertionDictionary<string, ConfigBlockBase>(new NotifyCollectionChangedEventHandler(OnContentChanged));
         }
 
         #endregion
@@ -364,9 +372,11 @@ namespace Ini.Configuration
         internal override void SerializeSelf(TextWriter writer, ConfigWriterOptions options, SectionSpec sectionSpecification, Config config)
         {
             // first serialize the header
-            writer.Write(IniSyntax.SerializeSectionHeader(Identifier));
-            writer.Write(' ');
-            writer.WriteLine(IniSyntax.SerializeCommentary(TrailingCommentary));
+            var header = IniSyntax.SerializeSectionHeader(Identifier);
+            var commentarySpacesCount = TrailingCommentaryPosition - header.Length;
+
+            writer.Write(header);
+            writer.WriteLine(IniSyntax.SerializeCommentary(TrailingCommentary, commentarySpacesCount > 1 ? commentarySpacesCount : 1));
 
             // and then inner options
             foreach(ConfigBlockBase item in Items.ReorderBlocks(sectionSpecification == null ? null : sectionSpecification.Options, options.SectionSortOrder))

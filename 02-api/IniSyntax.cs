@@ -204,18 +204,21 @@ namespace Ini
         /// <returns>The line's prefix, up to the start of the commentary.</returns>
         /// <param name="line">The input line.</param>
         /// <param name="commentary">The extracted trailing commentary, if any.</param>
-        public static string ExtractAndRemoveCommentary(string line, out string commentary)
+        /// <param name="commentaryPosition">The extracted trailing commentary position.</param>
+        public static string ExtractAndRemoveCommentary(string line, out string commentary, out int commentaryPosition)
         {
             // match the first semicolon that is not preceded by an escape sequence
             Match match = Regex.Match(line, UnescapedTokenRegex(COMMENTARY_SEPARATOR));
             if(match.Success)
             {
                 commentary = TrimLeadingWhitespaces(line.Substring(match.Index + 1, line.Length - match.Index - 1));
+                commentaryPosition = match.Index;
                 return TrimWhitespaces(line.Substring(0, match.Index));
             }
             else
             {
                 commentary = null;
+                commentaryPosition = 0;
                 return line;
             }
         }
@@ -229,7 +232,8 @@ namespace Ini
         /// </summary>
         /// <returns>The serialized comment.</returns>
         /// <param name="commentary">The commentary.</param>
-        public static string SerializeCommentary(string commentary)
+        /// <param name="leadingSpacesCount">Number of empty spaces to add in front of the commentary.</param>
+        public static string SerializeCommentary(string commentary, int leadingSpacesCount = 0)
         {
             if (string.IsNullOrWhiteSpace(commentary))
             {
@@ -237,7 +241,7 @@ namespace Ini
             }
             else
             {
-                return string.Format("{0} {1}", COMMENTARY_SEPARATOR, commentary);
+                return string.Format("{0}{1} {2}", new string(' ', leadingSpacesCount), COMMENTARY_SEPARATOR, commentary);
             }
         }
 
@@ -260,7 +264,7 @@ namespace Ini
         /// <param name="configuration">The parent configuration.</param>
         public static string SerializeOption(string identifier, IEnumerable<IElement> elements, Config configuration)
         {
-            return string.Format("{0}={1}", identifier, SerializeElements(elements, configuration));
+            return string.Format("{0} = {1}", identifier, SerializeElements(elements, configuration));
         }
 
         /// <summary>

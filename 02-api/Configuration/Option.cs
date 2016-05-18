@@ -34,6 +34,11 @@ namespace Ini.Configuration
         public string TrailingCommentary { get; set; }
 
         /// <summary>
+        /// The position of the trailing commentary.
+        /// </summary>
+        public int TrailingCommentaryPosition { get; set; }
+
+        /// <summary>
         /// This option's values. Consumers are given direct access to the collection but they might break some
         /// invariants so the collection is observed internally. When an invalid operation is performed,
         /// an exception is thrown.
@@ -48,11 +53,13 @@ namespace Ini.Configuration
         /// <summary>
         /// Initializes a new instance of the <see cref="Option"/> class.
         /// </summary>
-        public Option(string identifier, Type elementType, string commentary = null) : base(identifier)
+        public Option(string identifier, Type elementType, string commentary = null, int commentaryPosition = 0) : base(identifier)
         {
-            this.ValueType = elementType;
-            this.TrailingCommentary = commentary;
-            this.Elements = new ObservableList<IElement>(OnValuesChanged);
+            ValueType = elementType;
+            TrailingCommentary = commentary;
+            TrailingCommentaryPosition = commentaryPosition;
+
+            Elements = new ObservableList<IElement>(OnValuesChanged);
         }
 
         #endregion
@@ -262,8 +269,11 @@ namespace Ini.Configuration
         /// <param name="config">The parent configuration.</param>
         internal override void SerializeSelf(TextWriter writer, ConfigWriterOptions options, SectionSpec sectionSpecification, Config config)
         {
-            writer.Write(IniSyntax.SerializeOption(Identifier, Elements, config));
-            writer.WriteLine(IniSyntax.SerializeCommentary(TrailingCommentary));
+            var optionString = IniSyntax.SerializeOption(Identifier, Elements, config);
+            var commentarySpacesCount = TrailingCommentaryPosition - optionString.Length;
+
+            writer.Write(optionString);
+            writer.WriteLine(IniSyntax.SerializeCommentary(TrailingCommentary, commentarySpacesCount > 1 ? commentarySpacesCount : 1));
         }
 
         #region IEnumerable implementation
