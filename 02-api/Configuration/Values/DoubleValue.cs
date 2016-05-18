@@ -5,6 +5,7 @@ using Ini.Specification;
 using Ini.Util;
 using Ini.Configuration.Base;
 using Ini.Specification.Values;
+using System.Globalization;
 
 namespace Ini.Configuration.Values
 {
@@ -40,7 +41,7 @@ namespace Ini.Configuration.Values
         {
             value = value.Trim();
 
-            this.Value = Double.Parse(value);
+            this.Value = Double.Parse(value, CultureInfo.InvariantCulture);
         }
 
         /// <summary>
