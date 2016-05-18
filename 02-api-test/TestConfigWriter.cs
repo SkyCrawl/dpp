@@ -17,72 +17,72 @@ namespace Ini.Test
     [TestFixture]
     public class TestConfigWriter
     {
-		SpecReader specReader;
-		ConfigReader configReader;
-		ConfigWriter configWriter;
+        SpecReader specReader;
+        ConfigReader configReader;
+        ConfigWriter configWriter;
 
         [TestFixtureSetUp]
         public void Init()
         {
-			var configReaderLogger = Substitute.For<IConfigReaderEventLogger>();
-			configReaderLogger.SpecValidatiorLogger.Returns(Substitute.For<ISpecValidatorEventLogger>());
+            var configReaderLogger = Substitute.For<IConfigReaderEventLogger>();
+            configReaderLogger.SpecValidatiorLogger.Returns(Substitute.For<ISpecValidatorEventLogger>());
 
-			this.specReader = new SpecReader(Substitute.For<ISpecReaderEventLogger>());
-			this.configReader = new ConfigReader(null, configReaderLogger);
-			this.configWriter = new ConfigWriter(Substitute.For<IConfigWriterEventLogger>());
+            this.specReader = new SpecReader(Substitute.For<ISpecReaderEventLogger>());
+            this.configReader = new ConfigReader(null, configReaderLogger);
+            this.configWriter = new ConfigWriter(Substitute.For<IConfigWriterEventLogger>());
         }
 
         [Test]
         public void TestChainedIOWithRelaxedMode()
         {
-			// prepare writer options
-			ConfigWriterOptions options = new ConfigWriterOptions();
-			options.Validate = false;
+            // prepare writer options
+            ConfigWriterOptions options = new ConfigWriterOptions();
+            options.Validate = false;
 
             // load the first configuration from file
-			Config config1 = configReader.LoadFromFile(Files.RelaxedConfig, null, ConfigValidationMode.Relaxed, Encoding.UTF8);
+            Config config1 = configReader.LoadFromFile(Files.RelaxedConfig, null, ConfigValidationMode.Relaxed, Encoding.UTF8);
 
             // serialize it and backup the result
             TextWriter writer1 = new StringWriter();
-			configWriter.WriteToText(writer1, config1, options);
-			String serialized1 = writer1.ToString();
+            configWriter.WriteToText(writer1, config1, options);
+            String serialized1 = writer1.ToString();
 
             // try to deserialize it back into the second configuration
-			Config config2 = configReader.LoadFromText(null, new StringReader(serialized1), null, ConfigValidationMode.Relaxed);
+            Config config2 = configReader.LoadFromText(null, new StringReader(serialized1), null, ConfigValidationMode.Relaxed);
 
-			// serialize it and backup the result
-			TextWriter writer2 = new StringWriter();
-			configWriter.WriteToText(writer2, config2, options);
-			String serialized2 = writer2.ToString();
+            // serialize it and backup the result
+            TextWriter writer2 = new StringWriter();
+            configWriter.WriteToText(writer2, config2, options);
+            String serialized2 = writer2.ToString();
 
             // and test that the serialized configurations are identical
-			Assert.IsTrue(serialized1 == serialized2);
+            Assert.IsTrue(serialized1 == serialized2);
         }
 
         [Test]
-		public void TestChainedIOWithStrictMode()
+        public void TestChainedIOWithStrictMode()
         {
-			// load the first configuration from file
-			ConfigSpec specification = specReader.LoadFromFile(Files.YamlSpec);
-			Config config1 = configReader.LoadFromFile(Files.StrictConfig, specification, ConfigValidationMode.Strict, Encoding.UTF8);
+            // load the first configuration from file
+            ConfigSpec specification = specReader.LoadFromFile(Files.YamlSpec);
+            Config config1 = configReader.LoadFromFile(Files.StrictConfig, specification, ConfigValidationMode.Strict, Encoding.UTF8);
 
-			// serialize it and backup the result
-			TextWriter writer1 = new StringWriter();
-			configWriter.WriteToText(writer1, config1, null);
-			String serialized1 = writer1.ToString();
+            // serialize it and backup the result
+            TextWriter writer1 = new StringWriter();
+            configWriter.WriteToText(writer1, config1, null);
+            String serialized1 = writer1.ToString();
 
-			// try to deserialize it back into the second configuration
-			Config config2 = configReader.LoadFromText(null, new StringReader(serialized1), specification, ConfigValidationMode.Strict);
+            // try to deserialize it back into the second configuration
+            Config config2 = configReader.LoadFromText(null, new StringReader(serialized1), specification, ConfigValidationMode.Strict);
 
-			// serialize it and backup the result
-			TextWriter writer2 = new StringWriter();
-			configWriter.WriteToText(writer2, config2, null);
-			String serialized2 = writer2.ToString();
+            // serialize it and backup the result
+            TextWriter writer2 = new StringWriter();
+            configWriter.WriteToText(writer2, config2, null);
+            String serialized2 = writer2.ToString();
 
-			// and test that the serialized configurations are identical
-			Assert.IsTrue(serialized1 == serialized2);
+            // and test that the serialized configurations are identical
+            Assert.IsTrue(serialized1 == serialized2);
         }
 
-		// TODO: TestDefaultConfig
+        // TODO: TestDefaultConfig
     }
 }
