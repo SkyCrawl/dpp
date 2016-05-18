@@ -46,7 +46,7 @@ namespace Ini.Test
         [Test]
         public void TestChainedIOWithRelaxedMode()
         {
-            // prepare writer options
+			// prepare writer options
             ConfigWriterOptions options = new ConfigWriterOptions();
             options.Validate = false;
 
