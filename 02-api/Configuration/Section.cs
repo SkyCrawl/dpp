@@ -369,7 +369,7 @@ namespace Ini.Configuration
             writer.WriteLine(IniSyntax.SerializeCommentary(TrailingCommentary));
 
             // and then inner options
-            foreach(ConfigBlockBase item in Items.ReorderBlocks(sectionSpecification.Options, options.SectionSortOrder))
+            foreach(ConfigBlockBase item in Items.ReorderBlocks(sectionSpecification == null ? null : sectionSpecification.Options, options.SectionSortOrder))
             {
                 item.SerializeSelf(writer, options, sectionSpecification, config);
             }

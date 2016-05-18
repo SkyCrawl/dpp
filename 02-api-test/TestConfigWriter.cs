@@ -59,6 +59,7 @@ namespace Ini.Test
             String serialized1 = writer1.ToString();
 
             // try to deserialize it back into the second configuration
+            // TODO: this parses identifier with the trailing ']'
             Config config2 = configReader.LoadFromText(null, new StringReader(serialized1), null, ConfigValidationMode.Relaxed);
 
             // serialize it and backup the result
@@ -92,6 +93,14 @@ namespace Ini.Test
 
             // and test that the serialized configurations are identical
             Assert.IsTrue(serialized1 == serialized2);
+
+            /*
+            using (var stream = File.Open("/Users/SkyCrawl/Downloads/serialized2.txt", FileMode.Create, FileAccess.Write))
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(serialized2);
+                stream.Write(bytes, 0, bytes.Length);
+            }
+            */
         }
 
         [Test]

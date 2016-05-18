@@ -138,7 +138,13 @@ namespace Ini.Util
         {
             get
             {
-                return (ICollection<TKey>) dictionary.Keys;
+                // the inner dictionary is not generic so we have to explicitly retype the value collection
+                List<TKey> result = new List<TKey>();
+                foreach(object value in dictionary.Keys)
+                {
+                    result.Add((TKey) value);
+                }
+                return result;
             }
         }
 
