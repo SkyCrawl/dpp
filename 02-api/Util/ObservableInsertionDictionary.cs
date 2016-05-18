@@ -149,7 +149,13 @@ namespace Ini.Util
         {
             get
             {
-                return (ICollection<TValue>) dictionary.Values;
+                // the inner dictionary is not generic so we have to explicitly retype the value collection
+                List<TValue> result = new List<TValue>();
+                foreach(object value in dictionary.Values)
+                {
+                    result.Add((TValue) value);
+                }
+                return result;
             }
         }
 

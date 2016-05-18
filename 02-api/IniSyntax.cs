@@ -24,7 +24,7 @@ namespace Ini
         const char LINK_IDENTIFIER_SEPARATOR = '#';
 
         const string IDENTIFIER_START_CHAR_REGEX = "[a-zA-Z.$:]";
-        const string IDENTIFIER_SUFFIX_CHAR_REGEX = "[a-zA-Z0-9_~\\-.:$ " + ESCAPE_SEQUENCE + "]";
+        const string IDENTIFIER_SUFFIX_CHAR_REGEX = "[a-zA-Z0-9_~\\-.:$ " + ESCAPE_SEQUENCE + ESCAPE_SEQUENCE + "]";
         const string IDENTIFIER_REGEX = IDENTIFIER_START_CHAR_REGEX + IDENTIFIER_SUFFIX_CHAR_REGEX + "*";
 
         const string LINE_REGEX_SECTION = "^\\[" + IDENTIFIER_REGEX + "\\]$";
@@ -313,7 +313,7 @@ namespace Ini
             // use the first capture group to match the filtered string token
             // meaning: trailing whitespaces are ignored, up until the last one that is escaped
 
-            Match match = Regex.Match(token, "^(.*?(?:" + ESCAPE_SEQUENCE + "\\s)?)\\s*$");
+            Match match = Regex.Match(token, "^(.*?(?:" + ESCAPE_SEQUENCE + ESCAPE_SEQUENCE + "\\s)?)\\s*$");
             return match.Success ? match.Groups[1].Value : token;
         }
 
@@ -325,7 +325,7 @@ namespace Ini
         /// <param name="token">The token.</param>
         protected static string UnescapedTokenRegex(string token)
         {
-            return "(?<!" + ESCAPE_SEQUENCE + ")" + token;
+            return "(?<!" + ESCAPE_SEQUENCE + ESCAPE_SEQUENCE + ")" + token;
         }
 
         /// <summary>

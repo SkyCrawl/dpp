@@ -427,7 +427,7 @@ namespace Ini
         protected void ParseSectionHeader(ParserContext context, LineInfo lineInfo)
         {
             string identifier = IniSyntax.ExtractSectionId(lineInfo.Line);
-            SectionSpec sectionSpec = specification.GetSection(identifier);
+            SectionSpec sectionSpec = validationMode == ConfigValidationMode.Strict ? specification.GetSection(identifier) : null;
             if(string.IsNullOrEmpty(identifier))
             {
                 throw new InvalidOperationException("Library specification states that identifiers must not be empty. " +

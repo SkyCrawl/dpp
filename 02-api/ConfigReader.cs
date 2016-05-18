@@ -105,7 +105,10 @@ namespace Ini
             using (var fileStream = new FileStream(configPath, FileMode.Open, FileAccess.Read))
             {
                 bool result = TryLoadFromText(configPath, new StreamReader(fileStream, encoding), out configuration, spec, mode);
-                configuration.Origin = configPath;
+                if(configuration != null)
+                {
+                    configuration.Origin = configPath;
+                }
                 return result;
             }
         }

@@ -49,9 +49,11 @@ namespace Ini.Test
         [Test]
         public void TestRelaxedMode()
         {
-			// TODO:
-        }
+			Config config = configReader.LoadFromFile(Files.RelaxedConfig, null, ConfigValidationMode.Relaxed, Encoding.UTF8);
 
-        // TODO: test the main exceptions, reading and validation errors
+			Assert.IsNotNull(config);
+
+			// TODO: other assertations
+        }
     }
 }
