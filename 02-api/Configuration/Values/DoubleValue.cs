@@ -39,7 +39,9 @@ namespace Ini.Configuration.Values
         /// <param name="value">The string.</param>
         public override void FillFromString(string value)
         {
-            this.Value = Double.Parse(value.Trim(), CultureInfo.InvariantCulture);
+            value = value.Trim();
+
+            this.Value = Double.Parse(value, CultureInfo.InvariantCulture);
         }
 
         /// <summary>
