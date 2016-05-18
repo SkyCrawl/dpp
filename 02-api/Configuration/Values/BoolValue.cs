@@ -119,18 +119,18 @@ namespace Ini.Configuration.Values
         public override void FillFromString(string value)
         {
             // the library doesn't care about casing, as long as the base string is matched
-            string lowercaseValue = value.Trim().ToLower();
+            string lowercaseCleanValue = value.Trim().ToLower();
 
             // try to parse
-            if(TrueStrings.ContainsKey(lowercaseValue))
+            if(TrueStrings.ContainsKey(lowercaseCleanValue))
             {
                 this.Value = true;
-                this.Format = TrueStrings[lowercaseValue];
+                this.Format = TrueStrings[lowercaseCleanValue];
             }
-            else if(FalseStrings.ContainsKey(lowercaseValue))
+            else if(FalseStrings.ContainsKey(lowercaseCleanValue))
             {
                 this.Value = false;
-                this.Format = FalseStrings[lowercaseValue];
+                this.Format = FalseStrings[lowercaseCleanValue];
             }
             else
             {

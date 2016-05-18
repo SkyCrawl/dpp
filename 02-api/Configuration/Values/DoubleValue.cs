@@ -5,6 +5,7 @@ using Ini.Specification;
 using Ini.Util;
 using Ini.Configuration.Base;
 using Ini.Specification.Values;
+using System.Globalization;
 
 namespace Ini.Configuration.Values
 {
@@ -38,9 +39,7 @@ namespace Ini.Configuration.Values
         /// <param name="value">The string.</param>
         public override void FillFromString(string value)
         {
-            value = value.Trim();
-
-            this.Value = Double.Parse(value);
+            this.Value = Double.Parse(value.Trim(), CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -50,7 +49,7 @@ namespace Ini.Configuration.Values
         /// <returns>The element converted to a string.</returns>
         public override string ToOutputString(Config config)
         {
-            return this.Value.ToString();
+            return this.Value.ToString(CultureInfo.InvariantCulture);
         }
 
         #endregion

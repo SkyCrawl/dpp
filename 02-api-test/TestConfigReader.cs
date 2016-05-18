@@ -9,6 +9,7 @@ using Ini.EventLoggers;
 using Ini.Util;
 using NSubstitute;
 using NUnit.Framework;
+using System.Globalization;
 
 namespace Ini.Test
 {
@@ -35,15 +36,6 @@ namespace Ini.Test
         [Test]
         public void TestStrictMode()
         {
-            /*
-            Config config;
-            var spec = specReader.LoadFromFile(Files.YamlSpec);
-            var loadSuccess = configReader.TryLoadFromFile(Files.StrictConfig, out config, spec, ConfigValidationMode.Strict, Encoding.UTF8);
-
-            Assert.IsTrue(loadSuccess);
-            Assert.IsTrue(config.IsValid(ConfigValidationMode.Strict, configValidationLogger));
-            */
-
             var spec = specReader.LoadFromFile(Files.YamlSpec);
             var config = configReader.LoadFromFile(Files.StrictConfig, spec, ConfigValidationMode.Strict, Encoding.UTF8);
 
@@ -57,8 +49,6 @@ namespace Ini.Test
             Config config = configReader.LoadFromFile(Files.RelaxedConfig, null, ConfigValidationMode.Relaxed, Encoding.UTF8);
 
             Assert.IsNotNull(config);
-
-            // TODO: other assertations
         }
     }
 }
