@@ -66,7 +66,7 @@ namespace Ini.Configuration.Values
         /// <summary>
         /// The mapping of strings that represent "true" value to their respective format.
         /// </summary>
-        protected static Dictionary<string, BoolFormat> trueStrings = new Dictionary<string, BoolFormat>
+        public static Dictionary<string, BoolFormat> TrueStrings = new Dictionary<string, BoolFormat>
         {
             { "1", BoolFormat.CHARACTER_01 },
             { "t", BoolFormat.CHARACTER_TF },
@@ -79,7 +79,7 @@ namespace Ini.Configuration.Values
         /// <summary>
         /// The mapping of strings that represent "false" value to their respective format.
         /// </summary>
-        protected static Dictionary<string, BoolFormat> falseStrings = new Dictionary<string, BoolFormat>
+        public static Dictionary<string, BoolFormat> FalseStrings = new Dictionary<string, BoolFormat>
         {
             { "0", BoolFormat.CHARACTER_01 },
             { "f", BoolFormat.CHARACTER_TF },
@@ -122,15 +122,15 @@ namespace Ini.Configuration.Values
             string lowercaseValue = value.ToLower();
 
             // try to parse
-            if(trueStrings.ContainsKey(lowercaseValue))
+            if(TrueStrings.ContainsKey(lowercaseValue))
             {
                 this.Value = true;
-                this.Format = trueStrings[lowercaseValue];
+                this.Format = TrueStrings[lowercaseValue];
             }
-            else if(falseStrings.ContainsKey(lowercaseValue))
+            else if(FalseStrings.ContainsKey(lowercaseValue))
             {
                 this.Value = false;
-                this.Format = falseStrings[lowercaseValue];
+                this.Format = FalseStrings[lowercaseValue];
             }
             else
             {
@@ -145,7 +145,7 @@ namespace Ini.Configuration.Values
         /// <returns>The element converted to a string.</returns>
         public override string ToOutputString(Config config)
         {
-            return (this.Value ? trueStrings : falseStrings).GetKeysForValue(Format).Single();
+            return (this.Value ? TrueStrings : FalseStrings).GetKeysForValue(Format).Single();
         }
 
         #endregion

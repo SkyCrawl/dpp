@@ -22,7 +22,7 @@ namespace Ini.Util
         /// Binding of elementary value types (e.g. bool) to corresponding configuration
         /// value objects (e.g. BoolValue). Feel free to tinker with the binding or add your own.
         /// </summary>
-        public static ObservableInsertionDictionary<Type, Type> TypeBinding;
+        public static Dictionary<Type, Type> TypeBinding;
 
         #endregion
 
@@ -30,8 +30,7 @@ namespace Ini.Util
 
         static ValueFactory()
         {
-            TypeBinding = new ObservableInsertionDictionary<Type, Type>();
-            TypeBinding.CollectionChanged += OnTypeBindingIsChanged;
+            TypeBinding = new Dictionary<Type, Type>();
             TypeBinding.Add(typeof(bool), typeof(BoolValue));
             TypeBinding.Add(typeof(double), typeof(DoubleValue));
             TypeBinding.Add(typeof(Enum), typeof(EnumValue));
@@ -73,9 +72,9 @@ namespace Ini.Util
                 Type genericValueObjectType = typeof(ValueBase<>).MakeGenericType(valueType);
                 if (valueObjectType.IsSubclassOf(genericValueObjectType))
                 {
-                    var result = Activator.CreateInstance(valueObjectType) as ValueBase<object>;
-                    result.FillFromString(value);
-                    return result;
+                    var result = Activator.CreateInstance(valueObjectType, true);
+                    (result as ValueBase<object>).FillFromString(value);
+                    return (result as ValueBase<object>);
                 }
                 else
                 {
@@ -112,45 +111,6 @@ namespace Ini.Util
             {
                 throw new InvalidOperationException(string.Format("Could not determine the type to create. " +
                     "Have you added a type binding for '{0}'?", typeof(TValue).ToString()));
-            }
-        }
-
-        #endregion
-
-        #region Keeping internal state
-
-        /// <summary>
-        /// The delegate for <see cref="INotifyCollectionChanged"/>.
-        /// </summary>
-        /// <param name="sender">The observed collection, in this case <see cref="TypeBinding"/>.</param>
-        /// <param name="e">Changes that occurred.</param>
-        static void OnTypeBindingIsChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            switch (e.Action)
-            {
-            case NotifyCollectionChangedAction.Add:
-            case NotifyCollectionChangedAction.Replace:
-                foreach(KeyValuePair<Type, Type> entry in e.NewItems)
-                {
-                    Type genericValueObjectType = typeof(ValueBase<>).MakeGenericType(entry.Key);
-                    if(!entry.Value.IsSubclassOf(genericValueObjectType))
-                    {
-                        throw new InvariantBrokenException(string.Format(
-                            "Invalid binding specified: if the key type is '{0}', then the value type has to inherit from '{1}'.",
-                            entry.Key.ToString(),
-                            genericValueObjectType.ToString()));
-                    }
-                }
-                break;
-
-            case NotifyCollectionChangedAction.Move:
-            case NotifyCollectionChangedAction.Remove:
-            case NotifyCollectionChangedAction.Reset:
-                // one or more items were moved or removed - that doesn't break any invariant
-                break;
-
-            default:
-                throw new ArgumentException("Unknown enum value: " + e.Action.ToString());
             }
         }
 

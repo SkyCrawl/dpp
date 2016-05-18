@@ -96,7 +96,8 @@ namespace Ini.Configuration.Values.Links
         /// </summary>
         public void InterpretSelf()
         {
-            IEnumerable<IValue> interpreted = Values.Select<IValue, IValue>(value => (value as ValueStub).InterpretSelf());
+            // have to explicitly wrap in a list so as now to spawn: "System.InvalidOperationException : Sequence contains no elements"
+            List<IValue> interpreted = new List<IValue>(Values.Select<IValue, IValue>(value => (value as ValueStub).InterpretSelf()));
             Values.Clear();
             Values.AddRange(interpreted);
         }
@@ -234,7 +235,7 @@ namespace Ini.Configuration.Values.Links
                     // check the invariants and throw an exception if required
                     foreach(IValue value in e.NewItems)
                     {
-                        if(!value.ValueType.IsSubclassOf(ValueType))
+                        if(!ValueType.IsAssignableFrom(value.ValueType))
                         {
                             throw new InvariantBrokenException(string.Format(
                                 "Only elements with value type of '{0}' are allowed.",

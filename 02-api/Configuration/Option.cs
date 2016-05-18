@@ -231,7 +231,7 @@ namespace Ini.Configuration
                     // check the invariants and throw an exception if required
                     foreach(IElement elem in e.NewItems)
                     {
-                        if(!elem.ValueType.IsSubclassOf(ValueType))
+                        if(!ValueType.IsAssignableFrom(elem.ValueType))
                         {
                             throw new InvariantBrokenException(string.Format(
                                 "Only elements with value type of '{0}' are allowed.",

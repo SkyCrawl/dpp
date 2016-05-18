@@ -54,14 +54,17 @@ namespace Ini.Configuration.Values
             if(value.StartsWith("0x"))
             {
                 this.Base = NumberBase.HEXADECIMAL;
+                value = value.Substring(2);
             }
             else if(value.StartsWith("0b"))
             {
                 this.Base = NumberBase.BINARY;
+                value = value.Substring(2);
             }
             else if(value.StartsWith("0"))
             {
                 this.Base = NumberBase.OCTAL;
+                value = value.Substring(1);
             }
             else
             {

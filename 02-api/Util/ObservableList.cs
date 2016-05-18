@@ -155,7 +155,11 @@ namespace Ini.Util
         /// <param name="arrayIndex">The index to start at.</param>
         public void CopyTo(TValue[] array, int arrayIndex)
         {
-            throw new NotImplementedException();
+            foreach(TValue value in list)
+            {
+                array[arrayIndex] = value;
+                arrayIndex++;
+            }
         }
 
         /// <Docs>The item to remove from the current collection.</Docs>
