@@ -496,9 +496,9 @@ namespace Ini
                 context.CurrentSection.Add(newOption);
 
                 // and parse all elements of the option
-                foreach(string element in IniSyntax.ExtractAndUnescapeElements(value, valueSeparator))
+                foreach(string element in IniSyntax.ExtractElements(value, valueSeparator))
                 {
-                    ParseElements(context, lineInfo, newOption, value);
+                    ParseElements(context, lineInfo, newOption, element);
                 }
             }
         }

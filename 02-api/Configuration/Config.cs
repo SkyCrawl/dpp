@@ -452,9 +452,9 @@ namespace Ini.Configuration
             }
             else
             {
-                foreach(ConfigBlockBase item in Items.ReorderBlocks(Spec.Sections, options.SectionSortOrder))
+                foreach(ConfigBlockBase item in Items.ReorderBlocks(Spec == null ? null : Spec.Sections, options.SectionSortOrder))
                 {
-                    item.SerializeSelf(writer, options, Spec.GetSection(item.Identifier), this);
+                    item.SerializeSelf(writer, options, Spec == null ? null : Spec.GetSection(item.Identifier), this);
                 }
             }
         }

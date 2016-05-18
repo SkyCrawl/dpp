@@ -103,6 +103,7 @@ namespace Ini
         /// <exception cref="ArgumentException">If the input line doesn't match a section header.</exception>
         public static string ExtractSectionId(string line)
         {
+            line = TrimWhitespaces(line);
             if(LineMatches(line, LineContent.SECTION_HEADER))
             {
                 return TrimWhitespaces(line.Substring(1, line.Length - 2));
@@ -149,7 +150,7 @@ namespace Ini
         /// <returns>The elementary elements.</returns>
         /// <param name="value">The complete value of an option.</param>
         /// <param name="separator">The separator for elements.</param>
-        public static IEnumerable<string> ExtractAndUnescapeElements(string value, string separator)
+        public static IEnumerable<string> ExtractElements(string value, string separator)
         {
             // prepare the result enumerable
             List<string> result = new List<string>();
@@ -158,13 +159,16 @@ namespace Ini
             int elementStartIndex = 0;
             foreach(Match elementMatch in Regex.Matches(value, UnescapedTokenRegex(separator)))
             {
-                string element = value.Substring(elementStartIndex + separator.Length, elementMatch.Index - separator.Length);
-                result.Add(UnescapeElement(element));
-                elementStartIndex = elementMatch.Index;
+                string element = value.Substring(elementStartIndex, elementMatch.Index - elementStartIndex);
+                result.Add(element);
+                elementStartIndex = elementMatch.Index + separator.Length;
             }
 
             // and the remainder
-            result.Add(value.Substring(elementStartIndex + separator.Length, value.Length - elementStartIndex - separator.Length));
+            if(elementStartIndex < value.Length)
+            {
+                result.Add(value.Substring(elementStartIndex, value.Length - elementStartIndex));
+            }
 
             // and return
             return result;
@@ -256,7 +260,7 @@ namespace Ini
         /// <param name="configuration">The parent configuration.</param>
         public static string SerializeOption(string identifier, IEnumerable<IElement> elements, Config configuration)
         {
-            return string.Format("{0} = {1}", identifier, SerializeElements(elements, configuration));
+            return string.Format("{0}={1}", identifier, SerializeElements(elements, configuration));
         }
 
         /// <summary>
@@ -267,7 +271,7 @@ namespace Ini
         /// <param name="configuration">The parent configuration.</param>
         public static string SerializeElements(IEnumerable<IElement> elements, Config configuration)
         {
-            return string.Join(PRIMARY_ELEMENT_SEPARATOR, elements.Select(item => EscapeElement(item.ToOutputString(configuration))));
+            return string.Join(PRIMARY_ELEMENT_SEPARATOR, elements.Select(item => item.ToOutputString(configuration)));
         }
 
         /// <summary>
