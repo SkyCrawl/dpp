@@ -28,7 +28,7 @@ namespace Ini.Test
         }
 
         [Test]
-        public void TestDeserialization()
+        public void TestValidSpec()
         {
             var spec = reader.LoadFromFile(Files.YamlSpec);
 
