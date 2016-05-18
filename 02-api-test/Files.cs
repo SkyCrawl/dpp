@@ -17,6 +17,9 @@ namespace Ini.Test
         static internal readonly string RelaxedConfig = Path.Combine(AssemblyDirectory, "Examples", "RelaxedConfiguration.ini");
         static internal readonly string DefaultConfig = Path.Combine(AssemblyDirectory, "Examples", "DefaultConfiguration.ini");
 
+        static internal readonly string SortedConfig = Path.Combine(AssemblyDirectory, "Examples", "SortedConfiguration.ini");
+        static internal readonly string UnsortedConfig = Path.Combine(AssemblyDirectory, "Examples", "UnsortedConfiguration.ini");
+
         static string AssemblyDirectory
         {
             get
