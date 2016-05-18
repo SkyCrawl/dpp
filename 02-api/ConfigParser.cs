@@ -96,7 +96,7 @@ namespace Ini
             public LineInfo(string line)
             {
                 string trailingCommentary;
-                this.Line = IniSyntax.TrimWhitespaces(IniSyntax.ExtractAndRemoveCommentary(line, out trailingCommentary));
+                this.Line = IniSyntax.ExtractAndRemoveCommentary(line, out trailingCommentary);
                 this.TrailingCommentary = trailingCommentary;
                 this.IsSection = IniSyntax.LineMatches(Line, Ini.IniSyntax.LineContent.SECTION_HEADER);
             }
@@ -483,7 +483,7 @@ namespace Ini
                             context.LineNumber,
                             context.CurrentSection.Identifier,
                             identifier);
-                        return;
+                        return; // TODO: do we need to implement an error count in event loggers?
                     }
                     else
                     {
@@ -498,19 +498,19 @@ namespace Ini
                 // and parse all elements of the option
                 foreach(string element in IniSyntax.ExtractAndUnescapeElements(value, valueSeparator))
                 {
-                    ParseElement(context, lineInfo, newOption, value);
+                    ParseElements(context, lineInfo, newOption, value);
                 }
             }
         }
 
         /// <summary>
-        /// Parse the given option value, identify links and create/register value stubs.
+        /// Parse the given option's value, identify links and create/register value stubs.
         /// </summary>
         /// <param name="context">Parsing context.</param>
         /// <param name="lineInfo">Information about the current line.</param>
         /// <param name="option">The option being parsed.</param>
         /// <param name="element">The captured option value.</param>
-        protected void ParseElement(ParserContext context, LineInfo lineInfo, Option option, string element)
+        protected void ParseElements(ParserContext context, LineInfo lineInfo, Option option, string element)
         {
             if(IniSyntax.IsElementALink(element))
             {

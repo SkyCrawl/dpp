@@ -82,6 +82,17 @@ namespace Ini.Configuration.Values
         }
 
         /// <summary>
+        /// DO not use.
+        /// </summary>
+        /// <param name="value">Whatever.</param>
+        /// <exception cref="InvalidOperationException">Always.</exception>
+        [Obsolete("This method throws an exception as it was inherited and doesn't hold its meaning in this special class.")]
+        public void FillFromString(string value)
+        {
+            throw new InvalidOperationException();
+        }
+
+        /// <summary>
         /// Do not use.
         /// </summary>
         /// <param name="config">Whatever.</param>

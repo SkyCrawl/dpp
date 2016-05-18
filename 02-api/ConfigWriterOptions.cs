@@ -23,23 +23,30 @@ namespace Ini
         static ConfigWriterOptions()
         {
             Default = new ConfigWriterOptions();
-            Default.Validate = true;
-            Default.ValidationMode = ConfigValidationMode.Strict;
-            Default.SectionSortOrder = ConfigBlockSortOrder.Insertion;
-            Default.OptionSortOrder = ConfigBlockSortOrder.Insertion;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Ini.ConfigWriterOptions"/> class.
+        /// </summary>
+        public ConfigWriterOptions()
+        {
+            this.Validate = true;
+            this.ValidationMode = ConfigValidationMode.Strict;
+            this.SectionSortOrder = ConfigBlockSortOrder.Insertion;
+            this.OptionSortOrder = ConfigBlockSortOrder.Insertion;
         }
 
         /// <summary>
         /// Gets or sets a value indicating whether to validate the configuration
         /// against its associated specification (if defined) before writing it. The
         /// specification will also be validated. If the configuration is found
-        /// to be invalid, it will NOT be written.
+        /// to be invalid, it will NOT be written. Default: true;
         /// </summary>
         /// <value><c>true</c> if configuration is to be validated; otherwise, <c>false</c>.</value>
         public bool Validate { get; set; }
 
         /// <summary>
-        /// Validation mode to apply when validating configuration.
+        /// Validation mode to apply when validating configuration. Default: strict.
         /// </summary>
         public ConfigValidationMode ValidationMode { get; set; }
 
@@ -47,7 +54,7 @@ namespace Ini
         /// Sort order to use for sections when writing the configuration. The library
         /// will make a best effort to preserve commentary blocks' positions but it can not
         /// make any promises. Commentary blocks will stick to the first section below them,
-        /// as defined by the original order.
+        /// as defined by the original order. Default: insertion.
         /// </summary>
         public ConfigBlockSortOrder SectionSortOrder { get; set; }
 
@@ -55,7 +62,7 @@ namespace Ini
         /// Sort order to use for options when writing the configuration. The library
         /// will make a best effort to preserve commentary blocks' positions but it can not
         /// make any promises. Commentary blocks will stick to the first option below them,
-        /// as defined by the original order.
+        /// as defined by the original order. Default: insertion.
         /// </summary>
         public ConfigBlockSortOrder OptionSortOrder { get; set; }
 

@@ -58,16 +58,18 @@ namespace Ini
 
         /// <summary>
         /// Determines whether the specified line of input matches the specified content.
+        /// Automatically handles input leading or trailing whitespaces.
         /// </summary>
         /// <returns><c>true</c> If the specified line matches the specified content, otherwise <c>false</c>.</returns>
         /// <param name="line">The input line.</param>
         /// <param name="lineContent">The target content.</param>
         public static bool LineMatches(string line, LineContent lineContent)
         {
+            line = TrimWhitespaces(line);
             switch (lineContent)
             {
                 case LineContent.SECTION_HEADER:
-                    return Regex.IsMatch(line, LINE_REGEX_SECTION);    
+                    return Regex.IsMatch(line, LINE_REGEX_SECTION);
                 case LineContent.OPTION:
                     return Regex.IsMatch(line, LINE_REGEX_OPTION);
                 default:
@@ -77,6 +79,7 @@ namespace Ini
 
         /// <summary>
         /// Determines whether the specified element is a link.
+        /// Automatically handles input leading or trailing whitespaces.
         /// </summary>
         /// <returns><c>true</c> if is the element is a link; otherwise, <c>false</c>.</returns>
         /// <param name="element">The element.</param>
@@ -92,6 +95,8 @@ namespace Ini
 
         /// <summary>
         /// Extracts section identifier from the input line (section header) and returns it.
+        /// Automatically handles input leading or trailing whitespaces.
+        /// Automatically removes leading and trailing whitespaces from the identifier.
         /// </summary>
         /// <returns>The extracted identifier.</returns>
         /// <param name="line">The input line.</param>
@@ -110,6 +115,8 @@ namespace Ini
 
         /// <summary>
         /// Extracts individual option components from the specified input line.
+        /// Automatically handles input leading or trailing whitespaces.
+        /// Automatically removes leading and trailing whitespaces from identifier, and trailing whitespaces from value.
         /// </summary>
         /// <param name="line">The input line.</param>
         /// <param name="identifier">The extracted identifier.</param>
@@ -137,7 +144,7 @@ namespace Ini
         }
 
         /// <summary>
-        /// Extracts individual elements from the specified complete option value.
+        /// Extracts individual elements from the specified complete option value. Doesn't handle leading or trailing whitespaces.
         /// </summary>
         /// <returns>The elementary elements.</returns>
         /// <param name="value">The complete value of an option.</param>
@@ -151,13 +158,13 @@ namespace Ini
             int elementStartIndex = 0;
             foreach(Match elementMatch in Regex.Matches(value, UnescapedTokenRegex(separator)))
             {
-                string element = value.Substring(elementStartIndex, elementMatch.Index);
+                string element = value.Substring(elementStartIndex + separator.Length, elementMatch.Index - separator.Length);
                 result.Add(UnescapeElement(element));
                 elementStartIndex = elementMatch.Index;
             }
 
             // and the remainder
-            result.Add(value.Substring(elementStartIndex, value.Length - elementStartIndex));
+            result.Add(value.Substring(elementStartIndex + separator.Length, value.Length - elementStartIndex - separator.Length));
 
             // and return
             return result;
@@ -165,6 +172,7 @@ namespace Ini
 
         /// <summary>
         /// Extracts individual components from the specified link.
+        /// Automatically handles input leading or trailing whitespaces.
         /// </summary>
         /// <returns>The components.</returns>
         /// <param name="link">The link to parse.</param>
@@ -187,6 +195,7 @@ namespace Ini
         /// <summary>
         /// Extracts trailing commentary from the specified line into the specified output
         /// parameter. Returns the line's prefix, up to the start of the commentary.
+        /// Automatically removes leading whitespaces from commentary, and leading or trailing whitespaces from line prefix.
         /// </summary>
         /// <returns>The line's prefix, up to the start of the commentary.</returns>
         /// <param name="line">The input line.</param>
@@ -197,8 +206,8 @@ namespace Ini
             Match match = Regex.Match(line, UnescapedTokenRegex(COMMENTARY_SEPARATOR));
             if(match.Success)
             {
-                commentary = line.Substring(match.Index + 1, line.Length - match.Index - 1);
-                return line.Substring(0, match.Index);
+                commentary = TrimLeadingWhitespaces(line.Substring(match.Index + 1, line.Length - match.Index - 1));
+                return TrimWhitespaces(line.Substring(0, match.Index));
             }
             else
             {

@@ -50,7 +50,10 @@ namespace Ini.Configuration.Values
         /// <param name="value">The string.</param>
         public override void FillFromString(string value)
         {
-            // first determine the base
+            // first remove whitespaces
+            value = IniSyntax.TrimWhitespaces(value);
+
+            // then determine the number base
             if(value.StartsWith("0x"))
             {
                 this.Base = NumberBase.HEXADECIMAL;
@@ -71,7 +74,7 @@ namespace Ini.Configuration.Values
                 this.Base = NumberBase.DECIMAL;
             }
 
-            // and then parse
+            // and finally, parse
             this.Value = Convert.ToInt64(value, this.Base.ToBase());
         }
 

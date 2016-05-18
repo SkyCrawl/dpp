@@ -119,7 +119,7 @@ namespace Ini.Configuration.Values
         public override void FillFromString(string value)
         {
             // the library doesn't care about casing, as long as the base string is matched
-            string lowercaseValue = value.ToLower();
+            string lowercaseValue = IniSyntax.TrimWhitespaces(value).ToLower();
 
             // try to parse
             if(TrueStrings.ContainsKey(lowercaseValue))

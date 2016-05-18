@@ -63,7 +63,7 @@ namespace Ini.Configuration.Base
         /// <summary>
         /// Creates an instance of self from the given string value.
         /// </summary>
-        /// <param name="value">The string.</param>
+        /// <param name="value">The value.</param>
         public abstract void FillFromString(string value);
 
         /// <summary>
