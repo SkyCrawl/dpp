@@ -17,9 +17,9 @@ namespace Ini.Configuration.Base
         OutputType GetValue<OutputType>();
 
         /// <summary>
-        /// Creates an instance of self from the given string value.
+        /// Parses the string value and saves it into the internal value of the element.
         /// </summary>
-        /// <param name="value">The value.</param>
+        /// <param name="value">The string.</param>
         void FillFromString(string value);
     }
 }

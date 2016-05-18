@@ -21,7 +21,7 @@ namespace Ini.Test
 		ConfigReader configReader;
 		ConfigWriter configWriter;
 
-		[TestFixtureSetUp]
+        [TestFixtureSetUp]
         public void Init()
         {
 			var configReaderLogger = Substitute.For<IConfigReaderEventLogger>();

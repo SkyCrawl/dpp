@@ -45,15 +45,14 @@ namespace Ini.Configuration.Values
         #region Public methods
 
         /// <summary>
-        /// Creates an instance of self from the given string value.
+        /// Parses the string value and initializes the <see cref="ValueBase{T}.Value"/> property.
         /// </summary>
         /// <param name="value">The string.</param>
         public override void FillFromString(string value)
         {
-            // first remove whitespaces
-            value = IniSyntax.TrimWhitespaces(value);
+            value = value.Trim();
 
-            // then determine the number base
+            // first determine the base
             if(value.StartsWith("0x"))
             {
                 this.Base = NumberBase.HEXADECIMAL;
@@ -74,7 +73,7 @@ namespace Ini.Configuration.Values
                 this.Base = NumberBase.DECIMAL;
             }
 
-            // and finally, parse
+            // and then parse
             this.Value = Convert.ToUInt64(value, this.Base.ToBase());
         }
 

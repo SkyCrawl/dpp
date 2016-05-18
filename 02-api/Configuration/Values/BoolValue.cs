@@ -112,14 +112,14 @@ namespace Ini.Configuration.Values
         #region Public methods
 
         /// <summary>
-        /// Creates an instance of self from the given string value.
+        /// Parses the string value and initializes the <see cref="ValueBase{T}.Value"/> property.
         /// </summary>
         /// <param name="value">The string.</param>
         /// <exception cref="ArgumentException">If the given string value could not be interpreted.</exception>
         public override void FillFromString(string value)
         {
             // the library doesn't care about casing, as long as the base string is matched
-            string lowercaseValue = IniSyntax.TrimWhitespaces(value).ToLower();
+            string lowercaseValue = value.Trim().ToLower();
 
             // try to parse
             if(TrueStrings.ContainsKey(lowercaseValue))
