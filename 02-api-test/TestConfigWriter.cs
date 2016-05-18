@@ -18,7 +18,7 @@ namespace Ini.Test
         ConfigReader reader;
         ConfigWriter writer;
 
-		[TestFixtureSetUp]
+        [TestFixtureSetUp]
         public void Init()
         {
             reader = new ConfigReader();

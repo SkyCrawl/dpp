@@ -61,7 +61,7 @@ namespace Ini.Configuration.Base
         }
 
         /// <summary>
-        /// Creates an instance of self from the given string value.
+        /// Parses the string value and initializes the <see cref="Value"/> property.
         /// </summary>
         /// <param name="value">The string.</param>
         public abstract void FillFromString(string value);

@@ -72,9 +72,9 @@ namespace Ini.Util
                 Type genericValueObjectType = typeof(ValueBase<>).MakeGenericType(valueType);
                 if (valueObjectType.IsSubclassOf(genericValueObjectType))
                 {
-                    var result = Activator.CreateInstance(valueObjectType, true);
-                    (result as ValueBase<object>).FillFromString(value);
-                    return (result as ValueBase<object>);
+                    var result = (IValue)Activator.CreateInstance(valueObjectType, true);
+                    result.FillFromString(value);
+                    return result;
                 }
                 else
                 {

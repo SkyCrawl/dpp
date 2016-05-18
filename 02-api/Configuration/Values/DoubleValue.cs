@@ -33,11 +33,13 @@ namespace Ini.Configuration.Values
         #region Public methods
 
         /// <summary>
-        /// Creates an instance of self from the given string value.
+        /// Parses the string value and initializes the <see cref="ValueBase{T}.Value"/> property.
         /// </summary>
         /// <param name="value">The string.</param>
         public override void FillFromString(string value)
         {
+            value = value.Trim();
+
             this.Value = Double.Parse(value);
         }
 

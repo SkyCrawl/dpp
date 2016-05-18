@@ -28,13 +28,6 @@ namespace Ini.Configuration.Values
         public Type ValueObjectType { get; set; }
 
         /// <summary>
-        /// The type to eventually interpret <see cref="Value"/> with.
-        /// In other words, the parent option's value type.
-        /// </summary>
-        /// <value>Parent option's value type.</value>
-        public Type ValueType { get; private set; }
-
-        /// <summary>
         /// The initial string value.
         /// </summary>
         /// <value>The value.</value>
@@ -69,17 +62,16 @@ namespace Ini.Configuration.Values
             return ValueFactory.GetValue(ValueObjectType, ValueType, Value);
         }
 
+        #endregion
+
+        #region IValue Members
+
         /// <summary>
-        /// Do not use.
+        /// The type to eventually interpret <see cref="Value"/> with.
+        /// In other words, the parent option's value type.
         /// </summary>
-        /// <returns>Nothing.</returns>
-        /// <typeparam name="OutputType">Anything.</typeparam>
-        /// <exception cref="InvalidOperationException">Always.</exception>
-        [Obsolete("This method throws an exception as it was inherited and doesn't hold its meaning in this special class.")]
-        public OutputType GetValue<OutputType>()
-        {
-            throw new InvalidOperationException();
-        }
+        /// <value>Parent option's value type.</value>
+        public Type ValueType { get; private set; }
 
         /// <summary>
         /// Do not use.
@@ -89,11 +81,11 @@ namespace Ini.Configuration.Values
         /// <param name="specification">Whatever.</param>
         /// <param name="configLogger">Whatever.</param>
         /// <returns>Nothing.</returns>
-        /// <exception cref="InvalidOperationException">Always.</exception>
+        /// <exception cref="NotImplementedException">Always.</exception>
         [Obsolete("This method throws an exception as it was inherited and doesn't hold its meaning in this special class.")]
         public bool IsValid(Config config, string section, OptionSpec specification, IConfigValidatorEventLogger configLogger)
         {
-            throw new InvalidOperationException();
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -101,11 +93,34 @@ namespace Ini.Configuration.Values
         /// </summary>
         /// <returns>Nothing.</returns>
         /// <param name="config"></param>
-        /// <exception cref="InvalidOperationException">Always.</exception>
+        /// <exception cref="NotImplementedException">Always.</exception>
         [Obsolete("This method throws an exception as it was inherited and doesn't hold its meaning in this special class.")]
         public string ToOutputString(Config config)
         {
-            throw new InvalidOperationException();
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Do not use.
+        /// </summary>
+        /// <returns>Nothing.</returns>
+        /// <typeparam name="OutputType">Anything.</typeparam>
+        /// <exception cref="NotImplementedException">Always.</exception>
+        [Obsolete("This method throws an exception as it was inherited and doesn't hold its meaning in this special class.")]
+        public OutputType GetValue<OutputType>()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Do not use.
+        /// </summary>
+        /// <returns>Nothing.</returns>
+        /// <param name="value">Anything.</param>
+        /// <exception cref="InvalidOperationException">Always.</exception>
+        public void FillFromString(string value)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
