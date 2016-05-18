@@ -113,7 +113,7 @@ namespace Ini.Specification
         /// <returns></returns>
         public override Option CreateOptionStub()
         {
-            Option result = new Option(Identifier, GetValueType());
+            Option result = new Option(Identifier, GetValueType(), Description);
             foreach(TValue value in DefaultValues)
             {
                 result.Elements.Add(ValueFactory.GetValue<TValue>(value));

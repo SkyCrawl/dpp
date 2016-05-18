@@ -17,19 +17,30 @@ namespace Ini.Test
     [TestFixture]
     public class TestConfigWriter
     {
+        ISpecReaderEventLogger specReaderLogger;
+        ISpecValidatorEventLogger specValidationLogger;
+
+        IConfigReaderEventLogger configReaderLogger;
+        IConfigWriterEventLogger configWriterLogger;
+
         SpecReader specReader;
         ConfigReader configReader;
         ConfigWriter configWriter;
 
-        [TestFixtureSetUp]
+        [SetUp]
         public void Init()
         {
-            var configReaderLogger = Substitute.For<IConfigReaderEventLogger>();
-            configReaderLogger.SpecValidatiorLogger.Returns(Substitute.For<ISpecValidatorEventLogger>());
+            specReaderLogger = Substitute.For<ISpecReaderEventLogger>();
+            specValidationLogger = Substitute.For<ISpecValidatorEventLogger>();
 
-            this.specReader = new SpecReader(Substitute.For<ISpecReaderEventLogger>());
-            this.configReader = new ConfigReader(null, configReaderLogger);
-            this.configWriter = new ConfigWriter(Substitute.For<IConfigWriterEventLogger>());
+            configReaderLogger = Substitute.For<IConfigReaderEventLogger>();
+            configReaderLogger.SpecValidatiorLogger.Returns(specValidationLogger);
+
+            configWriterLogger = Substitute.For<IConfigWriterEventLogger>();
+
+            specReader = new SpecReader(specReaderLogger);
+            configReader = new ConfigReader(null, configReaderLogger);
+            configWriter = new ConfigWriter(configWriterLogger);
         }
 
         [Test]
@@ -83,6 +94,22 @@ namespace Ini.Test
             Assert.IsTrue(serialized1 == serialized2);
         }
 
-        // TODO: TestDefaultConfig
+        [Test]
+        public void TestDefaultConfiguration()
+        {
+            var specification = specReader.LoadFromFile(Files.YamlSpec);
+            var config = specification.CreateConfigStub(specValidationLogger);
+
+            using (var reader = new StreamReader(Files.DefaultConfig, Encoding.UTF8))
+            using (var writer = new StringWriter())
+            {
+                var correctConfigString = reader.ReadToEnd();
+
+                configWriter.WriteToText(writer, config, new ConfigWriterOptions { Validate = false });
+                var configString = writer.ToString();
+
+                Assert.AreEqual(configString, correctConfigString);
+            }
+        }
     }
 }

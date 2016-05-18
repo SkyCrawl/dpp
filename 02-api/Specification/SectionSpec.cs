@@ -52,13 +52,9 @@ namespace Ini.Specification
         /// <returns></returns>
         public Section CreateSectionStub()
         {
-            Section result = new Section(Identifier);
+            Section result = new Section(Identifier, Description);
             foreach(OptionSpec optionSpec in Options)
             {
-                if(!string.IsNullOrWhiteSpace(optionSpec.Description))
-                {
-                    result.Add(new Commentary(new string[] { optionSpec.Description }));
-                }
                 result.Add(optionSpec.CreateOptionStub());
             }
             return result;

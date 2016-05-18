@@ -48,6 +48,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <None Include="Examples\DefaultConfiguration.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Examples\RelaxedConfiguration.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
