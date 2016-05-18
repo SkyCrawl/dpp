@@ -1,4 +1,8 @@
-# made for Mono and GNU make
+# Made for Mono and GNU make
+# Requirements:
+# - Mono is required to be available on PATH.
+# - The test target requires the "NUC" parameter that specifies NUnitv2.6.4 console runner. E.g.:
+#       make NUC="/path/to/nunit-console.exe" test
 
 MAIN_PROJ = 02-api
 TEST_PROJ = 02-api-test
