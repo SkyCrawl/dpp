@@ -49,6 +49,12 @@
     <None Include="Examples\DefaultConfiguration.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Examples\UnsortedConfiguration.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\SortedConfiguration.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Examples\RelaxedConfiguration.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
