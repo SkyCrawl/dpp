@@ -123,17 +123,6 @@ namespace Ini.Configuration.Values
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Do not use.
-        /// </summary>
-        /// <returns>Nothing.</returns>
-        /// <param name="value">Anything.</param>
-        /// <exception cref="InvalidOperationException">Always.</exception>
-        public void FillFromString(string value)
-        {
-            throw new NotImplementedException();
-        }
-
         #endregion
     }
 }
