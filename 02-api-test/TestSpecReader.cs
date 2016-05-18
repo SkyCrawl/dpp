@@ -8,7 +8,7 @@ using Ini.EventLoggers;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace apitest
+namespace Ini.Test
 {
     [TestFixture]
     public class TestSpecReader
@@ -18,7 +18,7 @@ namespace apitest
 
         SpecReader reader;
 
-        [OneTimeSetUp]
+		[TestFixtureSetUp]
         public void Init()
         {
             specReaderLogger = Substitute.For<ISpecReaderEventLogger>();

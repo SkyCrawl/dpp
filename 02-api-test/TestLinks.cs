@@ -10,7 +10,7 @@ using Ini.EventLoggers;
 using System.Linq;
 using Ini.Configuration.Base;
 
-namespace apitest
+namespace Ini.Test
 {
 	[TestFixture]
 	public class TestLinks
@@ -18,7 +18,7 @@ namespace apitest
 		Config config;
 		Section section;
 
-		[OneTimeSetUp]
+		[TestFixtureSetUp]
 		public void Init()
 		{
 			config = new Config();
@@ -26,7 +26,7 @@ namespace apitest
 			config.Add(section);
 		}
 
-		[Test]
+		[Test, ExpectedException(typeof(LinkCycleException))]
 		public void TestLinkCycleDetected()
 		{
 			section.Clear();
@@ -51,7 +51,7 @@ namespace apitest
 			resolver.AddLink(new LinkNode(link1, new LinkOrigin(section.Identifier, option1.Identifier)));
 			resolver.AddLink(new LinkNode(link2, new LinkOrigin(section.Identifier, option2.Identifier)));
 			resolver.AddLink(new LinkNode(link3, new LinkOrigin(section.Identifier, option3.Identifier)));
-			Assert.Throws(typeof(LinkCycleException), () => resolver.ResolveLinks(config, new ConfigReaderEventLogger(Console.Out)));
+			resolver.ResolveLinks(config, new ConfigReaderEventLogger(Console.Out));
 		}
 
 		[Test]
@@ -63,7 +63,7 @@ namespace apitest
 			Option option2 = new Option("option2", typeof(bool));
 			Option option3 = new Option("option3", typeof(bool));
 
-			BoolValue value1 = new BoolValue(true);
+			ValueStub value1 = new ValueStub(typeof(bool), BoolValue.TrueStrings.Keys.First());
 			InclusionLink link2 = new InclusionLink(typeof(bool), new LinkTarget(section.Identifier, "option1"));
 			InclusionLink link3 = new InclusionLink(typeof(bool), new LinkTarget(section.Identifier, "option2"));
 
@@ -76,8 +76,8 @@ namespace apitest
 			section.Add(option3);
 
 			LinkResolver resolver = new LinkResolver();
-			resolver.AddLink(new LinkNode(link2, new LinkOrigin(section.Identifier, option1.Identifier)));
-			resolver.AddLink(new LinkNode(link3, new LinkOrigin(section.Identifier, option2.Identifier)));
+			resolver.AddLink(new LinkNode(link2, new LinkOrigin(section.Identifier, option2.Identifier)));
+			resolver.AddLink(new LinkNode(link3, new LinkOrigin(section.Identifier, option3.Identifier)));
 			resolver.ResolveLinks(config, new ConfigReaderEventLogger(Console.Out));
 
 			Assert.IsTrue(link3.IsResolved);

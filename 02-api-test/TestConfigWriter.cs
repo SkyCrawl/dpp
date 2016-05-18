@@ -10,7 +10,7 @@ using Ini.Configuration;
 using Ini.Util;
 using System.IO;
 
-namespace apitest
+namespace Ini.Test
 {
     [TestFixture]
     public class TestConfigWriter
@@ -18,7 +18,7 @@ namespace apitest
         ConfigReader reader;
         ConfigWriter writer;
 
-        [OneTimeSetUp]
+		[TestFixtureSetUp]
         public void Init()
         {
             reader = new ConfigReader();
@@ -49,7 +49,7 @@ namespace apitest
         [Test]
         public void TestDefaultConfig()
         {
-            
+            // TODO:
         }
     }
 }

@@ -10,17 +10,17 @@ using Ini.Util;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace apitest
+namespace Ini.Test
 {
     [TestFixture]
-    public class TestConfigReader
+	public class TestConfigReader
     {
         ConfigReader configReader;
         SpecReader specReader;
 
         IConfigValidatorEventLogger configValidationLogger;
 
-        [OneTimeSetUp]
+		[TestFixtureSetUp]
         public void Init()
         {
             configValidationLogger = Substitute.For<IConfigValidatorEventLogger>();
@@ -49,6 +49,7 @@ namespace apitest
         [Test]
         public void TestRelaxedMode()
         {
+			// TODO:
         }
 
         // TODO: test the main exceptions, reading and validation errors
