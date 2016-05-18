@@ -38,7 +38,6 @@ namespace Ini.Test
 			/*
             Config config;
             var spec = specReader.LoadFromFile(Files.YamlSpec);
-            config = configReader.LoadFromFile(Files.StrictConfig, spec, ConfigValidationMode.Strict, Encoding.UTF8);
             var loadSuccess = configReader.TryLoadFromFile(Files.StrictConfig, out config, spec, ConfigValidationMode.Strict, Encoding.UTF8);
 
             Assert.IsTrue(loadSuccess);
