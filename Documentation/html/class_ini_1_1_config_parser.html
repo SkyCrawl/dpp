@@ -152,12 +152,15 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:ac43a8acb752cc50eeef786cdcdab7336"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ini_1_1_config_parser.html#ac43a8acb752cc50eeef786cdcdab7336">ParseLines</a> ()</td></tr>
 <tr class="memdesc:ac43a8acb752cc50eeef786cdcdab7336"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse the whole input into <a class="el" href="class_ini_1_1_config_parser.html#a5553965440c164bad183b825cbead79b" title="The configuration being parsed. ">config</a> while also filling up <a class="el" href="class_ini_1_1_config_parser.html#af7179567b25aab52d32cf644b833acf9" title="Link resolver to use when parsing the configuration. ">linkResolver</a>.  <a href="#ac43a8acb752cc50eeef786cdcdab7336">More...</a><br /></td></tr>
 <tr class="separator:ac43a8acb752cc50eeef786cdcdab7336"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af02cb8bcb6f604f8e981648e8859e6fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ini_1_1_config_parser.html#af02cb8bcb6f604f8e981648e8859e6fc">ParseSectionHeader</a> (<a class="el" href="class_ini_1_1_config_parser_1_1_parser_context.html">ParserContext</a> <a class="el" href="class_ini_1_1_config_parser.html#a5b0c838a0aabe479ca3ba03d37227142">context</a>, <a class="el" href="class_ini_1_1_config_parser_1_1_line_info.html">LineInfo</a> lineInfo)</td></tr>
-<tr class="memdesc:af02cb8bcb6f604f8e981648e8859e6fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse the current line as a section header.  <a href="#af02cb8bcb6f604f8e981648e8859e6fc">More...</a><br /></td></tr>
-<tr class="separator:af02cb8bcb6f604f8e981648e8859e6fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2914857b8a6372a8d80c056c9c6468af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ini_1_1_config_parser.html#a2914857b8a6372a8d80c056c9c6468af">ParseOption</a> (<a class="el" href="class_ini_1_1_config_parser_1_1_parser_context.html">ParserContext</a> <a class="el" href="class_ini_1_1_config_parser.html#a5b0c838a0aabe479ca3ba03d37227142">context</a>, <a class="el" href="class_ini_1_1_config_parser_1_1_line_info.html">LineInfo</a> lineInfo)</td></tr>
-<tr class="memdesc:a2914857b8a6372a8d80c056c9c6468af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse the current line as an option.  <a href="#a2914857b8a6372a8d80c056c9c6468af">More...</a><br /></td></tr>
-<tr class="separator:a2914857b8a6372a8d80c056c9c6468af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39d31d653f84b7a930974d5ded27d834"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ini_1_1_config_parser.html#a39d31d653f84b7a930974d5ded27d834">ParseSectionHeader</a> (<a class="el" href="class_ini_1_1_config_parser_1_1_parser_context.html">ParserContext</a> <a class="el" href="class_ini_1_1_config_parser.html#a5b0c838a0aabe479ca3ba03d37227142">context</a>, <a class="el" href="class_ini_1_1_config_parser_1_1_line_info.html">LineInfo</a> lineInfo, List&lt; string &gt; leadingComments)</td></tr>
+<tr class="memdesc:a39d31d653f84b7a930974d5ded27d834"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse the current line as a section header.  <a href="#a39d31d653f84b7a930974d5ded27d834">More...</a><br /></td></tr>
+<tr class="separator:a39d31d653f84b7a930974d5ded27d834"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23f419acdbe2ab4a97be34c7144e1196"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ini_1_1_config_parser.html#a23f419acdbe2ab4a97be34c7144e1196">HandleCommentBetweenSections</a> (<a class="el" href="class_ini_1_1_config_parser_1_1_parser_context.html">ParserContext</a> <a class="el" href="class_ini_1_1_config_parser.html#a5b0c838a0aabe479ca3ba03d37227142">context</a>, List&lt; string &gt; comments)</td></tr>
+<tr class="memdesc:a23f419acdbe2ab4a97be34c7144e1196"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves comments that are between sections. The method assumes, that empty line separates comments for previous section.  <a href="#a23f419acdbe2ab4a97be34c7144e1196">More...</a><br /></td></tr>
+<tr class="separator:a23f419acdbe2ab4a97be34c7144e1196"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7166840b1c18bb04d24528aa641c29e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ini_1_1_config_parser.html#af7166840b1c18bb04d24528aa641c29e">ParseOption</a> (<a class="el" href="class_ini_1_1_config_parser_1_1_parser_context.html">ParserContext</a> <a class="el" href="class_ini_1_1_config_parser.html#a5b0c838a0aabe479ca3ba03d37227142">context</a>, <a class="el" href="class_ini_1_1_config_parser_1_1_line_info.html">LineInfo</a> lineInfo, List&lt; string &gt; leadingComments)</td></tr>
+<tr class="memdesc:af7166840b1c18bb04d24528aa641c29e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse the current line as an option.  <a href="#af7166840b1c18bb04d24528aa641c29e">More...</a><br /></td></tr>
+<tr class="separator:af7166840b1c18bb04d24528aa641c29e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1331dade2fdee6be4d2d6dc88ef7b69"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ini_1_1_config_parser.html#ae1331dade2fdee6be4d2d6dc88ef7b69">ParseElements</a> (<a class="el" href="class_ini_1_1_config_parser_1_1_parser_context.html">ParserContext</a> <a class="el" href="class_ini_1_1_config_parser.html#a5b0c838a0aabe479ca3ba03d37227142">context</a>, <a class="el" href="class_ini_1_1_config_parser_1_1_line_info.html">LineInfo</a> lineInfo, <a class="el" href="class_ini_1_1_configuration_1_1_option.html">Option</a> option, string element)</td></tr>
 <tr class="memdesc:ae1331dade2fdee6be4d2d6dc88ef7b69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse the given option's value, identify links and create/register value stubs.  <a href="#ae1331dade2fdee6be4d2d6dc88ef7b69">More...</a><br /></td></tr>
 <tr class="separator:ae1331dade2fdee6be4d2d6dc88ef7b69"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -226,6 +229,49 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a23f419acdbe2ab4a97be34c7144e1196"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ini.ConfigParser.HandleCommentBetweenSections </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ini_1_1_config_parser_1_1_parser_context.html">ParserContext</a>&#160;</td>
+          <td class="paramname"><em>context</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">List&lt; string &gt;&#160;</td>
+          <td class="paramname"><em>comments</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Saves comments that are between sections. The method assumes, that empty line separates comments for previous section. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">context</td><td>The parsing context.</td></tr>
+    <tr><td class="paramname">comments</td><td>The list of comments.</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a81ccc45da5e0b28a6c9aa4e356795c02"></a>
 <div class="memitem">
 <div class="memproto">
@@ -385,7 +431,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a2914857b8a6372a8d80c056c9c6468af"></a>
+<a class="anchor" id="af7166840b1c18bb04d24528aa641c29e"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -402,7 +448,13 @@ Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="class_ini_1_1_config_parser_1_1_line_info.html">LineInfo</a>&#160;</td>
-          <td class="paramname"><em>lineInfo</em>&#160;</td>
+          <td class="paramname"><em>lineInfo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">List&lt; string &gt;&#160;</td>
+          <td class="paramname"><em>leadingComments</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -422,13 +474,14 @@ Protected Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">context</td><td>Parsing context.</td></tr>
     <tr><td class="paramname">lineInfo</td><td>Information about the current line.</td></tr>
+    <tr><td class="paramname">leadingComments</td><td>The leading commentary.</td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a class="anchor" id="af02cb8bcb6f604f8e981648e8859e6fc"></a>
+<a class="anchor" id="a39d31d653f84b7a930974d5ded27d834"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -445,7 +498,13 @@ Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="class_ini_1_1_config_parser_1_1_line_info.html">LineInfo</a>&#160;</td>
-          <td class="paramname"><em>lineInfo</em>&#160;</td>
+          <td class="paramname"><em>lineInfo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">List&lt; string &gt;&#160;</td>
+          <td class="paramname"><em>leadingComments</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -465,6 +524,7 @@ Protected Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">context</td><td>Parsing context.</td></tr>
     <tr><td class="paramname">lineInfo</td><td>Information about the current line.</td></tr>
+    <tr><td class="paramname">leadingComments</td><td>The leading commentary.</td></tr>
   </table>
   </dd>
 </dl>
