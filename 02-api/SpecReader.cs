@@ -2,10 +2,9 @@
 using System.IO;
 using System.Text;
 using Ini.EventLoggers;
-using Ini.Specification;
-using YamlDotNet.Core.Events;
-using YamlDotNet.Serialization;
 using Ini.Exceptions;
+using Ini.Specification;
+using YamlDotNet.Serialization;
 
 namespace Ini
 {

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Ini.EventLoggers;
+﻿using System.Collections.Generic;
 using Ini.Configuration;
+using Ini.EventLoggers;
 using YamlDotNet.Serialization;
-using System.Linq;
 
 namespace Ini.Specification
 {
@@ -57,6 +55,10 @@ namespace Ini.Specification
             {
                 result.Add(optionSpec.CreateOptionStub());
             }
+
+            // New line after each section.
+            result.Add(new Commentary(new string[] { string.Empty }));
+
             return result;
         }
 

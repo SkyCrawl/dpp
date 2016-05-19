@@ -1,17 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using Ini.EventLoggers;
 using Ini.Configuration;
+using Ini.Configuration.Base;
+using Ini.Configuration.Values;
+using Ini.Configuration.Values.Links;
+using Ini.EventLoggers;
+using Ini.Exceptions;
 using Ini.Specification;
 using Ini.Util;
-using Ini.Exceptions;
-using Ini.Configuration.Values;
 using Ini.Util.LinkResolving;
-using Ini.Configuration.Values.Links;
-using Ini.Configuration.Base;
 
 namespace Ini
 {
@@ -385,35 +384,18 @@ namespace Ini
                 if(string.IsNullOrEmpty(lineInfo.Line)) // this assumes that LineInfo trims whitespaces by itself
                 {
                     // comments or empty lines must be saved for later
-                    filler.Add(lineInfo.TrailingCommentary == null ? "" : lineInfo.TrailingCommentary);
+                    filler.Add(lineInfo.TrailingCommentary == null ? string.Empty : lineInfo.TrailingCommentary);
                 }
                 else
                 {
-                    // first register the saved comments or empty lines, if needed
-                    if(filler.Count > 0)
-                    {
-                        // must save into the appropriate context
-                        if(context.CurrentSection != null)
-                        {
-                            context.CurrentSection.Add(new Commentary(filler));
-                        }
-                        else
-                        {
-                            config.Add(new Commentary(filler));
-                        }
-
-                        // filler has been saved, so clear
-                        filler.Clear();
-                    }
-
                     // and then continue parsing
                     if(lineInfo.IsSection)
                     {
-                        ParseSectionHeader(context, lineInfo);
+                        ParseSectionHeader(context, lineInfo, filler);
                     }
                     else if(IniSyntax.LineMatches(lineInfo.Line, Ini.IniSyntax.LineContent.OPTION))
                     {
-                        ParseOption(context, lineInfo);
+                        ParseOption(context, lineInfo, filler);
                     }
                     else
                     {
@@ -425,6 +407,9 @@ namespace Ini
                     }
                 }
             }
+
+            // first register the saved comments or empty lines, if needed
+            HandleCommentBetweenSections(context, filler);
         }
 
         /// <summary>
@@ -432,7 +417,8 @@ namespace Ini
         /// </summary>
         /// <param name="context">Parsing context.</param>
         /// <param name="lineInfo">Information about the current line.</param>
-        protected void ParseSectionHeader(ParserContext context, LineInfo lineInfo)
+        /// <param name="leadingComments">The leading commentary.</param>
+        protected void ParseSectionHeader(ParserContext context, LineInfo lineInfo, List<string> leadingComments)
         {
             string identifier = IniSyntax.ExtractSectionId(lineInfo.Line);
             SectionSpec sectionSpec = validationMode == ConfigValidationMode.Strict ? specification.GetSection(identifier) : null;
@@ -456,9 +442,62 @@ namespace Ini
             else
             {
                 Section newSection = new Section(identifier, lineInfo.TrailingCommentary, lineInfo.TrailingCommantaryPosition);
+
+                // first register the saved comments or empty lines, if needed
+                HandleCommentBetweenSections(context, leadingComments);
+
                 config.Add(newSection);
                 context.CurrentSection = newSection;
             }
+        }
+
+        /// <summary>
+        /// Saves comments that are between sections. The method assumes, that empty line separates comments for previous section.
+        /// </summary>
+        /// <param name="context">The parsing context.</param>
+        /// <param name="comments">The list of comments.</param>
+        protected void HandleCommentBetweenSections(ParserContext context, List<string> comments)
+        {
+            if (comments.Count == 0)
+                return;
+
+            // There are no existing sections in the configuration.
+            if (context.CurrentSection == null)
+            {
+                config.Add(new Commentary(comments));
+                return;
+            }
+
+            IEnumerable<string> oldSectionComments;
+            IEnumerable<string> newSectionComments;
+
+            // we assume, that empty line separates comments for previous section
+            var lastEmptyLineIndex = comments.FindLastIndex(item => item == string.Empty);
+            if (lastEmptyLineIndex >= 0)
+            {
+                oldSectionComments = comments.Take(lastEmptyLineIndex + 1);
+                newSectionComments = comments.Skip(lastEmptyLineIndex + 1);
+            }
+            else
+            {
+                oldSectionComments = new string[0];
+                newSectionComments = comments;
+            }
+
+            // Save comments for the previous section
+            if (oldSectionComments.Any())
+            {
+                context.CurrentSection.Add(new Commentary(oldSectionComments));
+            }
+
+            // Save comments for the new section
+            if (newSectionComments.Any())
+            {
+                config.Add(new Commentary(newSectionComments));
+            }
+
+            // comments has been saved, so clear
+            comments.Clear();
         }
 
         /// <summary>
@@ -466,7 +505,8 @@ namespace Ini
         /// </summary>
         /// <param name="context">Parsing context.</param>
         /// <param name="lineInfo">Information about the current line.</param>
-        protected void ParseOption(ParserContext context, LineInfo lineInfo)
+        /// <param name="leadingComments">The leading commentary.</param>
+        protected void ParseOption(ParserContext context, LineInfo lineInfo, List<string> leadingComments)
         {
             // extract components, throwing exceptions if the syntax doesn't match
             string identifier, valueSeparator, value;
@@ -497,6 +537,14 @@ namespace Ini
                     {
                         optionType = optionSpec.GetValueType();
                     }
+                }
+
+                // first register the saved comments or empty lines, if needed
+                if (leadingComments.Count > 0)
+                {
+                    context.CurrentSection.Add(new Commentary(leadingComments));
+                    // comments has been saved, so clear
+                    leadingComments.Clear();
                 }
 
                 // now we can create and register a new option, and parse the value

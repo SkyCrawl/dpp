@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Ini.Util
+﻿namespace Ini.Util
 {
     /// <summary>
     /// The supported number bases and respective prefixes.

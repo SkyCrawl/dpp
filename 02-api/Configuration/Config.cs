@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
-using Ini.EventLoggers;
-using Ini.Specification;
-using Ini.Util;
-using Ini.Exceptions;
 using Ini.Configuration.Base;
 using Ini.Configuration.Values;
-using System.IO;
+using Ini.EventLoggers;
+using Ini.Exceptions;
+using Ini.Specification;
+using Ini.Util;
 
 namespace Ini.Configuration
 {
@@ -220,18 +219,20 @@ namespace Ini.Configuration
 
         /// <summary>
         /// Gets the specified option's collection of elements.
+        /// Dynamically creates the option, if it is in specification, but not in configuration.
         /// </summary>
         /// <returns>The collection of elements, or null if not found.</returns>
         /// <param name="sectionIdentifier">Target section identifier.</param>
         /// <param name="optionIdentifier">Target option identifier.</param>
-        public ObservableList<IElement> GetElements(string sectionIdentifier, string optionIdentifier)
+        public IList<IElement> GetElements(string sectionIdentifier, string optionIdentifier)
         {
-            Section section = GetSection(sectionIdentifier);
-            return section != null ? section.GetElements(optionIdentifier) : null;
+            var option = GetOptionInternal(sectionIdentifier, optionIdentifier);
+            return option != null ? option.Elements : null;
         }
 
         /// <summary>
         /// Gets the specified option's element, with the specified index.
+        /// Dynamically creates the option, if it is in specification, but not in configuration.
         /// </summary>
         /// <returns>The element, or null if not found.</returns>
         /// <param name="sectionIdentifier">Target section identifier.</param>
@@ -239,12 +240,13 @@ namespace Ini.Configuration
         /// <param name="elementIndex">Target element index.</param>
         public IElement GetElement(string sectionIdentifier, string optionIdentifier, int elementIndex)
         {
-            Section section = GetSection(sectionIdentifier);
-            return section != null ? section.GetElement(optionIdentifier, elementIndex) : null;
+            var option = GetOptionInternal(sectionIdentifier, optionIdentifier);
+            return option != null ? option.GetElement(elementIndex) : null;
         }
 
         /// <summary>
         /// Gets the specified option's element (correctly typed), with the specified index.
+        /// Dynamically creates the option, if it is in specification, but not in configuration.
         /// </summary>
         /// <returns>The element, or null if not found.</returns>
         /// <param name="sectionIdentifier">Target section identifier.</param>
@@ -253,12 +255,13 @@ namespace Ini.Configuration
         /// <exception cref="InvalidCastException">If the specified type was not correct.</exception>
         public T GetElement<T>(string sectionIdentifier, string optionIdentifier, int elementIndex) where T : IValue
         {
-            Section section = GetSection(sectionIdentifier);
-            return section != null ? section.GetElement<T>(optionIdentifier, elementIndex) : default(T);
+            var option = GetOptionInternal(sectionIdentifier, optionIdentifier);
+            return option != null ? option.GetElement<T>(elementIndex) : default(T);
         }
 
         /// <summary>
         /// Gets the specified option's and element's value, correctly typed.
+        /// Dynamically creates the option, if it is in specification, but not in configuration.
         /// </summary>
         /// <returns>The value.</returns>
         /// <param name="sectionIdentifier">Target section identifier.</param>
@@ -271,19 +274,20 @@ namespace Ini.Configuration
         /// <see cref="IElement"/>.</exception>
         public OutputType GetValue<OutputType>(string sectionIdentifier, string optionIdentifier, int elementIndex)
         {
-            Section section = GetSection(sectionIdentifier);
-            if(section == null)
+            var option = GetOptionInternal(sectionIdentifier, optionIdentifier);
+            if (option == null)
             {
                 throw new IndexOutOfRangeException();
             }
             else
             {
-                return section.GetValue<OutputType>(optionIdentifier, elementIndex);
+                return option.GetValue<OutputType>(elementIndex);
             }
         }
 
         /// <summary>
         /// Converts the specified option's elements into a collection of value (<see cref="IValue"/>) objects.
+        /// Dynamically creates the option, if it is in specification, but not in configuration.
         /// </summary>
         /// <param name="sectionIdentifier">Target section identifier.</param>
         /// <param name="optionIdentifier">Target option identifier.</param>
@@ -291,12 +295,13 @@ namespace Ini.Configuration
         /// <returns>The collection.</returns>
         public IList<IValue> GetObjectValues(string sectionIdentifier, string optionIdentifier)
         {
-            Section section = GetSection(sectionIdentifier);
-            return section != null ? section.GetObjectValues(optionIdentifier) : null;
+            var option = GetOptionInternal(sectionIdentifier, optionIdentifier);
+            return option != null ? option.GetObjectValues() : null;
         }
 
         /// <summary>
         /// Converts the specified option's elements into an array of elementary values.
+        /// Dynamically creates the option, if it is in specification, but not in configuration.
         /// </summary>
         /// <returns>The array.</returns>
         /// <typeparam name="OutputType">The correct type.</typeparam>
@@ -305,6 +310,24 @@ namespace Ini.Configuration
         public OutputType[] GetValues<OutputType>(string sectionIdentifier, string optionIdentifier)
         {
             return GetObjectValues(sectionIdentifier, optionIdentifier).GetValues<OutputType>();
+        }
+
+        Option GetOptionInternal(string sectionIdentifier, string optionIdentifier)
+        {
+            var section = GetSection(sectionIdentifier);
+            var result = section != null ? section.GetOption(optionIdentifier) : null;
+
+            // Options that are not mandatory can be created dynamically.
+            if (result == null && Spec != null)
+            {
+                var specOption = Spec.GetOption(sectionIdentifier, optionIdentifier);
+                if (specOption != null && !specOption.IsMandatory)
+                {
+                    result = specOption.CreateOptionStub();
+                }
+            }
+
+            return result;
         }
 
         #endregion
@@ -452,19 +475,8 @@ namespace Ini.Configuration
             }
             else
             {
-                var firstSection = true;
-
                 foreach(ConfigBlockBase item in Items.ReorderBlocks(Spec == null ? null : Spec.Sections, options.SectionSortOrder))
                 {
-                    if (firstSection)
-                    {
-                        firstSection = false;
-                    }
-                    else
-                    {
-                        writer.WriteLine();
-                    }
-
                     item.SerializeSelf(writer, options, Spec == null ? null : Spec.GetSection(item.Identifier), this);
                 }
             }

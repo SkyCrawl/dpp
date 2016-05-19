@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ini;
-using Ini.EventLoggers;
+﻿using Ini.EventLoggers;
 using Ini.Specification.Values;
 using NSubstitute;
 using NUnit.Framework;

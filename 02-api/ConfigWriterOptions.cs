@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Ini.Util;
+﻿using Ini.Util;
 
 namespace Ini
 {

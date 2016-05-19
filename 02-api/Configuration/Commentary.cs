@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using Ini.Util.Guid;
-using Ini.Configuration.Base;
 using System.IO;
+using Ini.Configuration.Base;
 using Ini.Specification;
-using Ini.Util;
+using Ini.Util.Guid;
 
 namespace Ini.Configuration
 {

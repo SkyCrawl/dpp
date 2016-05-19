@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Ini;
-using Ini.Configuration.Base;
-
-namespace Ini.EventLoggers
+﻿namespace Ini.EventLoggers
 {
     /// <summary>
     /// Interface that defines events for configuration writing.

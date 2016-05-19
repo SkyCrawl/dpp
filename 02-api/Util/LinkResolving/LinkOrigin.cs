@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Ini.Util.LinkResolving
+﻿namespace Ini.Util.LinkResolving
 {
 	/// <summary>
 	/// The complete configuration location where the link originated.

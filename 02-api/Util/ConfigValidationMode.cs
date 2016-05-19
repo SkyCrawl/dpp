@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Ini.Util
+﻿namespace Ini.Util
 {
     /// <summary>
     /// Validation mode for configurations.

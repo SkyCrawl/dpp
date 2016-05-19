@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Ini.EventLoggers;
-using Ini.Specification;
-using Ini.Util;
-
-namespace Ini.Configuration.Base
+﻿namespace Ini.Configuration.Base
 {
     /// <summary>
     /// Interface for an option's value.

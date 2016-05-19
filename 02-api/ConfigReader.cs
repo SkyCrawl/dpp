@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Ini.Configuration;
-using Ini.Specification;
 using Ini.EventLoggers;
-using Ini.Util;
 using Ini.Exceptions;
+using Ini.Specification;
+using Ini.Util;
 
 namespace Ini
 {

@@ -73,6 +73,12 @@ sections:
     identifier: float4
     mandatory: true
     single_value: true
+  - !Float
+    identifier: float5
+    mandatory: false
+    single_value: true
+    default_values:
+    - 0.5
 - identifier: Other
   mandatory: true
   description: the purpose of Other

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Ini.Util.LinkResolving
+﻿namespace Ini.Util.LinkResolving
 {
     /// <summary>
     /// Represents a configuration location and defines its index (key).

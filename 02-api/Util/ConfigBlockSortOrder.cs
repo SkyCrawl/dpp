@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Ini.Util
+﻿namespace Ini.Util
 {
     /// <summary>
     /// The identifier-based sort order to apply before saving a configuration.

@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ini;
-using Ini.EventLoggers;
-using NUnit.Framework;
-using Ini.Configuration;
-using Ini.Util;
 using System.IO;
-using NSubstitute;
+using System.Text;
+using Ini.Configuration;
+using Ini.EventLoggers;
 using Ini.Specification;
+using Ini.Util;
+using NSubstitute;
+using NUnit.Framework;
 
 namespace Ini.Test
 {
@@ -46,7 +42,7 @@ namespace Ini.Test
         [Test]
         public void TestChainedIOWithRelaxedMode()
         {
-			// prepare writer options
+            // prepare writer options
             ConfigWriterOptions options = new ConfigWriterOptions();
             options.Validate = false;
 
@@ -98,11 +94,11 @@ namespace Ini.Test
         public void TestSorting()
         {
             // Load correct sorted result
-            var correctConfigString = LoadFileToString(Files.SortedConfig);
+            var correctConfigString = LoadFileToString(Files.SortedConfig).Trim();
 
             // Load specification and unsorted configuration
             ConfigSpec specification = specReader.LoadFromFile(Files.YamlSpec);
-            Config config = configReader.LoadFromFile(Files.UnsortedConfig, specification, ConfigValidationMode.Strict, Encoding.UTF8);
+            Config config = configReader.LoadFromFile(Files.UnsortedConfig, specification, ConfigValidationMode.Relaxed, Encoding.UTF8);
 
             using (var writer = new StringWriter())
             {
@@ -114,7 +110,7 @@ namespace Ini.Test
                 };
 
                 configWriter.WriteToText(writer, config, options);
-                var configString = writer.ToString();
+                var configString = writer.ToString().Trim();
 
                 Assert.AreEqual(configString, correctConfigString);
             }
@@ -124,7 +120,7 @@ namespace Ini.Test
         public void TestDefaultConfiguration()
         {
             // Load correct default configuration as string
-            var correctConfigString = LoadFileToString(Files.DefaultConfig);
+            var correctConfigString = LoadFileToString(Files.DefaultConfig).Trim();
 
             // Load specification and create default configuration
             var specification = specReader.LoadFromFile(Files.YamlSpec);
@@ -134,7 +130,7 @@ namespace Ini.Test
             using (var writer = new StringWriter())
             {
                 configWriter.WriteToText(writer, config, new ConfigWriterOptions { Validate = false });
-                var configString = writer.ToString();
+                var configString = writer.ToString().Trim();
 
                 Assert.AreEqual(configString, correctConfigString);
             }

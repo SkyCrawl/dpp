@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Ini.Util.Guid
+﻿namespace Ini.Util.Guid
 {
 	/// <summary>
 	/// General interface to create unique identifiers.

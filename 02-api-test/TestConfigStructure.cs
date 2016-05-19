@@ -1,12 +1,12 @@
 ﻿using System;
-using Ini.Configuration;
-using NUnit.Framework;
-using Ini.Exceptions;
 using System.Collections.Generic;
+using System.Linq;
+using Ini.Configuration;
 using Ini.Configuration.Base;
 using Ini.Configuration.Values;
-using System.Linq;
+using Ini.Exceptions;
 using Ini.Util;
+using NUnit.Framework;
 
 namespace Ini.Test
 {
@@ -183,6 +183,25 @@ namespace Ini.Test
 
             value.FillFromString("0b101");
             Assert.AreEqual(value.Base, NumberBase.BINARY);
+        }
+
+        [Test]
+        public void TestEnum()
+        {
+            var valueToTest = "Value2";
+            EnumValue value = new EnumValue(null);
+
+            value.FillFromString(valueToTest);
+
+            Assert.AreEqual(value.ToOutputString(null), valueToTest);
+            Assert.AreEqual(value.GetEnumValue<Values>(), Values.Value2);
+        }
+
+        enum Values
+        {
+            Value1,
+            Value2,
+            Value3
         }
     }
 }

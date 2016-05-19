@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ini;
+﻿using System.Text;
 using Ini.Configuration;
 using Ini.EventLoggers;
 using Ini.Util;
 using NSubstitute;
 using NUnit.Framework;
-using System.Globalization;
 
 namespace Ini.Test
 {
@@ -41,6 +35,7 @@ namespace Ini.Test
 
             Assert.IsNotNull(config);
             Assert.IsTrue(config.IsValid(ConfigValidationMode.Strict, configValidationLogger));
+            Assert.AreEqual(config.GetValue<double>("Cisla", "float5", 0), 0.5);
         }
 
         [Test]

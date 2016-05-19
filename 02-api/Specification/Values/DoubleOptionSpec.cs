@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Ini.EventLoggers;
+﻿using Ini.EventLoggers;
 using YamlDotNet.Serialization;
 
 namespace Ini.Specification.Values

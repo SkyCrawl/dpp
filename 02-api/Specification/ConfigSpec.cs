@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Ini.Configuration;
 using Ini.EventLoggers;
 using Ini.Exceptions;
 using YamlDotNet.Serialization;
-using System.Linq;
 
 namespace Ini.Specification
 {

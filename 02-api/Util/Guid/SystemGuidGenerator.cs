@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Ini.Util.Guid
+﻿namespace Ini.Util.Guid
 {
 	/// <summary>
 	/// Unique identifier generator using the system GUID.

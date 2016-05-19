@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using YamlDotNet.Serialization;
-using YamlDotNet.Core.Events;
-using Ini.Specification.Values;
 using Ini.Specification;
+using Ini.Specification.Values;
+using YamlDotNet.Core.Events;
+using YamlDotNet.Serialization;
 
 namespace Ini
 {

@@ -1,14 +1,13 @@
 ﻿using System;
-using NUnit.Framework;
+using System.Linq;
 using Ini.Configuration;
-using Ini.Util.Guid;
+using Ini.Configuration.Base;
 using Ini.Configuration.Values;
 using Ini.Configuration.Values.Links;
-using Ini.Util.LinkResolving;
-using Ini.Exceptions;
 using Ini.EventLoggers;
-using System.Linq;
-using Ini.Configuration.Base;
+using Ini.Exceptions;
+using Ini.Util.LinkResolving;
+using NUnit.Framework;
 
 namespace Ini.Test
 {

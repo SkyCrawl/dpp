@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Ini.EventLoggers;
-
-namespace Ini.Specification.Values
+﻿namespace Ini.Specification.Values
 {
     /// <summary>
     /// The definition for a boolean option.
     /// </summary>
-    public class BooleanOptionSpec : OptionSpec<bool>
-    {
-    }
+    public class BooleanOptionSpec : OptionSpec<bool> { }
 }

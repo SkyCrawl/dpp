@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Ini.Configuration.Base;
 using Ini.EventLoggers;
 using Ini.Specification;
 using Ini.Util;
-using Ini.Configuration.Base;
-using Ini.Specification.Values;
-using System.Linq;
 
 namespace Ini.Configuration.Values
 {

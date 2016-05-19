@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Ini.Specification;
-
-namespace Ini.EventLoggers
+﻿namespace Ini.EventLoggers
 {
     /// <summary>
     /// Interface that defines events for specification validation.

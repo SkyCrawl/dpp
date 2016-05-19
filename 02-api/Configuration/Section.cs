@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Ini.EventLoggers;
-using Ini.Specification;
-using Ini.Util;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using Ini.Exceptions;
+using System.IO;
+using System.Linq;
 using Ini.Configuration.Base;
 using Ini.Configuration.Values;
-using System.IO;
+using Ini.EventLoggers;
+using Ini.Exceptions;
+using Ini.Specification;
+using Ini.Util;
 
 namespace Ini.Configuration
 {
@@ -379,7 +378,7 @@ namespace Ini.Configuration
             writer.WriteLine(IniSyntax.SerializeCommentary(TrailingCommentary, commentarySpacesCount > 1 ? commentarySpacesCount : 1));
 
             // and then inner options
-            foreach(ConfigBlockBase item in Items.ReorderBlocks(sectionSpecification == null ? null : sectionSpecification.Options, options.SectionSortOrder))
+            foreach(ConfigBlockBase item in Items.ReorderBlocks(sectionSpecification == null ? null : sectionSpecification.Options, options.OptionSortOrder))
             {
                 item.SerializeSelf(writer, options, sectionSpecification, config);
             }

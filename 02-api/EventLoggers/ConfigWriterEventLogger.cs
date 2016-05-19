@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Ini.Configuration.Base;
+﻿using System.IO;
 using Ini.Properties;
 
 namespace Ini.EventLoggers

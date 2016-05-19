@@ -1,7 +1,6 @@
-﻿using System;
-using System.IO;
-using Ini.EventLoggers;
+﻿using System.IO;
 using Ini.Configuration;
+using Ini.EventLoggers;
 using Ini.Specification;
 using Ini.Util;
 

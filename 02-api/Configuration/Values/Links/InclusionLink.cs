@@ -1,16 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using Ini.Configuration;
 using Ini.Configuration.Base;
-using Ini.Specification;
 using Ini.EventLoggers;
-using Ini.Util.LinkResolving;
-using Ini.Util;
-using Ini.Configuration.Values;
 using Ini.Exceptions;
-using System.Collections;
+using Ini.Specification;
+using Ini.Util;
+using Ini.Util.LinkResolving;
 
 namespace Ini.Configuration.Values.Links
 {
@@ -166,11 +164,11 @@ namespace Ini.Configuration.Values.Links
         {
             if (IsTargetDifferentFromInnerValues(config))
             {
-                return IniSyntax.SerializeLink(Target);
+                return IniSyntax.SerializeElements(Values, config);
             }
             else
             {
-                return IniSyntax.SerializeElements(Values, config);
+                return IniSyntax.SerializeLink(Target);
             }
         }
 
@@ -206,7 +204,7 @@ namespace Ini.Configuration.Values.Links
                 IEnumerator<IValue> targetValue = targetValues.GetEnumerator();
                 while (targetValue.MoveNext() && thisValue.MoveNext())
                 {
-                    if(!targetValue.Current.GetValue<object>().Equals(thisValue.Current.GetValue<object>()))
+                    if(targetValue.Current.ToOutputString(null) != thisValue.Current.ToOutputString(null))
                     {
                         return true;
                     }

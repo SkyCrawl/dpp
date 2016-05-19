@@ -1,6 +1,5 @@
-﻿using Ini.Specification;
-using System;
-using System.IO;
+﻿using System.IO;
+using Ini.Specification;
 
 namespace Ini.Configuration.Base
 {

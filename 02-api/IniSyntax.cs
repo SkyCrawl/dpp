@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
-using Ini.Configuration.Base;
-using Ini.Configuration;
-using Ini.Util.LinkResolving;
 using System.Text;
+using System.Text.RegularExpressions;
+using Ini.Configuration;
+using Ini.Configuration.Base;
+using Ini.Util.LinkResolving;
 
 namespace Ini
 {
@@ -104,7 +104,7 @@ namespace Ini
         public static string ExtractSectionId(string line)
         {
             line = TrimWhitespaces(line);
-            if(LineMatches(line, LineContent.SECTION_HEADER))
+            if (LineMatches(line, LineContent.SECTION_HEADER))
             {
                 return TrimWhitespaces(line.Substring(1, line.Length - 2));
             }
@@ -126,14 +126,19 @@ namespace Ini
         /// <exception cref="ArgumentException">If the input line doesn't match option syntax or it defines an empty identifier.</exception>
         public static void ExtractOptionComponents(string line, out string identifier, out string separator, out string value)
         {
+            if (line.Contains(':'))
+            {
+
+            }
+
             line = TrimWhitespaces(line);
             Match match = Regex.Match(line, LINE_REGEX_OPTION);
-            if(match.Success)
+            if (match.Success)
             {
                 identifier = TrimTrailingWhitespaces(match.Groups[1].Value); // the specification tells us to do so
-                separator = match.Groups[2].Value.Contains(SECONDARY_ELEMENT_SEPARATOR) ? SECONDARY_ELEMENT_SEPARATOR : PRIMARY_ELEMENT_SEPARATOR;
+                separator = match.Groups[3].Value.Contains(PRIMARY_ELEMENT_SEPARATOR) ? PRIMARY_ELEMENT_SEPARATOR : SECONDARY_ELEMENT_SEPARATOR;
                 value = match.Groups[3].Value; // must not explicitly trim leading whitespaces of a value
-                if(string.IsNullOrEmpty(identifier))
+                if (string.IsNullOrEmpty(identifier))
                 {
                     throw new ArgumentException("Library specification states that identifiers must not be empty.");
                 }
@@ -157,17 +162,22 @@ namespace Ini
 
             // iterate through all occurrences of the element separator (if unescaped)
             int elementStartIndex = 0;
-            foreach(Match elementMatch in Regex.Matches(value, UnescapedTokenRegex(separator)))
+            foreach (Match elementMatch in Regex.Matches(value, UnescapedTokenRegex(separator)))
             {
                 string element = value.Substring(elementStartIndex, elementMatch.Index - elementStartIndex);
+                element = UnescapeElement(TrimWhitespaces(element));
+
                 result.Add(element);
                 elementStartIndex = elementMatch.Index + separator.Length;
             }
 
             // and the remainder
-            if(elementStartIndex < value.Length)
+            if (elementStartIndex < value.Length)
             {
-                result.Add(value.Substring(elementStartIndex, value.Length - elementStartIndex));
+                string element = value.Substring(elementStartIndex, value.Length - elementStartIndex);
+                element = UnescapeElement(TrimWhitespaces(element));
+
+                result.Add(element);
             }
 
             // and return
@@ -185,7 +195,7 @@ namespace Ini
         {
             // content must not be empty because identifiers must not be empty as well
             Match match = Regex.Match(TrimWhitespaces(link), UnescapedTokenRegex(LINK_REGEX));
-            if(match.Success)
+            if (match.Success)
             {
                 // use the first capture group to fetch the link's content
                 return match.Groups[1].Value.Split(LINK_IDENTIFIER_SEPARATOR);
@@ -209,7 +219,7 @@ namespace Ini
         {
             // match the first semicolon that is not preceded by an escape sequence
             Match match = Regex.Match(line, UnescapedTokenRegex(COMMENTARY_SEPARATOR));
-            if(match.Success)
+            if (match.Success)
             {
                 commentary = TrimLeadingWhitespaces(line.Substring(match.Index + 1, line.Length - match.Index - 1));
                 commentaryPosition = match.Index;
@@ -275,7 +285,7 @@ namespace Ini
         /// <param name="configuration">The parent configuration.</param>
         public static string SerializeElements(IEnumerable<IElement> elements, Config configuration)
         {
-            return string.Join(PRIMARY_ELEMENT_SEPARATOR, elements.Select(item => item.ToOutputString(configuration)));
+            return string.Join(PRIMARY_ELEMENT_SEPARATOR + " ", elements.Select(item => EscapeElement(item.ToOutputString(configuration))));
         }
 
         /// <summary>
@@ -346,27 +356,31 @@ namespace Ini
         }
 
         /// <summary>
-        /// Escapes meta-characters in the specified element.
+        /// Escapes leading and traling spaces in the specified element.
         /// </summary>
         /// <returns>The element to escape.</returns>
         /// <param name="element">The element, with escaped meta-characters.</param>
         protected static string EscapeElement(string element)
         {
             StringBuilder builder = new StringBuilder();
-            foreach(char c in element)
+            for (int index = 0; index < element.Length; index++)
             {
-                string cs = c.ToString();
-                if((cs == PRIMARY_ELEMENT_SEPARATOR) || (cs == SECONDARY_ELEMENT_SEPARATOR) || (cs == COMMENTARY_SEPARATOR))
+                char c = element[index];
+
+                if (index == 0 || index == element.Length - 1)
                 {
-                    builder.Append(ESCAPE_SEQUENCE);
+                    builder.Append(EscapeSpace(c));
                 }
-                builder.Append(c);
+                else
+                {
+                    builder.Append(c);
+                }
             }
             return builder.ToString();
         }
 
         /// <summary>
-        /// Unescapes meta-characters in the specified element.
+        /// Unescapes spaces in the specified element.
         /// </summary>
         /// <returns>The element to unescape.</returns>
         /// <param name="element">The element, with unescaped meta-characters.</param>
@@ -374,8 +388,20 @@ namespace Ini
         {
             return Regex.Replace(
                 element,
-                ESCAPE_SEQUENCE + ESCAPE_SEQUENCE + "([" + PRIMARY_ELEMENT_SEPARATOR + SECONDARY_ELEMENT_SEPARATOR + COMMENTARY_SEPARATOR + "])",
+                ESCAPE_SEQUENCE + ESCAPE_SEQUENCE + "( )",
                 new MatchEvaluator(match => match.Groups[1].Value));
+        }
+
+        static string EscapeSpace(char character)
+        {
+            if (character == ' ')
+            {
+                return "\\ ";
+            }
+            else
+            {
+                return character.ToString();
+            }
         }
 
         #endregion

@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
-using Ini.Specification;
-using Ini.EventLoggers;
-using Ini.Util;
-using Ini.Exceptions;
 using Ini.Configuration.Base;
 using Ini.Configuration.Values;
-using System.IO;
+using Ini.EventLoggers;
+using Ini.Exceptions;
+using Ini.Specification;
+using Ini.Util;
 
 namespace Ini.Configuration
 {
