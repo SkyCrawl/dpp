@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Comment CommentText="Value items">
+    <Position X="0.5" Y="1.25" Height="0.375" Width="5.766" />
+  </Comment>
+  <Comment CommentText="Base configuration implementation">
+    <Position X="0.5" Y="0.5" Height="0.417" Width="13.273" />
+  </Comment>
+  <Comment CommentText="Exceptions">
+    <Position X="6.761" Y="1.24" Height="0.427" Width="6.002" />
+  </Comment>
+  <Class Name="Configuration.Base.BoolValueItem">
+    <Position X="4" Y="2" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Configuration.Base.ValueItem&lt;T&gt;">
+    <Position X="0.5" Y="2" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAQEAAAAigAAAAhgAAAhBgAAAAAAAQAgAABAAAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Configuration.Base.Int64ValueItem">
+    <Position X="4" Y="3.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Configuration.Base.DoubleValueItem">
+    <Position X="4" Y="5.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Configuration.Base.StringValueItem">
+    <Position X="0.5" Y="7" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Configuration.Base.ConfigException">
+    <Position X="6.75" Y="2" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Configuration.Base.Section">
+    <Position X="0.5" Y="9.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AEIAAEQEAAAAiBAACAhABAACAhAAEAAECQAgAAAAAAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Configuration.Base.Config">
+    <Position X="7.25" Y="9.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AEIEAEgEAAAACBAACAAABAAAABAAEAAECEAAAAAAAAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Configuration.Base.OtherItem">
+    <Position X="4" Y="9.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAAAAAgAAAAAAAQAgAAAAAAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Configuration.Base.CommentConfig">
+    <Position X="10.75" Y="9.25" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAQAAoAAAAAAgAAAAQIAQAACAAAAAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Configuration.Base.SectionDefinition">
+    <Position X="3.75" Y="15.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAEAAAgBAACABABAAgAAAQEAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Configuration.Base.ConfigDefinition">
+    <Position X="0.5" Y="15.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAIEAAAAAAAAABAACAAABAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Configuration.Base.ValueDefinition">
+    <Position X="7.25" Y="15.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AIAAQAAAAAAAgAAAAABAAAAgAAAAAAAgAAAAgAAAAAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Configuration.Base.BoolValueDefinition">
+    <Position X="7.25" Y="19.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAABgEABCCAAgAAAAgAAAEIA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Configuration.Base.Int64ValueDefinition">
+    <Position X="13.5" Y="19.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAEABCAAAgAAAAgAAAEAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Configuration.Base.DoubleValueDefinition">
+    <Position X="9.25" Y="19.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAEABCAAAgAAAAgAAAEAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Configuration.Base.StringValueDefinition">
+    <Position X="11.25" Y="19.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAEABCAAAgAAAAgAAAEAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Configuration.Base.EnumValueItem">
+    <Position X="6" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Configuration.Base.UInt64ValueItem">
+    <Position X="3.75" Y="7" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Configuration.Base.EnumValueDefinition">
+    <Position X="17.25" Y="19.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAEABCAAAgAAAAiAAAEAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Configuration.Base.UInt64ValueDefinition">
+    <Position X="15.25" Y="19.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAEABCAAAgAAAAgAAAEAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

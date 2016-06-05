@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Comment CommentText="Definitions">
+    <Position X="0.5" Y="1.25" Height="0.521" Width="2.533" />
+  </Comment>
+  <Comment CommentText="Instances of configurations">
+    <Position X="4.292" Y="1.281" Height="0.521" Width="9.481" />
+  </Comment>
+  <Comment CommentText="Input/output">
+    <Position X="0.5" Y="11.5" Height="0.552" Width="6.002" />
+  </Comment>
+  <Comment CommentText="Interfaces for configuration">
+    <Position X="0.5" Y="0.5" Height="0.417" Width="13.273" />
+  </Comment>
+  <Interface Name="Configuration.IConfig">
+    <Position X="4.25" Y="2" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AEIAAEgEAAAACAAACAAABAAAAAAAAAAACEAAAAAAAAA=</HashCode>
+      <FileName>IConfig.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Configuration.ISection">
+    <Position X="4.25" Y="7.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AEIAAEQEAAAAiAAACAAABAAAAAAAAAAACAAgAAAAAAA=</HashCode>
+      <FileName>IConfig.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Configuration.IComment">
+    <Position X="10" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>IConfig.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Configuration.IConfigItem">
+    <Position X="4.25" Y="5.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAAAAAgAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>IConfig.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Configuration.IOtherItem">
+    <Position X="12" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IConfig.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Configuration.IConfigDefinition">
+    <Position X="0.5" Y="2" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAACAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IConfig.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Configuration.ISectionDefinition">
+    <Position X="0.5" Y="4.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAgAAACAAABAAgAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IConfig.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Configuration.IValueItem">
+    <Position X="7.25" Y="7.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQEAAAAiAAAAAAgAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IConfig.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Configuration.IIOConfig">
+    <Position X="0.5" Y="12.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>IConfig.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Configuration.IValueDefinition">
+    <Position X="0.5" Y="7" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAQAAAAAAAgAAAAAAAAAAgAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>IConfig.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Configuration.IValueDefinition&lt;T&gt;">
+    <Position X="0.5" Y="9.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IConfig.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Configuration.IIOConfigDefinition">
+    <Position X="3.75" Y="12.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IConfig.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Configuration.IReferenceValue&lt;T&gt;">
+    <Position X="9.75" Y="5.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>IConfig.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="Configuration.ConfigItemType">
+    <Position X="7.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAgAIAAAAA=</HashCode>
+      <FileName>IConfig.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
